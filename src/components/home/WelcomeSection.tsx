@@ -2,7 +2,7 @@ import React from "react";
 
 export function WelcomeSection() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-20">
+    <section className="mx-auto max-w-7xl px-6 py-20">
       <div className="max-w-4xl">
         <div className="text-sm tracking-[0.22em] text-white/60">WELCOME</div>
         <h2 className="mt-3 text-3xl md:text-4xl">

@@ -16,12 +16,7 @@ const slides: Slide[] = [
   { key: "hajj", imageSrc: "/hero/hajj.webp" },
 ];
 
-type Props = {
-  title: string;
-  subtitle?: string;
-};
-
-export function Hero({ title, subtitle }: Props) {
+export function Hero() {
   const [i, setI] = React.useState(0);
 
   React.useEffect(() => {
@@ -53,23 +48,45 @@ export function Hero({ title, subtitle }: Props) {
 
       {/* content */}
       <div className="absolute inset-0">
-        <div className="mx-auto max-w-6xl px-6 pt-28">
+        <div className="mx-auto max-w-7xl px-6 pt-28">
           {/* Premium headline block (less ugly than solid brick) */}
           <div className="max-w-3xl">
-            <div className="inline-block rounded-2xl border border-white/15 bg-[color:var(--evg-blue)]/80 px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur md:px-10 md:py-8">
+            {/* <div className="inline-block rounded-2xl border border-white/15 bg-(--evg-blue)/40 px-6 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur md:px-10 md:py-8">
               <h1 className="text-4xl font-semibold leading-[0.98] tracking-tight md:text-6xl">
-                {title}
+                Dreams beyond borders, guided with confidence.
+              </h1>
+            </div> */}
+            <div
+              className="
+              rounded-3xl px-10 py-10 max-w-3xl
+              bg-gradient-to-b from-white/18 to-white/10
+              backdrop-blur-xl
+              ring-1 ring-white/20
+              shadow-[0_30px_80px_rgba(0,0,0,.35)]
+              transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)]
+              hover:-translate-y-[2px]
+              "
+            >
+              <h1 className="text-5xl leading-[1.02] font-semibold text-white">
+                Dreams beyond borders,
+                <br />
+                guided with confidence.
               </h1>
             </div>
 
-            {subtitle ? (
-              <p className="mt-6 max-w-xl text-white/80">{subtitle}</p>
-            ) : null}
+            <p className="mt-6 max-w-xl text-white/80">
+              Visa, tours, travel and pilgrimage services — structured,
+              compliant, and professionally guided.
+            </p>
           </div>
 
           {/* booking widget */}
-          <div className="mt-10 max-w-4xl">
-            <BookingWidget></BookingWidget>
+          <div className="flex justify-end">
+            <div className="w-full max-w-md">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+                <BookingWidget />
+              </div>
+            </div>
           </div>
 
           {/* dots */}

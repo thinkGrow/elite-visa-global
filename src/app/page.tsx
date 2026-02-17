@@ -26,10 +26,7 @@ export default function HomePage() {
     >
       <Navbar></Navbar>
 
-      <Hero
-        title="Dreams beyond borders, guided with confidence."
-        subtitle="Visa, tours, travel and pilgrimage services — structured, compliant, and professionally guided."
-      />
+      <Hero />
 
       <WelcomeSection />
       <CoreServiceSection />
