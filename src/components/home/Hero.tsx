@@ -66,7 +66,7 @@ export function Hero() {
               </h1>
             </div>
             <p className="mt-6 max-w-xl text-white/75 text-lg leading-relaxed font-light">
-              Visa, tours, travel and pilgrimage services — structured,
+              Visa, tours, travel, umrah and hajj services — structured,
               compliant, and professionally guided.
             </p>
           </div>
