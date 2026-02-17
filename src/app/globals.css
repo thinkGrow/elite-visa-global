@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* globals.css */
+
+.font-playfair {
+  font-family: var(--font-playfair), ui-serif, Georgia, serif;
+}
+
+.font-geist {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}

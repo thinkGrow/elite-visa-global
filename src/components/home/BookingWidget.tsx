@@ -15,7 +15,7 @@ export function BookingWidget() {
   const [active, setActive] = React.useState<TabKey>("tour");
 
   return (
-    <section className="w-full">
+    <section className="w-full ">
       <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/10 backdrop-blur-xl">
         
         {/* tabs */}
@@ -93,7 +93,7 @@ export function BookingWidget() {
             <div>
               <button
                 type="button"
-                className="h-11 w-full rounded-xl bg-[var(--evg-blue)] text-white border border-white/10 inline-flex items-center justify-center gap-2 text-sm tracking-[0.2em] hover:brightness-110 active:brightness-95"
+                className="h-11 w-full rounded-xl bg-(--evg-gold) text-white border border-white/10 inline-flex items-center justify-center gap-2 text-sm tracking-[0.2em] hover:brightness-110 active:brightness-95"
               >
                 🔎 SEARCH
               </button>

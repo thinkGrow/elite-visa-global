@@ -49,7 +49,7 @@ export function Hero() {
           <div className="max-w-3xl">
             <div
               className="
-                rounded-3xl px-10 py-10 max-w-2xl
+                rounded-3xl px-7 py-10 max-w-2xl
                 bg-gradient-to-b from-white/18 to-white/10
                 backdrop-blur-xl
                 ring-1 ring-white/20
@@ -58,16 +58,14 @@ export function Hero() {
                 hover:-translate-y-[2px]
               "
             >
-              <h1 className="text-5xl leading-[1.02] font-semibold text-white">
+              <h1 className="font-[var(--font-playfair)] text-5xl leading-[1.02] font-semibold text-white">
                 Dreams beyond{" "}
-                <span className="text-[var(--evg-gold)]">borders</span>
-                ,
+                <span className="text-[var(--evg-gold)]">borders</span>,
                 <br />
                 guided with confidence.
               </h1>
             </div>
-
-            <p className="mt-6 max-w-xl text-white/80">
+            <p className="mt-6 max-w-xl text-white/75 text-lg leading-relaxed font-light">
               Visa, tours, travel and pilgrimage services — structured,
               compliant, and professionally guided.
             </p>
