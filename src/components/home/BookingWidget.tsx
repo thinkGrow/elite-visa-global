@@ -93,7 +93,7 @@ export function BookingWidget() {
             <div>
               <button
                 type="button"
-                className="h-11 w-full rounded-xl bg-(--evg-gold) text-white border border-white/10 inline-flex items-center justify-center gap-2 text-sm tracking-[0.2em] hover:brightness-110 active:brightness-95"
+                className="cursor-pointer h-11 w-full rounded-xl bg-(--evg-gold) text-white border border-white/10 inline-flex items-center justify-center gap-2 text-sm tracking-[0.2em] hover:brightness-110 active:brightness-95"
               >
                 🔎 SEARCH
               </button>
