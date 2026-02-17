@@ -1,0 +1,84 @@
+/* ===== HERO CONTENT (subtle luxury) ===== */
+
+.contentWrap {
+  will-change: transform, opacity, filter;
+}
+
+/* Headline card */
+.headlineIn {
+  animation: evg_headline_in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes evg_headline_in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.995);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Paragraph comes slightly after */
+.subIn {
+  animation: evg_sub_in 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 120ms;
+}
+
+@keyframes evg_sub_in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    filter: blur(6px);
+  }
+  70% {
+    opacity: 1;
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+/* Widget: tiniest settle, later */
+.widgetIn {
+  animation: evg_widget_in 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 180ms;
+}
+
+@keyframes evg_widget_in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.99);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headlineIn,
+  .subIn,
+  .widgetIn {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

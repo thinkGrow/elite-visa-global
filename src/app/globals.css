@@ -34,3 +34,79 @@ body {
 .font-geist {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
+
+/* ===== HERO SLIDE ANIMATIONS ===== */
+
+.hero-in-right {
+  animation: heroInRight 1600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.hero-in-left {
+  animation: heroInLeft 1600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.hero-out-left {
+  animation: heroOutLeft 1600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.hero-out-right {
+  animation: heroOutRight 1600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes heroInRight {
+  0% { opacity: 0; transform: translateX(30vw) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) scale(1.08); }
+}
+@keyframes heroInLeft {
+  0% { opacity: 0; transform: translateX(-30vw) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) scale(1.08); }
+}
+@keyframes heroOutLeft {
+  0% { opacity: 1; transform: translateX(0) scale(1.08); }
+  100% { opacity: 0; transform: translateX(-30vw) scale(1.02); }
+}
+@keyframes heroOutRight {
+  0% { opacity: 1; transform: translateX(0) scale(1.08); }
+  100% { opacity: 0; transform: translateX(30vw) scale(1.02); }
+}
+
+@layer utilities {
+  .hero-headline-in {
+    animation: evgHeadlinePop 900ms cubic-bezier(0.12, 0.9, 0.18, 1) both;
+  }
+
+  .hero-sub-in {
+    animation: evgSubPop 900ms cubic-bezier(0.12, 0.9, 0.18, 1) both;
+    animation-delay: 120ms;
+  }
+
+  .hero-widget-in {
+    animation: evgWidgetPop 950ms cubic-bezier(0.12, 0.9, 0.18, 1) both;
+    animation-delay: 200ms;
+  }
+}
+
+@keyframes evgHeadlinePop {
+  0% { opacity: 0; transform: translate3d(0, 60px, 0) scale(0.9); }
+  65% { opacity: 1; transform: translate3d(0, 6px, 0) scale(1.03); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes evgSubPop {
+  0% { opacity: 0; transform: translate3d(0, 40px, 0); }
+  70% { opacity: 1; transform: translate3d(0, 6px, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes evgWidgetPop {
+  0% { opacity: 0; transform: translate3d(0, 70px, 0) scale(0.92); }
+  60% { opacity: 1; transform: translate3d(0, 8px, 0) scale(1.03); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* if your Mac has Reduce Motion ON, animations will be disabled */
+@media (prefers-reduced-motion: reduce) {
+  .hero-headline-in,
+  .hero-sub-in,
+  .hero-widget-in {
+    animation: none !important;
+  }
+}
+
