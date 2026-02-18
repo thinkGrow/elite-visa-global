@@ -50,7 +50,10 @@ function SocialRow({ label, href }: { label: string; href: string }) {
 
 export default function ContactPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden text-white" style={themeVars}>
+    <main
+      className="relative min-h-screen overflow-hidden text-white"
+      style={themeVars}
+    >
       {/* Global premium background */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(180deg,#040912_0%,#06122b_25%,#0a1f46_55%,#071531_80%,#030814_100%)]" />
@@ -67,7 +70,7 @@ export default function ContactPage() {
         {/* Hero glass headline block */}
         <div
           className={[
-            "rounded-3xl px-7 py-10 max-w-3xl",
+            "rounded-3xl px-7 py-10 max-w-2xl",
             "bg-gradient-to-b from-white/18 to-white/10",
             "backdrop-blur-xl ring-1 ring-white/20",
             "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
@@ -77,20 +80,25 @@ export default function ContactPage() {
             Let’s talk about your{" "}
             <span className="text-[var(--evg-gold)]">next journey</span>.
           </h1>
-
-          <p className="mt-6 text-base md:text-lg text-white/75 leading-relaxed">
-            Share your details and we’ll get back with clear guidance, compliant steps,
-            and realistic timelines.
-          </p>
         </div>
+        <p className="mt-6 text-base md:text-lg text-white/75 leading-relaxed">
+          Share your details and we’ll get back with clear guidance, compliant
+          steps, and realistic timelines.
+        </p>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[1.25fr_.75fr]">
+        <hr className="my-4 border-gray-400 dark:border-gray-600 border"></hr>
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-[1.25fr_.75fr] ">
           {/* Form */}
           <GlassCard className="p-7 md:p-8">
             <div className="flex items-end justify-between gap-6">
               <div>
-                <p className="text-xs tracking-[0.22em] text-white/50">CONTACT FORM</p>
-                <h2 className="mt-2 text-xl md:text-2xl font-semibold">Send a message</h2>
+                <p className="text-xs tracking-[0.22em] text-white/50">
+                  CONTACT FORM
+                </p>
+                <h2 className="mt-2 text-xl md:text-2xl font-semibold">
+                  Send a message
+                </h2>
               </div>
               <div className="hidden md:block h-px flex-1 bg-white/10" />
             </div>
@@ -173,9 +181,18 @@ export default function ContactPage() {
               <h3 className="mt-2 text-lg font-semibold">Connect</h3>
 
               <div className="mt-5 grid gap-3">
-                <SocialRow label="Facebook" href="https://www.facebook.com/elitevisaglobal" />
-                <SocialRow label="Instagram" href="https://www.instagram.com/elitevisaglobal/" />
-                <SocialRow label="X (Twitter)" href="https://x.com/EliteVisaGlobal" />
+                <SocialRow
+                  label="Facebook"
+                  href="https://www.facebook.com/elitevisaglobal"
+                />
+                <SocialRow
+                  label="Instagram"
+                  href="https://www.instagram.com/elitevisaglobal/"
+                />
+                <SocialRow
+                  label="X (Twitter)"
+                  href="https://x.com/EliteVisaGlobal"
+                />
               </div>
 
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/70">
