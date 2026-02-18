@@ -25,7 +25,7 @@ export function CoreServiceSection() {
   ];
 
   return (
-    <section id="services" className="mx-auto max-w-6xl px-6 pb-24">
+    <section id="services" className="mx-auto max-w-7xl px-6 pb-24">
       <div className="text-sm tracking-[0.22em] text-white/60">WHAT WE DO</div>
       <h2 className="mt-3 text-3xl md:text-4xl">Our Core Services</h2>
 
