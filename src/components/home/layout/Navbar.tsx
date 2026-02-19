@@ -1,3 +1,4 @@
+// src/components/home/layout/Navbar.tsx
 "use client";
 
 import Image from "next/image";
@@ -5,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 
-type NavKey = "services" | "about" | "contact";
+type NavKey = "services" | "contact";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -46,15 +47,36 @@ export function Navbar() {
     return () => io.disconnect();
   }, [isHome]);
 
+  const isVisa = pathname === "/visa-processing" || pathname.startsWith("/visa-processing/");
+  const isAbout = pathname === "/about" || pathname.startsWith("/about/");
+  const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
+
+  // Treat these pages as "light background pages"
+  const isLightPage = isVisa || isAbout || isContact;
+
+  // If it's a light page and NOT scrolled yet, use dark text + light glass bg
+  const useLightNav = isLightPage && !scrolled;
+
   function navLinkClasses(isActive: boolean) {
-    return [
-      "relative py-2 text-sm tracking-wide transition-colors",
-      isActive ? "text-white" : "text-white/75 hover:text-white",
-      "after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:h-[2px] after:origin-left after:transition-transform after:duration-300",
-      isActive
-        ? "after:scale-x-100 after:bg-[var(--evg-gold)]"
-        : "after:scale-x-0 after:bg-white/30 hover:after:scale-x-100",
-    ].join(" ");
+    const base = "relative py-2 text-sm tracking-wide transition-colors";
+    const text = useLightNav
+      ? isActive
+        ? "text-slate-900"
+        : "text-slate-600 hover:text-slate-900"
+      : isActive
+      ? "text-white"
+      : "text-white/75 hover:text-white";
+
+    const underlineBase =
+      "after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:h-[2px] after:origin-left after:transition-transform after:duration-300";
+
+    const underline = isActive
+      ? "after:scale-x-100 after:bg-[var(--evg-gold)]"
+      : useLightNav
+      ? "after:scale-x-0 after:bg-slate-900/20 hover:after:scale-x-100"
+      : "after:scale-x-0 after:bg-white/30 hover:after:scale-x-100";
+
+    return [base, text, underlineBase, underline].join(" ");
   }
 
   return (
@@ -66,6 +88,8 @@ export function Navbar() {
             "transition-all duration-300",
             scrolled
               ? "bg-[rgba(6,18,43,0.86)] backdrop-blur-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.35)]"
+              : useLightNav
+              ? "bg-white/70 backdrop-blur-xl border border-slate-200 shadow-[0_18px_60px_rgba(2,6,23,0.08)]"
               : "bg-transparent",
           ].join(" ")}
         >
@@ -80,32 +104,46 @@ export function Navbar() {
                 className="object-contain transition-transform duration-300 hover:scale-[1.06]"
               />
             </div>
+
             <div className="leading-tight">
-              <div className="text-[12px] sm:text-sm tracking-[0.22em] text-white font-medium">
+              <div
+                className={[
+                  "text-[12px] sm:text-sm tracking-[0.22em] font-medium",
+                  useLightNav ? "text-slate-900" : "text-white",
+                ].join(" ")}
+              >
                 ELITE VISA GLOBAL
               </div>
-              <div className="text-[11px] text-white/60 tracking-wide">Follow your dreams.</div>
+              <div className={["text-[11px] tracking-wide", useLightNav ? "text-slate-500" : "text-white/60"].join(" ")}>
+                Follow your dreams.
+              </div>
             </div>
           </Link>
 
           {/* Desktop */}
-          <nav className="hidden md:flex items-center gap-7">
+          <nav className="hidden md:flex items-center gap-6">
             <Link href="/#services" className={navLinkClasses(isHome && active === "services")}>
               Services
             </Link>
 
-            {/* IMPORTANT: real route link */}
-            <Link href="/about" className={navLinkClasses(pathname === "/about")}>
+            <Link href="/visa-processing" className={navLinkClasses(isVisa)}>
+              Visa Processing
+            </Link>
+
+            <Link href="/about" className={navLinkClasses(isAbout)}>
               About
             </Link>
 
-            <Link href="/contact" className={navLinkClasses(isHome && active === "contact")}>
+            <Link href="/contact" className={navLinkClasses(isHome ? active === "contact" : isContact)}>
               Contact
             </Link>
 
             <Link
               href="/contact"
-              className="rounded-xl px-5 py-2.5 text-sm font-medium bg-[var(--evg-gold)] text-slate-900 transition transform hover:-translate-y-[1px] hover:brightness-110 active:translate-y-0 shadow-[0_10px_30px_rgba(214,162,58,0.22)]"
+              className={[
+                "rounded-xl px-5 py-2.5 text-sm font-medium transition transform hover:-translate-y-[1px] active:translate-y-0",
+                "bg-[var(--evg-gold)] text-slate-900 hover:brightness-110 shadow-[0_10px_30px_rgba(214,162,58,0.22)]",
+              ].join(" ")}
             >
               Get Consultation
             </Link>
@@ -114,7 +152,12 @@ export function Navbar() {
           {/* Mobile toggle */}
           <button
             type="button"
-            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/85 backdrop-blur transition hover:bg-white/10"
+            className={[
+              "md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl backdrop-blur transition",
+              useLightNav
+                ? "border border-slate-200 bg-white/60 text-slate-900 hover:bg-white/80"
+                : "border border-white/10 bg-white/5 text-white/85 hover:bg-white/10",
+            ].join(" ")}
             onClick={() => setOpen((v) => !v)}
             aria-label="Open menu"
             aria-expanded={open}
@@ -124,19 +167,41 @@ export function Navbar() {
 
           {/* Mobile menu */}
           {open && (
-            <div className="absolute left-4 right-4 top-[calc(100%+10px)] md:hidden rounded-2xl border border-white/10 bg-[rgba(6,18,43,0.92)] backdrop-blur-xl shadow-[0_30px_80px_rgba(0,0,0,0.45)] overflow-hidden">
+            <div
+              className={[
+                "absolute left-4 right-4 top-[calc(100%+10px)] md:hidden rounded-2xl backdrop-blur-xl shadow-[0_30px_80px_rgba(0,0,0,0.30)] overflow-hidden",
+                useLightNav ? "border border-slate-200 bg-white/90" : "border border-white/10 bg-[rgba(6,18,43,0.92)]",
+              ].join(" ")}
+            >
               <div className="p-3 grid gap-1">
                 <Link
                   href="/#services"
-                  className="rounded-xl px-4 py-3 text-sm text-white/80 hover:bg-white/10 hover:text-white"
+                  className={[
+                    "rounded-xl px-4 py-3 text-sm",
+                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                  ].join(" ")}
                   onClick={() => setOpen(false)}
                 >
                   Services
                 </Link>
 
                 <Link
+                  href="/visa-processing"
+                  className={[
+                    "rounded-xl px-4 py-3 text-sm",
+                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                  ].join(" ")}
+                  onClick={() => setOpen(false)}
+                >
+                  Visa Processing
+                </Link>
+
+                <Link
                   href="/about"
-                  className="rounded-xl px-4 py-3 text-sm text-white/80 hover:bg-white/10 hover:text-white"
+                  className={[
+                    "rounded-xl px-4 py-3 text-sm",
+                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                  ].join(" ")}
                   onClick={() => setOpen(false)}
                 >
                   About
@@ -144,7 +209,10 @@ export function Navbar() {
 
                 <Link
                   href="/contact"
-                  className="rounded-xl px-4 py-3 text-sm text-white/80 hover:bg-white/10 hover:text-white"
+                  className={[
+                    "rounded-xl px-4 py-3 text-sm",
+                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                  ].join(" ")}
                   onClick={() => setOpen(false)}
                 >
                   Contact
