@@ -33,8 +33,6 @@ export default function HomePage() {
       <WelcomeSection />
       <CoreServiceSection />
       <TrustSection />
-
-      <Footer></Footer>
     </main>
   );
 }
