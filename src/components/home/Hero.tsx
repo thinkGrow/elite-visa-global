@@ -144,39 +144,43 @@ export function Hero() {
         </div>
 
         {/* Bottom UI */}
+        {/* Bottom UI */}
         <div className="absolute inset-x-0 bottom-10">
-          {/* dots inside container width */}
-          <div className="mx-auto max-w-7xl px-6 flex justify-start">
-            <div className="flex items-center gap-2">
-              {slides.map((x, idx) => {
-                const active = idx === i;
-                return (
-                  <button
-                    key={x.key}
-                    type="button"
-                    onClick={() => goTo(idx)}
-                    className={[
-                      "h-2 rounded-full transition-all duration-300",
-                      active
-                        ? "w-8 bg-[var(--evg-gold)]"
-                        : "w-2 bg-white/30 hover:bg-white/55",
-                    ].join(" ")}
-                    aria-label={`Hero slide ${idx + 1}`}
-                  />
-                );
-              })}
-            </div>
-          </div>
+          <div className="mx-auto max-w-7xl px-6">
+            {/* layout: dots left, widget right (stacks on mobile) */}
+            <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+              {/* dots */}
+              <div className="flex items-center gap-2">
+                {slides.map((x, idx) => {
+                  const active = idx === i;
+                  return (
+                    <button
+                      key={x.key}
+                      type="button"
+                      onClick={() => goTo(idx)}
+                      className={[
+                        "h-2 rounded-full transition-all duration-300",
+                        active
+                          ? "w-8 bg-[var(--evg-gold)]"
+                          : "w-2 bg-white/30 hover:bg-white/55",
+                      ].join(" ")}
+                      aria-label={`Hero slide ${idx + 1}`}
+                    />
+                  );
+                })}
+              </div>
 
-          {/* widget pinned right edge */}
-          <div className="absolute right-6 md:right-10 bottom-0 w-full max-w-4xl">
-            <div
-              className={[
-                "rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]",
-                contentIn ? "hero-widget-in" : "",
-              ].join(" ")}
-            >
-              <BookingWidget />
+              {/* widget (contained within max-w-7xl) */}
+              <div className="w-full md:w-[56rem] max-w-full">
+                <div
+                  className={[
+                    "rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]",
+                    contentIn ? "hero-widget-in" : "",
+                  ].join(" ")}
+                >
+                  <BookingWidget />
+                </div>
+              </div>
             </div>
           </div>
         </div>
