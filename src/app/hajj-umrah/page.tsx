@@ -161,20 +161,19 @@ function HeaderCard({
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
             <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
-              ELITE VISA GLOBAL
+              ELITE HAJJ KAFELA
             </div>
 
             <div className="mt-3 flex items-center gap-3">
               <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
-                Hajj &amp; Umrah (Elite Hajj Kafela)
+                Hajj &amp; Umrah
               </h2>
               <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
             </div>
 
             <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
               Select Hajj or Umrah to view packages, pricing, inclusions, and
-              requirements. Later we will add the full list (including Bangla
-              version).
+              requirements.
             </p>
           </div>
 

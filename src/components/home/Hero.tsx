@@ -137,8 +137,9 @@ export function Hero() {
                 contentIn ? "hero-sub-in" : "",
               ].join(" ")}
             >
-              Visa, tours, travel, umrah and hajj services — structured,
-              compliant, and professionally guided.
+              Whether it’s higher education abroad or the sacred pilgrimage of
+              Hajj and Umrah, we ensure every document, every requirement, and
+              every step is handled with care, compliance, and responsibility.
             </p>
           </div>
         </div>
