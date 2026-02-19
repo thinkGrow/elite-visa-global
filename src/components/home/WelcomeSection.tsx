@@ -3,10 +3,7 @@ import { themeVars } from "@/lib/theme";
 
 export function WelcomeSection() {
   return (
-    <section
-      className="relative overflow-hidden bg-white"
-      style={themeVars}
-    >
+    <section className="relative overflow-hidden bg-white" style={themeVars}>
       {/* Soft EVG blue glow */}
       <div
         className="pointer-events-none absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full blur-3xl"
@@ -21,13 +18,16 @@ export function WelcomeSection() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-24">
         <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
-          <div className="text-xs tracking-[0.3em] text-[color:var(--evg-blue)]/70">
+          <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
             WELCOME
           </div>
 
-          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-semibold text-[color:var(--evg-deep)] leading-tight">
-            Welcome to Elite Visa Global
-          </h2>
+          <div className="mt-3 flex items-center gap-3">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
+              Welcome to Elite Visa Global
+            </h2>
+            <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
+          </div>
 
           <div className="mt-8 space-y-6 text-gray-800 leading-relaxed text-[17px]">
             <p>
@@ -41,14 +41,14 @@ export function WelcomeSection() {
               In a world shaped by complex immigration rules and global
               regulations, EVG transforms ambition into structured, achievable
               pathways. From international education and short-term travel to
-              business mobility, pilgrimage, and leisure journeys, we ensure every
-              step is compliant, considered, and purposeful.
+              business mobility, pilgrimage, and leisure journeys, we ensure
+              every step is compliant, considered, and purposeful.
             </p>
 
             <p>
-              Our approach is consultative, not transactional. We listen before we
-              advise, assess before we recommend, and prepare every application
-              with precision and integrity.
+              Our approach is consultative, not transactional. We listen before
+              we advise, assess before we recommend, and prepare every
+              application with precision and integrity.
             </p>
 
             <p>
