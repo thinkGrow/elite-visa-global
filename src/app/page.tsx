@@ -5,6 +5,7 @@ import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { CoreServiceSection } from "@/components/home/CoreServiceSection";
 import { TrustSection } from "@/components/home/TrustSection";
 import { Navbar } from "@/components/home/layout/Navbar";
+import { Footer } from "@/components/home/layout/Footer";
 
 type ThemeVars = React.CSSProperties & {
   "--evg-blue": string;
@@ -21,9 +22,9 @@ const themeVars: ThemeVars = {
 export default function HomePage() {
   return (
     <main
-    // className="min-h-screen text-white bg-[linear-gradient(to_bottom,#06122b,#07183a_40%,#030814)]"
-    className="min-h-screen text-black bg-white"
-    style={themeVars}
+      // className="min-h-screen text-white bg-[linear-gradient(to_bottom,#06122b,#07183a_40%,#030814)]"
+      className="min-h-screen text-black bg-white"
+      style={themeVars}
     >
       <Navbar></Navbar>
 
@@ -33,11 +34,7 @@ export default function HomePage() {
       <CoreServiceSection />
       <TrustSection />
 
-      <footer id="contact" className="border-t border-white/10 py-10">
-        <div className="mx-auto max-w-6xl px-6 text-sm text-white/60">
-          Elite Visa Global • Dhaka, Bangladesh • Since 2016
-        </div>
-      </footer>
+      <Footer></Footer>
     </main>
   );
 }
