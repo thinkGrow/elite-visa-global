@@ -201,22 +201,6 @@ function HeaderCard({
                 ▼
               </div>
             </div>
-
-            <div className="mt-4 rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4">
-              <div className="text-xs uppercase tracking-wide text-slate-500">
-                How it works
-              </div>
-              <div className="mt-2 text-sm text-slate-700">
-                Click a package card to expand. Only one opens at a time.
-              </div>
-            </div>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Badge>Hajj</Badge>
-              <Badge>Umrah</Badge>
-              <Badge>Pricing tiers</Badge>
-              <Badge>Hotels</Badge>
-            </div>
           </div>
         </div>
       </div>
