@@ -84,7 +84,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-4">
         <div
           className={[
-            "flex h-16 items-center justify-between rounded-2xl px-3 sm:px-4",
+            "flex h-16 items-center justify-between rounded-2xl px-3 sm:px-4 py-10",
             "transition-all duration-300",
             scrolled
               ? "bg-[rgba(6,18,43,0.86)] backdrop-blur-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.35)]"
@@ -95,7 +95,7 @@ export function Navbar() {
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-            <div className="relative h-10 w-10 rounded-full overflow-hidden">
+            <div className="relative h-14 w-14 rounded-full overflow-hidden">
               <Image
                 src="/evg-logo.png"
                 alt="Elite Visa Global"
@@ -108,7 +108,7 @@ export function Navbar() {
             <div className="leading-tight">
               <div
                 className={[
-                  "text-[12px] sm:text-sm tracking-[0.22em] font-medium",
+                  "text-2xl sm:text-sm tracking-[0.22em] font-semibold",
                   useLightNav ? "text-slate-900" : "text-white",
                 ].join(" ")}
               >

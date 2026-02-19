@@ -28,66 +28,101 @@ export function CoreServiceSection() {
   return (
     <section
       id="services"
+      className="relative overflow-hidden bg-white"
       style={themeVars}
-      className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-24"
     >
-      <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
-        WHAT WE DO
-      </div>
+      <div className="absolute top-0 left-0 w-full h-px bg-black/5" />
 
-      <div className="mt-3 flex items-center gap-3">
-        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
-          Our Core Services
-        </h2>
-        <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
-      </div>
+      <div className="relative mx-auto max-w-7xl px-6 py-24">
+        {/* Heading */}
+        <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
+          <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
+            WHAT WE DO
+          </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
-        {services.map((s) => (
-          <a
-            key={s.title}
-            href="#"
-            className={[
-              "group relative rounded-3xl p-6 transition",
-              "border border-slate-200/70 bg-white",
-              "shadow-[0_12px_40px_rgba(2,6,23,0.06)]",
-              "hover:-translate-y-0.5 hover:shadow-[0_18px_60px_rgba(2,6,23,0.10)]",
-              "focus:outline-none focus:ring-2 focus:ring-[var(--evg-gold)]/25",
-            ].join(" ")}
-          >
-            {/* subtle top hairline + hover glow */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--evg-gold)]/35 to-transparent"
-            />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(circle,rgba(214,162,58,0.16),transparent_65%)]"
-            />
+          <div className="mt-3 flex items-center gap-3">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
+              Our Core Services
+            </h2>
+            <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
+          </div>
+        </div>
 
-            <div className="relative">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50">
-                  <div className="text-2xl leading-none">{s.icon}</div>
+        {/* Cards */}
+        <div className="mt-14 grid gap-8 md:grid-cols-2">
+          {services.map((s) => (
+            <a
+              key={s.title}
+              href="#"
+              className={[
+                "group relative rounded-3xl p-10",
+                "border border-slate-200 bg-white",
+                "shadow-[0_10px_30px_rgba(2,6,23,0.06)]",
+                "transition-all duration-300",
+                "hover:-translate-y-1",
+                "hover:border-[var(--evg-gold)]/60",
+                "hover:shadow-[0_18px_60px_rgba(2,6,23,0.10)]",
+              ].join(" ")}
+            >
+              {/* subtle gold glow */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(214,162,58,0.18) 0%, rgba(214,162,58,0.08) 40%, transparent 70%)",
+                }}
+              />
+
+              <div className="relative flex items-start gap-6">
+                {/* Refined icon container */}
+                <div
+                  className={[
+                    "flex h-16 w-16 items-center justify-center",
+                    "rounded-2xl border bg-white",
+                    "border-slate-200",
+                    "text-2xl",
+                    "transition-all duration-300",
+                    "group-hover:border-[var(--evg-gold)]/60",
+                    "group-hover:shadow-[inset_0_0_0_1px_rgba(214,162,58,0.25)]",
+                  ].join(" ")}
+                >
+                  {s.icon}
                 </div>
 
-                <div className="min-w-0">
+                <div className="flex-1">
+                  {/* Title */}
                   <h3 className="text-lg font-semibold text-[var(--evg-deep)]">
                     {s.title}
                   </h3>
-                  <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+
+                  {/* subtle gold underline animation */}
+                  <div className="mt-2 h-px w-10 bg-[var(--evg-gold)]/0 transition-all duration-300 group-hover:w-16 group-hover:bg-[var(--evg-gold)]/55" />
+
+                  {/* Body text now uses EVG deep */}
+                  <p className="mt-4 text-[15px] leading-relaxed text-[color:var(--evg-deep)]/75">
                     {s.text}
                   </p>
 
-                  <div className="mt-5 inline-flex items-center gap-2 text-sm text-[var(--evg-blue)]/85 group-hover:text-[var(--evg-blue)] transition">
-                    Learn more <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                  {/* Link uses EVG blue */}
+                  <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--evg-gold)] transition-all duration-300 group-hover:brightness-110">
+                    <span className="relative">
+                      Learn more
+                      <span className="absolute left-0 -bottom-1 h-px w-0 bg-[var(--evg-gold)] transition-all duration-300 group-hover:w-full" />
+                    </span>
+
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
                   </div>
                 </div>
               </div>
-            </div>
-          </a>
-        ))}
+            </a>
+          ))}
+        </div>
       </div>
+
+      <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-b from-transparent to-black/[0.03]" />
     </section>
   );
 }
