@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
+import { themeVars } from "@/lib/theme";
 
 type NavKey = "services" | "contact";
 
@@ -48,11 +49,12 @@ export function Navbar() {
   }, [isHome]);
 
   const isVisa = pathname === "/visa-processing" || pathname.startsWith("/visa-processing/");
+  const isHajjUmrah = pathname === "/hajj-umrah" || pathname.startsWith("/hajj-umrah/");
   const isAbout = pathname === "/about" || pathname.startsWith("/about/");
   const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
 
   // Treat these pages as "light background pages"
-  const isLightPage = isVisa || isAbout || isContact;
+  const isLightPage = isVisa || isHajjUmrah || isAbout || isContact;
 
   // If it's a light page and NOT scrolled yet, use dark text + light glass bg
   const useLightNav = isLightPage && !scrolled;
@@ -79,12 +81,17 @@ export function Navbar() {
     return [base, text, underlineBase, underline].join(" ");
   }
 
+  const desktopCtaClasses = [
+    "rounded-xl px-5 py-2.5 text-sm font-medium transition transform hover:-translate-y-[1px] active:translate-y-0",
+    "bg-[var(--evg-gold)] text-slate-900 hover:brightness-110 shadow-[0_10px_30px_rgba(214,162,58,0.22)]",
+  ].join(" ");
+
   return (
-    <header className="fixed left-0 right-0 top-0 z-50">
+    <header className="fixed left-0 right-0 top-0 z-50" style={themeVars}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-4">
         <div
           className={[
-            "flex h-16 items-center justify-between rounded-2xl px-3 sm:px-4 py-10",
+            "flex h-16 items-center justify-between rounded-2xl px-3 sm:px-4",
             "transition-all duration-300",
             scrolled
               ? "bg-[rgba(6,18,43,0.86)] backdrop-blur-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.35)]"
@@ -94,8 +101,20 @@ export function Navbar() {
           ].join(" ")}
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-            <div className="relative h-14 w-14 rounded-full overflow-hidden">
+          <Link
+            href="/"
+            className="flex items-center gap-3"
+            onClick={() => setOpen(false)}
+          >
+            {/* refined logo container */}
+            <div
+              className={[
+                "relative h-12 w-12 sm:h-13 sm:w-13 rounded-full overflow-hidden",
+                "p-[6px] bg-white/70 border border-black/5",
+                "shadow-[0_10px_30px_rgba(2,6,23,0.08)]",
+                useLightNav ? "" : "bg-white/10 border-white/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)]",
+              ].join(" ")}
+            >
               <Image
                 src="/evg-logo.png"
                 alt="Elite Visa Global"
@@ -108,13 +127,18 @@ export function Navbar() {
             <div className="leading-tight">
               <div
                 className={[
-                  "text-2xl sm:text-sm tracking-[0.22em] font-semibold",
+                  "text-[12px] sm:text-sm tracking-[0.22em] font-semibold",
                   useLightNav ? "text-slate-900" : "text-white",
                 ].join(" ")}
               >
                 ELITE VISA GLOBAL
               </div>
-              <div className={["text-[11px] tracking-wide", useLightNav ? "text-slate-500" : "text-white/60"].join(" ")}>
+              <div
+                className={[
+                  "text-[11px] tracking-wide",
+                  useLightNav ? "text-slate-500" : "text-white/60",
+                ].join(" ")}
+              >
                 Follow your dreams.
               </div>
             </div>
@@ -122,7 +146,10 @@ export function Navbar() {
 
           {/* Desktop */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/#services" className={navLinkClasses(isHome && active === "services")}>
+            <Link
+              href="/#services"
+              className={navLinkClasses(isHome && active === "services")}
+            >
               Services
             </Link>
 
@@ -130,21 +157,22 @@ export function Navbar() {
               Visa Processing
             </Link>
 
+            <Link href="/hajj-umrah" className={navLinkClasses(isHajjUmrah)}>
+              Hajj & Umrah
+            </Link>
+
             <Link href="/about" className={navLinkClasses(isAbout)}>
               About
             </Link>
 
-            <Link href="/contact" className={navLinkClasses(isHome ? active === "contact" : isContact)}>
+            <Link
+              href="/contact"
+              className={navLinkClasses(isHome ? active === "contact" : isContact)}
+            >
               Contact
             </Link>
 
-            <Link
-              href="/contact"
-              className={[
-                "rounded-xl px-5 py-2.5 text-sm font-medium transition transform hover:-translate-y-[1px] active:translate-y-0",
-                "bg-[var(--evg-gold)] text-slate-900 hover:brightness-110 shadow-[0_10px_30px_rgba(214,162,58,0.22)]",
-              ].join(" ")}
-            >
+            <Link href="/contact" className={desktopCtaClasses}>
               Get Consultation
             </Link>
           </nav>
@@ -170,7 +198,9 @@ export function Navbar() {
             <div
               className={[
                 "absolute left-4 right-4 top-[calc(100%+10px)] md:hidden rounded-2xl backdrop-blur-xl shadow-[0_30px_80px_rgba(0,0,0,0.30)] overflow-hidden",
-                useLightNav ? "border border-slate-200 bg-white/90" : "border border-white/10 bg-[rgba(6,18,43,0.92)]",
+                useLightNav
+                  ? "border border-slate-200 bg-white/90"
+                  : "border border-white/10 bg-[rgba(6,18,43,0.92)]",
               ].join(" ")}
             >
               <div className="p-3 grid gap-1">
@@ -178,7 +208,9 @@ export function Navbar() {
                   href="/#services"
                   className={[
                     "rounded-xl px-4 py-3 text-sm",
-                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                    useLightNav
+                      ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900"
+                      : "text-white/80 hover:bg-white/10 hover:text-white",
                   ].join(" ")}
                   onClick={() => setOpen(false)}
                 >
@@ -189,7 +221,9 @@ export function Navbar() {
                   href="/visa-processing"
                   className={[
                     "rounded-xl px-4 py-3 text-sm",
-                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                    useLightNav
+                      ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900"
+                      : "text-white/80 hover:bg-white/10 hover:text-white",
                   ].join(" ")}
                   onClick={() => setOpen(false)}
                 >
@@ -197,10 +231,25 @@ export function Navbar() {
                 </Link>
 
                 <Link
+                  href="/hajj-umrah"
+                  className={[
+                    "rounded-xl px-4 py-3 text-sm",
+                    useLightNav
+                      ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900"
+                      : "text-white/80 hover:bg-white/10 hover:text-white",
+                  ].join(" ")}
+                  onClick={() => setOpen(false)}
+                >
+                  Hajj & Umrah
+                </Link>
+
+                <Link
                   href="/about"
                   className={[
                     "rounded-xl px-4 py-3 text-sm",
-                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                    useLightNav
+                      ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900"
+                      : "text-white/80 hover:bg-white/10 hover:text-white",
                   ].join(" ")}
                   onClick={() => setOpen(false)}
                 >
@@ -211,7 +260,9 @@ export function Navbar() {
                   href="/contact"
                   className={[
                     "rounded-xl px-4 py-3 text-sm",
-                    useLightNav ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900" : "text-white/80 hover:bg-white/10 hover:text-white",
+                    useLightNav
+                      ? "text-slate-700 hover:bg-slate-900/5 hover:text-slate-900"
+                      : "text-white/80 hover:bg-white/10 hover:text-white",
                   ].join(" ")}
                   onClick={() => setOpen(false)}
                 >

@@ -19,13 +19,37 @@ type Country = {
 };
 
 const studentCountries: Country[] = [
-  { key: "uk", name: "United Kingdom", flagEmoji: "🇬🇧", sectionId: "uk", badge: "UKVI" },
-  { key: "australia", name: "Australia", flagEmoji: "🇦🇺", sectionId: "australia", badge: "Subclass 500" },
-  { key: "usa", name: "United States", flagEmoji: "🇺🇸", sectionId: "usa", badge: "F-1 / SEVIS" },
+  {
+    key: "uk",
+    name: "United Kingdom",
+    flagEmoji: "🇬🇧",
+    sectionId: "uk",
+    badge: "UKVI",
+  },
+  {
+    key: "australia",
+    name: "Australia",
+    flagEmoji: "🇦🇺",
+    sectionId: "australia",
+    badge: "Subclass 500",
+  },
+  {
+    key: "usa",
+    name: "United States",
+    flagEmoji: "🇺🇸",
+    sectionId: "usa",
+    badge: "F-1 / SEVIS",
+  },
 ];
 
 const visitCountries: Country[] = [
-  { key: "uae", name: "United Arab Emirates", flagEmoji: "🇦🇪", sectionId: "uae", badge: "e-Visa" },
+  {
+    key: "uae",
+    name: "United Arab Emirates",
+    flagEmoji: "🇦🇪",
+    sectionId: "uae",
+    badge: "e-Visa",
+  },
 ];
 
 const studentFutureFlags = [
@@ -63,7 +87,11 @@ const studentFutureFlags = [
 
 function Container({ children }: { children: React.ReactNode }) {
   // ✅ max-w-7xl
-  return <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>;
+  return (
+    <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      {children}
+    </div>
+  );
 }
 
 function PageShell({ children }: { children: React.ReactNode }) {
@@ -147,7 +175,9 @@ function Section({
           </h2>
           <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
         </div>
-        {subtitle ? <p className="mt-3 text-sm sm:text-base text-slate-600">{subtitle}</p> : null}
+        {subtitle ? (
+          <p className="mt-3 text-sm sm:text-base text-slate-600">{subtitle}</p>
+        ) : null}
       </div>
 
       <Card hairline className="p-5 sm:p-7">
@@ -179,7 +209,11 @@ function BulletList({ items }: { items: string[] }) {
   );
 }
 
-function KeyValueGrid({ rows }: { rows: Array<{ k: string; v: React.ReactNode }> }) {
+function KeyValueGrid({
+  rows,
+}: {
+  rows: Array<{ k: string; v: React.ReactNode }>;
+}) {
   return (
     <div className="mt-4 grid gap-3 sm:grid-cols-2">
       {rows.map((r, i) => (
@@ -190,19 +224,31 @@ function KeyValueGrid({ rows }: { rows: Array<{ k: string; v: React.ReactNode }>
             "shadow-[0_10px_28px_rgba(2,6,23,0.05)]",
           ].join(" ")}
         >
-          <div className="text-xs uppercase tracking-wide text-slate-500">{r.k}</div>
-          <div className="mt-1 text-sm sm:text-base text-slate-800 leading-relaxed">{r.v}</div>
+          <div className="text-xs uppercase tracking-wide text-slate-500">
+            {r.k}
+          </div>
+          <div className="mt-1 text-sm sm:text-base text-slate-800 leading-relaxed">
+            {r.v}
+          </div>
         </div>
       ))}
     </div>
   );
 }
 
-function FlagsBar({ title, countries }: { title: string; countries: Country[] }) {
+function FlagsBar({
+  title,
+  countries,
+}: {
+  title: string;
+  countries: Country[];
+}) {
   return (
     <Card hairline className="p-4 sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-sm font-medium text-[var(--evg-deep)]">{title}</div>
+        <div className="text-sm font-medium text-[var(--evg-deep)]">
+          {title}
+        </div>
 
         <div className="flex flex-wrap gap-2">
           {countries.map((c) => (
@@ -236,13 +282,21 @@ function FlagsBar({ title, countries }: { title: string; countries: Country[] })
   );
 }
 
-function Dropdown({ value, onChange }: { value: VisaCategoryKey; onChange: (v: VisaCategoryKey) => void }) {
+function Dropdown({
+  value,
+  onChange,
+}: {
+  value: VisaCategoryKey;
+  onChange: (v: VisaCategoryKey) => void;
+}) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <div className="inline-flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-[var(--evg-gold)]" />
-          <span className="text-xs tracking-[0.22em] text-slate-600">ELITE VISA GLOBAL</span>
+          <span className="text-xs tracking-[0.22em] text-slate-600">
+            ELITE VISA GLOBAL
+          </span>
         </div>
 
         <h1 className="mt-3 text-2xl sm:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
@@ -250,12 +304,15 @@ function Dropdown({ value, onChange }: { value: VisaCategoryKey; onChange: (v: V
         </h1>
 
         <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
-          Compliance-focused guidance for students, tourists, families, and business travelers—structured, transparent, and visa-ready.
+          Compliance-focused guidance for students, tourists, families, and
+          business travelers—structured, transparent, and visa-ready.
         </p>
       </div>
 
       <div className="w-full sm:w-[420px]">
-        <label className="block text-xs uppercase tracking-wide text-slate-500">Dropdown Menu</label>
+        <label className="block text-xs uppercase tracking-wide text-slate-500">
+          Dropdown Menu
+        </label>
         <div className="mt-2 relative">
           <select
             value={value}
@@ -267,7 +324,9 @@ function Dropdown({ value, onChange }: { value: VisaCategoryKey; onChange: (v: V
             ].join(" ")}
           >
             <option value="student">Student Visa Processing</option>
-            <option value="visit">Visit, Family & Business Visa Processing</option>
+            <option value="visit">
+              Visit, Family & Business Visa Processing
+            </option>
           </select>
 
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
@@ -305,26 +364,32 @@ export default function VisaProcessingPage() {
           <div className="relative">
             <Dropdown value={category} onChange={setCategory} />
 
-            <div className="mt-6 flex flex-wrap gap-2">
+            {/* <div className="mt-6 flex flex-wrap gap-2">
               <Pill>Static for now</Pill>
               <Pill>CMS-ready structure</Pill>
               <Pill>EVG accents (Gold / Deep Blue)</Pill>
-            </div>
+            </div> */}
 
             <AccentCallout>
-              Tip: hover a flag and click to jump. Later this becomes CMS data (countries → sections → blocks → Bangla/English).
+              Tip: hover a flag and click to jump. Later this becomes CMS data
+              (countries → sections → blocks → Bangla/English).
             </AccentCallout>
           </div>
         </Card>
 
         <Divider />
 
-        {category === "student" ? <StudentVisaProcessing /> : <VisitFamilyBusinessVisaProcessing />}
+        {category === "student" ? (
+          <StudentVisaProcessing />
+        ) : (
+          <VisitFamilyBusinessVisaProcessing />
+        )}
 
         <Divider />
 
         <div className="text-sm text-slate-600 leading-relaxed">
-          For future CMS: store each country as structured blocks (title, bullets, kv, notes) and render via map.
+          For future CMS: store each country as structured blocks (title,
+          bullets, kv, notes) and render via map.
         </div>
       </Container>
     </PageShell>
@@ -334,7 +399,10 @@ export default function VisaProcessingPage() {
 function StudentVisaProcessing() {
   return (
     <div className="space-y-10">
-      <FlagsBar title="Student visa destinations" countries={studentCountries} />
+      <FlagsBar
+        title="Student visa destinations"
+        countries={studentCountries}
+      />
 
       <Section
         title="Inside Student Visa Processing"
@@ -366,7 +434,10 @@ function StudentVisaProcessing() {
 function VisitFamilyBusinessVisaProcessing() {
   return (
     <div className="space-y-10">
-      <FlagsBar title="Visit, family & business destinations" countries={visitCountries} />
+      <FlagsBar
+        title="Visit, family & business destinations"
+        countries={visitCountries}
+      />
 
       <UaeVisit />
 
@@ -461,7 +532,10 @@ function UkStudent() {
           { k: "Bachelor’s Degrees", v: "GBP 12,000 – 18,000" },
           { k: "Master’s (Taught)", v: "GBP 12,000 – 22,000" },
           { k: "MBA / Specialized Programs", v: "GBP 18,000 – 30,000+" },
-          { k: "PhD / Research Programs", v: "Often funded or partially funded (subject to availability)" },
+          {
+            k: "PhD / Research Programs",
+            v: "Often funded or partially funded (subject to availability)",
+          },
         ]}
       />
 
@@ -480,7 +554,9 @@ function UkStudent() {
       <Subheading>Documents Checklist – UK Student Visa</Subheading>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 shadow-[0_10px_28px_rgba(2,6,23,0.05)]">
-          <div className="text-sm font-semibold text-[var(--evg-deep)]">Mandatory Documents</div>
+          <div className="text-sm font-semibold text-[var(--evg-deep)]">
+            Mandatory Documents
+          </div>
           <BulletList
             items={[
               "Valid passport",
@@ -494,7 +570,9 @@ function UkStudent() {
         </div>
 
         <div className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 shadow-[0_10px_28px_rgba(2,6,23,0.05)]">
-          <div className="text-sm font-semibold text-[var(--evg-deep)]">Additional Documents (if applicable)</div>
+          <div className="text-sm font-semibold text-[var(--evg-deep)]">
+            Additional Documents (if applicable)
+          </div>
           <BulletList
             items={[
               "Sponsor documents",
@@ -527,12 +605,16 @@ function UkStudent() {
 
       <Subheading>Important Advisory</Subheading>
       <p className="mt-3 text-sm sm:text-base text-slate-700 leading-relaxed">
-        UK student visas are assessed based on genuine student intent, academic progression, financial credibility, and strict documentation compliance.
-        Elite Visa Global conducts pre-application assessments to ensure your profile aligns with current UK immigration requirements before submission.
+        UK student visas are assessed based on genuine student intent, academic
+        progression, financial credibility, and strict documentation compliance.
+        Elite Visa Global conducts pre-application assessments to ensure your
+        profile aligns with current UK immigration requirements before
+        submission.
       </p>
 
       <AccentCallout>
-        Follow your dreams—with the right guidance. Elite Visa Global supports your UK study journey with precision, transparency, and responsibility.
+        Follow your dreams—with the right guidance. Elite Visa Global supports
+        your UK study journey with precision, transparency, and responsibility.
       </AccentCallout>
     </Section>
   );
@@ -612,7 +694,10 @@ function AustraliaStudent() {
           { k: "Bachelor’s Degrees", v: "AUD 15,000 – 25,000" },
           { k: "Master’s Degrees", v: "AUD 18,000 – 35,000" },
           { k: "MBA / Specialized Programs", v: "AUD 30,000 – 45,000+" },
-          { k: "PhD / Research Programs", v: "Often funded or partially funded (subject to availability)" },
+          {
+            k: "PhD / Research Programs",
+            v: "Often funded or partially funded (subject to availability)",
+          },
         ]}
       />
 
@@ -630,7 +715,9 @@ function AustraliaStudent() {
       <Subheading>Documents Checklist – Australia Student Visa</Subheading>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 shadow-[0_10px_28px_rgba(2,6,23,0.05)]">
-          <div className="text-sm font-semibold text-[var(--evg-deep)]">Mandatory Documents</div>
+          <div className="text-sm font-semibold text-[var(--evg-deep)]">
+            Mandatory Documents
+          </div>
           <BulletList
             items={[
               "Valid passport",
@@ -645,7 +732,9 @@ function AustraliaStudent() {
         </div>
 
         <div className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 shadow-[0_10px_28px_rgba(2,6,23,0.05)]">
-          <div className="text-sm font-semibold text-[var(--evg-deep)]">Additional Documents (if applicable)</div>
+          <div className="text-sm font-semibold text-[var(--evg-deep)]">
+            Additional Documents (if applicable)
+          </div>
           <BulletList
             items={[
               "Sponsor documents",
@@ -657,7 +746,9 @@ function AustraliaStudent() {
         </div>
       </div>
 
-      <Subheading>Australia Student Visa Application Fee (from Bangladesh)</Subheading>
+      <Subheading>
+        Australia Student Visa Application Fee (from Bangladesh)
+      </Subheading>
       <BulletList
         items={[
           "Student Visa (Subclass 500) application fee: AUD 2000",
@@ -677,12 +768,16 @@ function AustraliaStudent() {
 
       <Subheading>Important Advisory</Subheading>
       <p className="mt-3 text-sm sm:text-base text-slate-700 leading-relaxed">
-        Australian student visas are assessed based on genuine student intent, financial capacity, academic progression, and strict compliance with visa conditions.
-        Elite Visa Global conducts pre-lodgement assessments to reduce risk and ensure alignment with current Australian immigration policy.
+        Australian student visas are assessed based on genuine student intent,
+        financial capacity, academic progression, and strict compliance with
+        visa conditions. Elite Visa Global conducts pre-lodgement assessments to
+        reduce risk and ensure alignment with current Australian immigration
+        policy.
       </p>
 
       <AccentCallout>
-        Follow your dreams—with informed choices. Elite Visa Global supports your Australian study journey with professionalism, clarity, and care.
+        Follow your dreams—with informed choices. Elite Visa Global supports
+        your Australian study journey with professionalism, clarity, and care.
       </AccentCallout>
     </Section>
   );
@@ -757,12 +852,21 @@ function UsaStudent() {
       <Subheading>Approximate Tuition Fee Range (per year)</Subheading>
       <KeyValueGrid
         rows={[
-          { k: "Community Colleges / Associate Degrees", v: "USD 8,000 – 15,000" },
-          { k: "Public Universities (Undergraduate)", v: "USD 15,000 – 25,000" },
+          {
+            k: "Community Colleges / Associate Degrees",
+            v: "USD 8,000 – 15,000",
+          },
+          {
+            k: "Public Universities (Undergraduate)",
+            v: "USD 15,000 – 25,000",
+          },
           { k: "Private Universities", v: "USD 25,000 – 45,000+" },
           { k: "Master’s Programs", v: "USD 18,000 – 35,000" },
           { k: "MBA / Specialized Programs", v: "USD 30,000 – 60,000+" },
-          { k: "PhD / Research Programs", v: "Often fully or partially funded" },
+          {
+            k: "PhD / Research Programs",
+            v: "Often fully or partially funded",
+          },
         ]}
       />
 
@@ -780,7 +884,9 @@ function UsaStudent() {
       <Subheading>Documents Checklist – USA Student Visa (F-1)</Subheading>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 shadow-[0_10px_28px_rgba(2,6,23,0.05)]">
-          <div className="text-sm font-semibold text-[var(--evg-deep)]">Mandatory Documents</div>
+          <div className="text-sm font-semibold text-[var(--evg-deep)]">
+            Mandatory Documents
+          </div>
           <BulletList
             items={[
               "Valid passport",
@@ -795,7 +901,9 @@ function UsaStudent() {
         </div>
 
         <div className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 shadow-[0_10px_28px_rgba(2,6,23,0.05)]">
-          <div className="text-sm font-semibold text-[var(--evg-deep)]">Additional Documents</div>
+          <div className="text-sm font-semibold text-[var(--evg-deep)]">
+            Additional Documents
+          </div>
           <BulletList
             items={[
               "Standardized test scores (if required)",
@@ -807,7 +915,9 @@ function UsaStudent() {
         </div>
       </div>
 
-      <Subheading>USA Student Visa Application Fee (from Bangladesh)</Subheading>
+      <Subheading>
+        USA Student Visa Application Fee (from Bangladesh)
+      </Subheading>
       <BulletList
         items={[
           "SEVIS fee: USD 350",
@@ -828,12 +938,17 @@ function UsaStudent() {
 
       <Subheading>Important Advisory</Subheading>
       <p className="mt-3 text-sm sm:text-base text-slate-700 leading-relaxed">
-        US student visas are interview-driven and credibility-focused. Visa approval depends heavily on academic clarity, financial strength, career intent,
-        and ability to articulate study plans and home-country ties. Elite Visa Global provides interview preparation, document alignment, and case strategy to strengthen your application.
+        US student visas are interview-driven and credibility-focused. Visa
+        approval depends heavily on academic clarity, financial strength, career
+        intent, and ability to articulate study plans and home-country ties.
+        Elite Visa Global provides interview preparation, document alignment,
+        and case strategy to strengthen your application.
       </p>
 
       <AccentCallout>
-        Follow your dreams—with preparation that speaks for itself. Elite Visa Global supports your US study journey with insight, structure, and professionalism.
+        Follow your dreams—with preparation that speaks for itself. Elite Visa
+        Global supports your US study journey with insight, structure, and
+        professionalism.
       </AccentCallout>
     </Section>
   );
@@ -851,14 +966,19 @@ function UaeVisit() {
       subtitle="End-to-end assistance to ensure correct visa type selection and compliant submission."
     >
       <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-        UAE visas are generally short-term, sponsor-based, and processed electronically, making accuracy of documents and sponsor details critical.
-        Elite Visa Global provides end-to-end assistance to ensure correct visa type selection and compliant submission.
+        UAE visas are generally short-term, sponsor-based, and processed
+        electronically, making accuracy of documents and sponsor details
+        critical. Elite Visa Global provides end-to-end assistance to ensure
+        correct visa type selection and compliant submission.
       </p>
 
       <Subheading>Tourist / Visit Visa (UAE)</Subheading>
       <KeyValueGrid
         rows={[
-          { k: "Purpose", v: "Leisure travel, sightseeing, short-term personal visits (without family sponsorship)." },
+          {
+            k: "Purpose",
+            v: "Leisure travel, sightseeing, short-term personal visits (without family sponsorship).",
+          },
           {
             k: "Common Visa Validity",
             v: "30 days (single or multiple entry), 60 days (single or multiple entry). Extendable in some cases (subject to UAE rules).",
@@ -893,13 +1013,23 @@ function UaeVisit() {
       <Subheading>Family Visit Visa (UAE)</Subheading>
       <KeyValueGrid
         rows={[
-          { k: "Purpose", v: "Visiting close family members legally residing in the UAE." },
-          { k: "Sponsor", v: "UAE resident (spouse, parent, child, or close relative) with valid residence visa." },
+          {
+            k: "Purpose",
+            v: "Visiting close family members legally residing in the UAE.",
+          },
+          {
+            k: "Sponsor",
+            v: "UAE resident (spouse, parent, child, or close relative) with valid residence visa.",
+          },
           {
             k: "Applicant Documents",
             v: (
               <ul className="mt-1 space-y-1">
-                {["Passport (6 months validity)", "Photograph (white background)", "National ID copy"].map((x) => (
+                {[
+                  "Passport (6 months validity)",
+                  "Photograph (white background)",
+                  "National ID copy",
+                ].map((x) => (
                   <li key={x} className="text-sm text-slate-800">
                     • {x}
                   </li>
@@ -926,7 +1056,10 @@ function UaeVisit() {
               </ul>
             ),
           },
-          { k: "UAE Family Visit Visa Fee (Approx.)", v: "30-day: BDT 12,000 – 18,000; 60-day: BDT 18,000 – 25,000" },
+          {
+            k: "UAE Family Visit Visa Fee (Approx.)",
+            v: "30-day: BDT 12,000 – 18,000; 60-day: BDT 18,000 – 25,000",
+          },
           { k: "Approximate Processing Time", v: "5–10 working days" },
         ]}
       />
@@ -934,19 +1067,28 @@ function UaeVisit() {
       <Subheading>Business Visa (UAE)</Subheading>
       <KeyValueGrid
         rows={[
-          { k: "Purpose", v: "Business meetings, exhibitions, conferences, short-term commercial visits (not valid for employment)." },
-          { k: "Sponsor", v: "UAE-based company, event organizer, or registered business entity." },
+          {
+            k: "Purpose",
+            v: "Business meetings, exhibitions, conferences, short-term commercial visits (not valid for employment).",
+          },
+          {
+            k: "Sponsor",
+            v: "UAE-based company, event organizer, or registered business entity.",
+          },
           {
             k: "Applicant Documents",
             v: (
               <ul className="mt-1 space-y-1">
-                {["Passport (6 months validity)", "Photograph (white background)", "National ID copy", "Previous travel history (if available)"].map(
-                  (x) => (
-                    <li key={x} className="text-sm text-slate-800">
-                      • {x}
-                    </li>
-                  )
-                )}
+                {[
+                  "Passport (6 months validity)",
+                  "Photograph (white background)",
+                  "National ID copy",
+                  "Previous travel history (if available)",
+                ].map((x) => (
+                  <li key={x} className="text-sm text-slate-800">
+                    • {x}
+                  </li>
+                ))}
               </ul>
             ),
           },
@@ -954,17 +1096,23 @@ function UaeVisit() {
             k: "Business Documents",
             v: (
               <ul className="mt-1 space-y-1">
-                {["Invitation letter from UAE company", "Trade license of UAE sponsor", "Cover letter stating purpose of visit", "Meeting or event details"].map(
-                  (x) => (
-                    <li key={x} className="text-sm text-slate-800">
-                      • {x}
-                    </li>
-                  )
-                )}
+                {[
+                  "Invitation letter from UAE company",
+                  "Trade license of UAE sponsor",
+                  "Cover letter stating purpose of visit",
+                  "Meeting or event details",
+                ].map((x) => (
+                  <li key={x} className="text-sm text-slate-800">
+                    • {x}
+                  </li>
+                ))}
               </ul>
             ),
           },
-          { k: "UAE Business Visa Fee (Approx.)", v: "30-day: BDT 15,000 – 22,000; 60-day: BDT 20,000 – 30,000" },
+          {
+            k: "UAE Business Visa Fee (Approx.)",
+            v: "30-day: BDT 15,000 – 22,000; 60-day: BDT 20,000 – 30,000",
+          },
           { k: "Approximate Processing Time", v: "5–10 working days" },
         ]}
       />
@@ -981,7 +1129,8 @@ function UaeVisit() {
       />
 
       <AccentCallout>
-        Follow your dreams—travel with confidence. Elite Visa Global guides your UAE visit with professionalism and care.
+        Follow your dreams—travel with confidence. Elite Visa Global guides your
+        UAE visit with professionalism and care.
       </AccentCallout>
     </Section>
   );
