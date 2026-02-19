@@ -1,45 +1,69 @@
 import React from "react";
+import { themeVars } from "@/lib/theme";
 
 export function WelcomeSection() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20">
-      <div className="max-w-4xl">
-        <div className="text-sm tracking-[0.22em] text-white/60">WELCOME</div>
-        <h2 className="mt-3 text-3xl md:text-4xl">
-          Welcome to Elite Visa Global
-        </h2>
+    <section
+      className="relative overflow-hidden bg-white"
+      style={themeVars}
+    >
+      {/* Soft EVG blue glow */}
+      <div
+        className="pointer-events-none absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(28,90,168,0.10) 0%, rgba(28,90,168,0.04) 40%, transparent 70%)",
+        }}
+      />
 
-        <div className="mt-6 space-y-5 text-white/70 leading-relaxed">
-          <p>
-            Elite Visa Global (EVG) is a premium Visa, Tours & Travel
-            consultancy, created for individuals and families ready to follow
-            their dreams beyond borders—with clarity, confidence, and
-            professional guidance.
-          </p>
+      {/* subtle top divider */}
+      <div className="absolute top-0 left-0 w-full h-px bg-black/5" />
 
-          <p>
-            In a world shaped by complex immigration rules and global
-            regulations, EVG transforms ambition into structured, achievable
-            pathways. From international education and short-term travel to
-            business mobility, pilgrimage, and leisure journeys, we ensure every
-            step is compliant, considered, and purposeful.
-          </p>
+      <div className="relative mx-auto max-w-7xl px-6 py-24">
+        <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
+          <div className="text-xs tracking-[0.3em] text-[color:var(--evg-blue)]/70">
+            WELCOME
+          </div>
 
-          <p>
-            Our approach is consultative, not transactional. We listen before we
-            advise, assess before we recommend, and prepare every application
-            with precision and integrity.
-          </p>
+          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-semibold text-[color:var(--evg-deep)] leading-tight">
+            Welcome to Elite Visa Global
+          </h2>
 
-          <p>
-            At Elite Visa Global, dreams are not rushed—they are guided.
-            <br />
-            <span className="text-[color:var(--evg-gold)] font-medium">
-              Follow your dreams. We’ll help you reach them.
-            </span>
-          </p>
+          <div className="mt-8 space-y-6 text-gray-800 leading-relaxed text-[17px]">
+            <p>
+              Elite Visa Global (EVG) is a premium Visa, Tours & Travel
+              consultancy, created for individuals and families ready to follow
+              their dreams beyond borders—with clarity, confidence, and
+              professional guidance.
+            </p>
+
+            <p>
+              In a world shaped by complex immigration rules and global
+              regulations, EVG transforms ambition into structured, achievable
+              pathways. From international education and short-term travel to
+              business mobility, pilgrimage, and leisure journeys, we ensure every
+              step is compliant, considered, and purposeful.
+            </p>
+
+            <p>
+              Our approach is consultative, not transactional. We listen before we
+              advise, assess before we recommend, and prepare every application
+              with precision and integrity.
+            </p>
+
+            <p>
+              At Elite Visa Global, dreams are not rushed—they are guided.
+              <br /> <br />
+              <span className="text-[color:var(--evg-gold)] font-semibold">
+                Follow your dreams. We’ll help you reach them.
+              </span>
+            </p>
+          </div>
         </div>
       </div>
+
+      {/* soft bottom fade */}
+      <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-b from-transparent to-black/[0.03]" />
     </section>
   );
 }

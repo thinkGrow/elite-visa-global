@@ -38,11 +38,11 @@ export function CoreServiceSection() {
           >
             <div className="text-2xl">{s.icon}</div>
             <h3 className="mt-4 text-lg">{s.title}</h3>
-            <p className="mt-3 text-sm text-white/70 leading-relaxed">
+            <p className="mt-3 text-sm text-black/70 leading-relaxed">
               {s.text}
             </p>
 
-            <div className="mt-5 text-sm text-white/60 group-hover:text-white transition">
+            <div className="mt-5 text-sm text-black/60 group-hover:text-black transition">
               Learn more →
             </div>
           </a>

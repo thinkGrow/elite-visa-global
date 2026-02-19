@@ -21,8 +21,9 @@ const themeVars: ThemeVars = {
 export default function HomePage() {
   return (
     <main
-      className="min-h-screen text-white bg-[linear-gradient(to_bottom,#06122b,#07183a_40%,#030814)]"
-      style={themeVars}
+    // className="min-h-screen text-white bg-[linear-gradient(to_bottom,#06122b,#07183a_40%,#030814)]"
+    className="min-h-screen text-black bg-white"
+    style={themeVars}
     >
       <Navbar></Navbar>
 
