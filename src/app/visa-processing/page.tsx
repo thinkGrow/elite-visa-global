@@ -8,17 +8,32 @@ import { Navbar } from "@/components/home/layout/Navbar";
 // import { Footer } from "@/components/home/layout/Footer";
 
 type VisaCategoryKey = "student" | "visit";
-type CountryKey = "uk" | "australia" | "usa" | "uae";
 
-type Country = {
-  key: CountryKey;
+type StudentCountryKey = "uk" | "australia" | "usa";
+type VisitCountryKey =
+  | "uae"
+  | "saudi"
+  | "qatar"
+  | "kuwait"
+  | "bahrain"
+  | "oman"
+  | "turkey"
+  | "malaysia"
+  | "singapore"
+  | "thailand";
+
+type CountryBase<K extends string> = {
+  key: K;
   name: string;
   flagEmoji: string;
-  sectionId: string;
   badge?: string;
+  sectionId?: string; // reserved for future anchors/CMS
 };
 
-const studentCountries: Country[] = [
+type StudentCountry = CountryBase<StudentCountryKey>;
+type VisitCountry = CountryBase<VisitCountryKey>;
+
+const studentCountries: StudentCountry[] = [
   {
     key: "uk",
     name: "United Kingdom",
@@ -42,13 +57,76 @@ const studentCountries: Country[] = [
   },
 ];
 
-const visitCountries: Country[] = [
+const visitCountries: VisitCountry[] = [
   {
     key: "uae",
     name: "United Arab Emirates",
     flagEmoji: "🇦🇪",
     sectionId: "uae",
     badge: "e-Visa",
+  },
+  {
+    key: "saudi",
+    name: "Saudi Arabia",
+    flagEmoji: "🇸🇦",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "qatar",
+    name: "Qatar",
+    flagEmoji: "🇶🇦",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "kuwait",
+    name: "Kuwait",
+    flagEmoji: "🇰🇼",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "bahrain",
+    name: "Bahrain",
+    flagEmoji: "🇧🇭",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "oman",
+    name: "Oman",
+    flagEmoji: "🇴🇲",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "turkey",
+    name: "Turkey",
+    flagEmoji: "🇹🇷",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "malaysia",
+    name: "Malaysia",
+    flagEmoji: "🇲🇾",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "singapore",
+    name: "Singapore",
+    flagEmoji: "🇸🇬",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
+  },
+  {
+    key: "thailand",
+    name: "Thailand",
+    flagEmoji: "🇹🇭",
+    sectionId: "visit-dynamic",
+    badge: "Visit",
   },
 ];
 
@@ -86,7 +164,6 @@ const studentFutureFlags = [
 ];
 
 function Container({ children }: { children: React.ReactNode }) {
-  // ✅ max-w-7xl
   return (
     <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
       {children}
@@ -96,7 +173,6 @@ function Container({ children }: { children: React.ReactNode }) {
 
 function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    // ✅ outside the container stays pure white
     <main style={themeVars} className="min-h-screen bg-white text-slate-900">
       <Navbar />
       <div className="pt-24 pb-14 sm:pt-28 sm:pb-16">{children}</div>
@@ -137,14 +213,6 @@ function Card({
 
 function Divider() {
   return <div className="my-10 h-px w-full bg-slate-200/70" />;
-}
-
-function Pill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700 shadow-sm">
-      {children}
-    </span>
-  );
 }
 
 function Badge({ children }: { children: React.ReactNode }) {
@@ -236,13 +304,27 @@ function KeyValueGrid({
   );
 }
 
-function FlagsBar({
+/** DRY flags picker for both student + visit */
+function FlagsPicker<K extends string>({
   title,
-  countries,
+  items,
+  selected,
+  onSelect,
+  layout = "wrap",
+  showBadges = true,
 }: {
   title: string;
-  countries: Country[];
+  items: Array<CountryBase<K>>;
+  selected: K;
+  onSelect: (k: K) => void;
+  layout?: "wrap" | "grid";
+  showBadges?: boolean;
 }) {
+  const listClass =
+    layout === "grid"
+      ? "mt-1 grid grid-cols-2 gap-2 sm:mt-0 sm:grid-cols-4 lg:grid-cols-5"
+      : "flex flex-wrap gap-2";
+
   return (
     <Card hairline className="p-4 sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -250,32 +332,41 @@ function FlagsBar({
           {title}
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {countries.map((c) => (
-            <a
-              key={c.key}
-              href={`#${c.sectionId}`}
-              className={[
-                "group inline-flex items-center gap-2 rounded-full",
-                "border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700",
-                "shadow-sm transition",
-                "hover:-translate-y-0.5 hover:border-[var(--evg-gold)]/70 hover:shadow-md",
-                "focus:outline-none focus:ring-2 focus:ring-[var(--evg-gold)]/25",
-              ].join(" ")}
-            >
-              <span className="text-base transition-transform duration-300 group-hover:scale-[1.08]">
-                {c.flagEmoji}
-              </span>
-              <span className="underline-offset-4 group-hover:underline group-hover:decoration-[var(--evg-gold)]">
-                {c.name}
-              </span>
-              {c.badge ? (
-                <span className="ml-1 hidden sm:inline-flex">
-                  <Badge>{c.badge}</Badge>
+        <div className={listClass}>
+          {items.map((c) => {
+            const isActive = c.key === selected;
+            return (
+              <button
+                key={c.key}
+                type="button"
+                onClick={() => onSelect(c.key)}
+                className={[
+                  "group inline-flex items-center gap-2 rounded-full",
+                  "border bg-white px-3 py-2 text-sm",
+                  "shadow-sm transition",
+                  layout === "grid" ? "justify-start" : "",
+                  isActive
+                    ? "border-[var(--evg-gold)]/70 bg-[rgba(214,162,58,0.08)] text-[var(--evg-deep)]"
+                    : "border-slate-200 text-slate-700 hover:-translate-y-0.5 hover:border-[var(--evg-gold)]/70 hover:shadow-md",
+                  "focus:outline-none focus:ring-2 focus:ring-[var(--evg-gold)]/25",
+                ].join(" ")}
+                aria-pressed={isActive}
+              >
+                <span className="text-base transition-transform duration-300 group-hover:scale-[1.08]">
+                  {c.flagEmoji}
                 </span>
-              ) : null}
-            </a>
-          ))}
+                <span className="truncate underline-offset-4 group-hover:underline group-hover:decoration-[var(--evg-gold)]">
+                  {c.name}
+                </span>
+
+                {showBadges && c.badge ? (
+                  <span className="ml-1 hidden sm:inline-flex">
+                    <Badge>{c.badge}</Badge>
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
         </div>
       </div>
     </Card>
@@ -291,17 +382,19 @@ function Dropdown({
 }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <div className="inline-flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-[var(--evg-gold)]" />
-          <span className="text-xs tracking-[0.22em] text-slate-600">
-            ELITE VISA GLOBAL
-          </span>
+
+
+      <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
+        <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
+          ELITE VISA GLOBAL
         </div>
 
-        <h1 className="mt-3 text-2xl sm:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
-          Visa Processing
-        </h1>
+        <div className="mt-3 flex items-center gap-3">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
+            Visa Processing
+          </h2>
+          <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
+        </div>
 
         <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
           Compliance-focused guidance for students, tourists, families, and
@@ -349,13 +442,194 @@ function AccentCallout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function VisitTemplate({ countryName }: { countryName: string }) {
+  // Uses UAE copy as placeholder for ALL visit countries for now
+  return (
+    <Section
+      id="visit-dynamic"
+      title={`${countryName} (Visit, Family & Business)`}
+      subtitle="For now, this uses the UAE reference layout. We will replace each country with accurate requirements later."
+    >
+      <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+        Visas are generally short-term, sponsor-based, and processed
+        electronically, making accuracy of documents and sponsor details
+        critical. Elite Visa Global provides end-to-end assistance to ensure
+        correct visa type selection and compliant submission.
+      </p>
+
+      <Subheading>Tourist / Visit Visa</Subheading>
+      <KeyValueGrid
+        rows={[
+          {
+            k: "Purpose",
+            v: "Leisure travel, sightseeing, short-term personal visits (without family sponsorship).",
+          },
+          {
+            k: "Common Visa Validity",
+            v: "30 days (single or multiple entry), 60 days (single or multiple entry). Extendable in some cases (subject to rules).",
+          },
+          {
+            k: "Required Documents",
+            v: (
+              <ul className="mt-1 space-y-1">
+                {[
+                  "Passport (minimum 6 months validity)",
+                  "Passport-size photograph (white background)",
+                  "National ID (NID) copy",
+                  "Travel history (if available)",
+                  "Hotel booking or address in destination",
+                  "Return or onward ticket (recommended)",
+                ].map((x) => (
+                  <li key={x} className="text-sm text-slate-800">
+                    • {x}
+                  </li>
+                ))}
+              </ul>
+            ),
+          },
+          {
+            k: "Approx Fee (BD)",
+            v: "30-day: BDT 10,000 – 15,000; 60-day: BDT 15,000 – 20,000 (varies based on sponsor and processing)",
+          },
+          { k: "Approximate Processing Time", v: "3–10 working days" },
+        ]}
+      />
+
+      <Subheading>Family Visit Visa</Subheading>
+      <KeyValueGrid
+        rows={[
+          {
+            k: "Purpose",
+            v: "Visiting close family members legally residing in the destination country.",
+          },
+          {
+            k: "Sponsor",
+            v: "Resident sponsor (spouse/parent/child/close relative) with valid status.",
+          },
+          {
+            k: "Applicant Documents",
+            v: (
+              <ul className="mt-1 space-y-1">
+                {[
+                  "Passport (6 months validity)",
+                  "Photograph (white background)",
+                  "National ID copy",
+                ].map((x) => (
+                  <li key={x} className="text-sm text-slate-800">
+                    • {x}
+                  </li>
+                ))}
+              </ul>
+            ),
+          },
+          {
+            k: "Sponsor Documents",
+            v: (
+              <ul className="mt-1 space-y-1">
+                {[
+                  "Residence status/visa copy",
+                  "National ID (if applicable)",
+                  "Passport copy",
+                  "Salary proof / contract",
+                  "Tenancy proof",
+                  "Proof of relationship (attested if required)",
+                ].map((x) => (
+                  <li key={x} className="text-sm text-slate-800">
+                    • {x}
+                  </li>
+                ))}
+              </ul>
+            ),
+          },
+          {
+            k: "Approx Fee (BD)",
+            v: "30-day: BDT 12,000 – 18,000; 60-day: BDT 18,000 – 25,000",
+          },
+          { k: "Approximate Processing Time", v: "5–10 working days" },
+        ]}
+      />
+
+      <Subheading>Business Visa</Subheading>
+      <KeyValueGrid
+        rows={[
+          {
+            k: "Purpose",
+            v: "Business meetings, exhibitions, conferences, short-term commercial visits (not valid for employment).",
+          },
+          {
+            k: "Sponsor",
+            v: "Company sponsor / event organizer / registered entity.",
+          },
+          {
+            k: "Applicant Documents",
+            v: (
+              <ul className="mt-1 space-y-1">
+                {[
+                  "Passport (6 months validity)",
+                  "Photograph (white background)",
+                  "National ID copy",
+                  "Previous travel history (if available)",
+                ].map((x) => (
+                  <li key={x} className="text-sm text-slate-800">
+                    • {x}
+                  </li>
+                ))}
+              </ul>
+            ),
+          },
+          {
+            k: "Business Documents",
+            v: (
+              <ul className="mt-1 space-y-1">
+                {[
+                  "Invitation letter",
+                  "Sponsor trade license / business registration",
+                  "Cover letter stating purpose of visit",
+                  "Meeting or event details",
+                ].map((x) => (
+                  <li key={x} className="text-sm text-slate-800">
+                    • {x}
+                  </li>
+                ))}
+              </ul>
+            ),
+          },
+          {
+            k: "Approx Fee (BD)",
+            v: "30-day: BDT 15,000 – 22,000; 60-day: BDT 20,000 – 30,000",
+          },
+          { k: "Approximate Processing Time", v: "5–10 working days" },
+        ]}
+      />
+
+      <Subheading>Important Notes</Subheading>
+      <BulletList
+        items={[
+          "Visa rules can change without notice; always confirm latest requirements before travel.",
+          "Overstaying can result in fines and future travel restrictions.",
+          "Employment is strictly prohibited on visit or business visas.",
+          "Elite Visa Global ensures your application is correctly categorized, accurately documented, and submitted through authorized channels.",
+        ]}
+      />
+
+      <div className="mt-6">
+        <Link
+          href="/contact"
+          className="inline-flex items-center justify-center rounded-2xl bg-[var(--evg-gold)] px-5 py-3 text-sm font-semibold text-slate-900 transition hover:brightness-110 shadow-[0_10px_30px_rgba(214,162,58,0.22)]"
+        >
+          Get Consultation
+        </Link>
+      </div>
+    </Section>
+  );
+}
+
 export default function VisaProcessingPage() {
   const [category, setCategory] = React.useState<VisaCategoryKey>("student");
 
   return (
     <PageShell>
       <Container>
-        {/* Hero card: “exciting” stays INSIDE max-w-7xl, outside remains white */}
         <Card hairline className="p-5 sm:p-8">
           <div
             aria-hidden="true"
@@ -363,17 +637,6 @@ export default function VisaProcessingPage() {
           />
           <div className="relative">
             <Dropdown value={category} onChange={setCategory} />
-
-            {/* <div className="mt-6 flex flex-wrap gap-2">
-              <Pill>Static for now</Pill>
-              <Pill>CMS-ready structure</Pill>
-              <Pill>EVG accents (Gold / Deep Blue)</Pill>
-            </div> */}
-
-            <AccentCallout>
-              Tip: hover a flag and click to jump. Later this becomes CMS data
-              (countries → sections → blocks → Bangla/English).
-            </AccentCallout>
           </div>
         </Card>
 
@@ -396,50 +659,59 @@ export default function VisaProcessingPage() {
   );
 }
 
+/* =========================
+   STUDENT (default country shown)
+========================= */
+
 function StudentVisaProcessing() {
+  const [selected, setSelected] = React.useState<StudentCountryKey>("uk");
+
+  const studentContent: Record<StudentCountryKey, React.ReactNode> = {
+    uk: <UkStudent />,
+    australia: <AustraliaStudent />,
+    usa: <UsaStudent />,
+  };
+
   return (
     <div className="space-y-10">
-      <FlagsBar
+      <FlagsPicker
         title="Student visa destinations"
-        countries={studentCountries}
+        items={studentCountries}
+        selected={selected}
+        onSelect={setSelected}
+        layout="wrap"
+        showBadges
       />
 
-      <Section
-        title="Inside Student Visa Processing"
-        subtitle="Select a country flag to jump to details. More destinations and Bangla version will be added later."
-      >
-        <div className="flex flex-wrap gap-2">
-          {studentFutureFlags.map((t) => (
-            <span
-              key={t}
-              className={[
-                "rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700",
-                "transition hover:-translate-y-0.5 hover:border-[var(--evg-gold)]/70 hover:shadow-sm",
-              ].join(" ")}
-              title="Planned (to be added later)"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </Section>
-
-      <UkStudent />
-      <AustraliaStudent />
-      <UsaStudent />
+      {studentContent[selected]}
     </div>
   );
 }
 
+/* =========================
+   VISIT/FAMILY/BUSINESS (default UAE shown)
+========================= */
+
 function VisitFamilyBusinessVisaProcessing() {
+  const [selected, setSelected] = React.useState<VisitCountryKey>("uae");
+  const current = visitCountries.find((c) => c.key === selected);
+
   return (
     <div className="space-y-10">
-      <FlagsBar
+      <FlagsPicker
         title="Visit, family & business destinations"
-        countries={visitCountries}
+        items={visitCountries}
+        selected={selected}
+        onSelect={setSelected}
+        layout="grid"
+        showBadges={false}
       />
 
-      <UaeVisit />
+      {selected === "uae" ? (
+        <UaeVisit />
+      ) : (
+        <VisitTemplate countryName={current?.name ?? "Selected Country"} />
+      )}
 
       <Section
         title="Other visa destinations (planned)"
