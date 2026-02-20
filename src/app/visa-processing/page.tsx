@@ -4,6 +4,7 @@
 import React from "react";
 import Link from "next/link";
 import { themeVars } from "@/lib/theme";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/home/layout/Navbar";
 // import { Footer } from "@/components/home/layout/Footer";
 
@@ -625,7 +626,24 @@ function VisitTemplate({ countryName }: { countryName: string }) {
 }
 
 export default function VisaProcessingPage() {
-  const [category, setCategory] = React.useState<VisaCategoryKey>("student");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const typeParam = (searchParams.get("type") ?? "").toLowerCase();
+  const initial: VisaCategoryKey = typeParam === "visit" ? "visit" : "student";
+
+  const [category, setCategory] = React.useState<VisaCategoryKey>(initial);
+
+  React.useEffect(() => {
+    const t = (searchParams.get("type") ?? "").toLowerCase();
+    const next: VisaCategoryKey = t === "visit" ? "visit" : "student";
+    setCategory(next);
+  }, [searchParams]);
+
+  const onChange = (v: VisaCategoryKey) => {
+    setCategory(v);
+    router.replace(`/visa-processing?type=${v}`, { scroll: false });
+  };
 
   return (
     <PageShell>
@@ -636,7 +654,7 @@ export default function VisaProcessingPage() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_circle_at_20%_0%,rgba(28,90,168,0.10),transparent_55%),radial-gradient(700px_circle_at_85%_20%,rgba(214,162,58,0.10),transparent_55%)]"
           />
           <div className="relative">
-            <Dropdown value={category} onChange={setCategory} />
+            <Dropdown value={category} onChange={onChange} />
           </div>
         </Card>
 
