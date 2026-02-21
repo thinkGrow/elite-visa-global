@@ -107,16 +107,13 @@ function Dropdown({
           <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
         </div>
 
-        <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
+        {/* <p className="mt-3 max-w-2xl text-sm sm:text-base text-black">
           International and local tours—clear itinerary, inclusions, and pricing
           tiers. Choose a category to explore.
-        </p>
+        </p> */}
       </div>
 
       <div className="w-full sm:w-[420px]">
-        <label className="block text-xs uppercase tracking-wide text-slate-500">
-          Dropdown Menu
-        </label>
         <div className="mt-2 relative">
           <select
             value={value}
@@ -135,18 +132,13 @@ function Dropdown({
             ▼
           </div>
         </div>
-
-        <div className="mt-3 text-xs text-slate-500">
-          Filter by continent and country for international tours.
-        </div>
       </div>
     </div>
   );
 }
 
 /* =========================================
-   DATA: 3–4 per continent, 5–6 for Europe/Asia
-   Multi: 3–4 multi-country routes (no sub nav)
+   DATA
 ========================================= */
 
 const continents: Array<{ key: ContinentKey; label: string }> = [
@@ -159,10 +151,10 @@ const continents: Array<{ key: ContinentKey; label: string }> = [
   { key: "multi", label: "Multi Countries" },
 ];
 
-// NOTE: these are just starting picks for tour packages.
-// You can expand anytime, CMS later.
-const countriesByContinent: Record<Exclude<ContinentKey, "multi">, Country[]> = {
-  // 6 for Europe
+const countriesByContinent: Record<
+  Exclude<ContinentKey, "multi">,
+  Country[]
+> = {
   europe: [
     {
       key: "france",
@@ -215,12 +207,11 @@ const countriesByContinent: Record<Exclude<ContinentKey, "multi">, Country[]> = 
       flag: "🇳🇱",
       slug: "netherlands",
       heroImage:
-        "https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=1400&q=70",
+        "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1400&q=70",
       badge: "Amsterdam",
     },
   ],
 
-  // 6 for Asia
   asia: [
     {
       key: "thailand",
@@ -278,7 +269,6 @@ const countriesByContinent: Record<Exclude<ContinentKey, "multi">, Country[]> = 
     },
   ],
 
-  // 3–4 for North America
   na: [
     {
       key: "usa",
@@ -318,7 +308,6 @@ const countriesByContinent: Record<Exclude<ContinentKey, "multi">, Country[]> = 
     },
   ],
 
-  // 3–4 for South America
   sa: [
     {
       key: "brazil",
@@ -358,7 +347,6 @@ const countriesByContinent: Record<Exclude<ContinentKey, "multi">, Country[]> = 
     },
   ],
 
-  // 3–4 for Africa
   africa: [
     {
       key: "egypt",
@@ -398,7 +386,6 @@ const countriesByContinent: Record<Exclude<ContinentKey, "multi">, Country[]> = 
     },
   ],
 
-  // 3–4 for Oceania
   oceania: [
     {
       key: "australia",
@@ -444,7 +431,7 @@ const multiCountryRoutes: Array<{
   title: string;
   subtitle: string;
   image: string;
-  slug: string; // /tour-packages/[slug]
+  slug: string;
 }> = [
   {
     key: "europe-multi",
@@ -481,7 +468,6 @@ const multiCountryRoutes: Array<{
 ];
 
 function makeDefaultPackages(countryName: string, slug: string): PackageCard[] {
-  // keep it simple + realistic placeholders, CMS later
   return [
     {
       id: `${slug}-classic`,
@@ -643,7 +629,7 @@ function PackageGrid({
 }
 
 /* =========================
-   INTERNATIONAL (continent tabs + subnav)
+   INTERNATIONAL
 ========================= */
 
 function InternationalTours() {
@@ -653,11 +639,13 @@ function InternationalTours() {
   const urlContinent = (sp.get("continent") ?? "europe").toLowerCase();
   const urlCountry = (sp.get("country") ?? "").toLowerCase();
 
-  const safeContinent: ContinentKey = ((
-    ["europe", "asia", "na", "sa", "africa", "oceania", "multi"] as string[]
-  ).includes(urlContinent)
-    ? urlContinent
-    : "europe") as ContinentKey;
+  const safeContinent: ContinentKey = (
+    (
+      ["europe", "asia", "na", "sa", "africa", "oceania", "multi"] as string[]
+    ).includes(urlContinent)
+      ? urlContinent
+      : "europe"
+  ) as ContinentKey;
 
   const [continent, setContinent] = React.useState<ContinentKey>(safeContinent);
 
@@ -665,10 +653,7 @@ function InternationalTours() {
     setContinent(safeContinent);
   }, [safeContinent]);
 
-  const setQuery = (next: {
-    continent?: ContinentKey;
-    country?: string;
-  }) => {
+  const setQuery = (next: { continent?: ContinentKey; country?: string }) => {
     const params = new URLSearchParams(sp.toString());
     if (next.continent) params.set("continent", next.continent);
     if (next.country !== undefined) {
@@ -683,7 +668,6 @@ function InternationalTours() {
   const onPickContinent = (v: ContinentKey) => {
     setContinent(v);
 
-    // reset country when switching continent (except multi)
     if (v === "multi") setQuery({ continent: v, country: "" });
     else {
       const list = countriesByContinent[v as Exclude<ContinentKey, "multi">];
@@ -692,7 +676,6 @@ function InternationalTours() {
     }
   };
 
-  // Determine active country for subnav continents
   const activeCountrySlug = React.useMemo(() => {
     if (continent === "multi") return "";
     const list = countriesByContinent[continent];
@@ -704,14 +687,14 @@ function InternationalTours() {
   const activeCountry = React.useMemo(() => {
     if (continent === "multi") return null;
     return (
-      countriesByContinent[continent].find((c) => c.slug === activeCountrySlug) ??
-      countriesByContinent[continent][0]
+      countriesByContinent[continent].find(
+        (c) => c.slug === activeCountrySlug,
+      ) ?? countriesByContinent[continent][0]
     );
   }, [continent, activeCountrySlug]);
 
   const packages: PackageCard[] = React.useMemo(() => {
     if (continent === "multi") {
-      // for multi, show route cards as packages
       return multiCountryRoutes.map((r) => ({
         id: r.slug,
         title: r.title,
@@ -726,15 +709,12 @@ function InternationalTours() {
     return makeDefaultPackages(activeCountry.name, activeCountry.slug).map(
       (p, idx) => ({
         ...p,
-        // use country hero as first card image for nicer cohesion
         image: idx === 0 ? activeCountry.heroImage : p.image,
-      })
+      }),
     );
   }, [continent, activeCountry]);
 
   const detailsHrefForPkg = (pkgId: string) => {
-    // redirect to country page (or multi route page).
-    // you can parse pkgId later if you want /tour-packages/[country]/[pkg]
     if (continent === "multi") return `/tour-packages/${pkgId}`;
     return `/tour-packages/${activeCountry?.slug ?? "country"}`;
   };
@@ -787,7 +767,7 @@ function InternationalTours() {
 }
 
 /* =========================
-   LOCAL (kept simple placeholder)
+   LOCAL
 ========================= */
 
 function LocalTours() {
@@ -858,13 +838,11 @@ export default function TourPackagesClient() {
   const onChange = (v: TourCategoryKey) => {
     setCategory(v);
 
-    // keep continent/country params if present
     const params = new URLSearchParams(searchParams.toString());
     params.set("type", v);
     router.replace(`/tour-packages?${params.toString()}`, { scroll: false });
   };
 
-  // ensure default continent/country exists for international (clean UX)
   React.useEffect(() => {
     if (category !== "international") return;
 
@@ -890,27 +868,46 @@ export default function TourPackagesClient() {
 
       if (!has) {
         params.set("country", list?.[0]?.slug ?? "");
-        router.replace(`/tour-packages?${params.toString()}`, { scroll: false });
+        router.replace(`/tour-packages?${params.toString()}`, {
+          scroll: false,
+        });
       }
     } else {
-      // multi: no country
       if (params.get("country")) {
         params.delete("country");
-        router.replace(`/tour-packages?${params.toString()}`, { scroll: false });
+        router.replace(`/tour-packages?${params.toString()}`, {
+          scroll: false,
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
+  // ✅ hero bg image for the TOP CARD
+  const headerBg =
+    category === "international"
+      ? "/tours/hero-international.jpg"
+      : "/tours/hero-local.jpg";
+
   return (
     <PageShell>
       <Container>
-        <Card hairline className="p-5 sm:p-8">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_circle_at_20%_0%,rgba(28,90,168,0.10),transparent_55%),radial-gradient(700px_circle_at_85%_20%,rgba(214,162,58,0.10),transparent_55%)]"
-          />
-          <div className="relative">
+        <Card hairline className="p-0">
+          {/* background image */}
+          <div className="absolute inset-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={headerBg}
+              alt=""
+              className="h-full w-full object-cover"
+              loading="eager"
+            />
+            {/* darken + premium overlays */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/5 to-white/25" />
+          </div>
+
+          {/* content */}
+          <div className="relative p-5 sm:p-8">
             <Dropdown value={category} onChange={onChange} />
           </div>
         </Card>
@@ -924,8 +921,8 @@ export default function TourPackagesClient() {
         <div className="text-sm text-slate-600 leading-relaxed">
           Next step: create dynamic pages under{" "}
           <span className="text-slate-900">/src/app/tour-packages/[slug]</span>{" "}
-          to render country-specific details + multiple packages per country from
-          CMS.
+          to render country-specific details + multiple packages per country
+          from CMS.
         </div>
       </Container>
     </PageShell>
