@@ -12,8 +12,7 @@ export const toursListQuery = `
   heroImage,
   tags,
   badges,
-  isFeatured,
-  summary
+  isFeatured
 }
 `;
 
@@ -32,6 +31,12 @@ export const tourBySlugQuery = `
   tags,
   badges,
   isFeatured,
-  summary
+  highlights,
+  includes,
+  excludes,
+  summaryContent,
+  remarksContent,
+  itinerary,
+  faq
 }
 `;
