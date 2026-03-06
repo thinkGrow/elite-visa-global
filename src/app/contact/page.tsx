@@ -68,15 +68,17 @@ export default function ContactPage() {
 
       <section className="mx-auto max-w-7xl px-6 pt-28 pb-16">
         {/* Hero glass headline block */}
+        {/* Hero glass headline block */}
         <div
           className={[
             "rounded-3xl px-7 py-10 max-w-2xl",
             "bg-gradient-to-b from-white/18 to-white/10",
             "backdrop-blur-xl ring-1 ring-white/20",
             "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
+            "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[2px]",
           ].join(" ")}
         >
-          <h1 className="font-[var(--font-playfair)] text-5xl md:text-6xl leading-[1.02] font-semibold text-white">
+          <h1 className="font-[var(--font-playfair)] text-5xl leading-[1.02] font-semibold text-white text-balance">
             Let’s talk about your{" "}
             <span className="text-[var(--evg-gold)]">next journey</span>.
           </h1>

@@ -140,25 +140,18 @@ export default function AboutPage() {
         <div className="max-w-3xl">
           <div
             className={[
-              "rounded-3xl px-8 py-12 max-w-2xl",
+              "rounded-3xl px-7 py-10 max-w-2xl",
               "bg-gradient-to-b from-white/18 to-white/10",
               "backdrop-blur-xl ring-1 ring-white/20",
-              "shadow-[0_40px_100px_rgba(0,0,0,.45)]",
-              "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[3px]",
+              "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
+              "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[2px]",
             ].join(" ")}
           >
-            <h1 className="text-4xl font-semibold leading-[1.05] md:text-6xl">
-              <span className="block">Experience</span>
+            <h1 className="font-[var(--font-playfair)] text-5xl leading-[1.02] font-semibold text-white">
+              <span className="block">Experience driven by</span>
 
-              <span className="block text-white/80">driven by</span>
-
-              <span className="relative block">
-                <span className="bg-gradient-to-r from-[var(--evg-gold)] via-yellow-300 to-[var(--evg-gold)] bg-clip-text text-transparent">
-                  ethics & execution
-                </span>
-
-                {/* subtle glow */}
-                <span className="absolute inset-0 -z-10 blur-xl opacity-40 bg-[radial-gradient(circle_at_center,rgba(214,162,58,0.5),transparent_70%)]" />
+              <span className="block text-[var(--evg-gold)]">
+                ethics & execution
               </span>
             </h1>
           </div>
