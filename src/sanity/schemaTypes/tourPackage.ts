@@ -1,4 +1,51 @@
+import React from "react";
 import {defineArrayMember, defineField, defineType} from "sanity";
+
+const richTextBlock = defineArrayMember({
+  type: "block",
+  styles: [
+    {title: "Normal", value: "normal"},
+    {title: "H2", value: "h2"},
+    {title: "H3", value: "h3"},
+    {title: "Quote", value: "blockquote"},
+  ],
+  lists: [
+    {title: "Bullet", value: "bullet"},
+    {title: "Numbered", value: "number"},
+  ],
+  marks: {
+    decorators: [
+      {title: "Bold", value: "strong"},
+      {title: "Italic", value: "em"},
+      {
+        title: "Gold Text",
+        value: "goldText",
+        component: ({children}: {children: React.ReactNode}) =>
+          React.createElement("span", {style: {color: "#d6a23a"}}, children),
+      },
+      {
+        title: "Blue Text",
+        value: "blueText",
+        component: ({children}: {children: React.ReactNode}) =>
+          React.createElement("span", {style: {color: "#1c5aa8"}}, children),
+      },
+    ],
+    annotations: [
+      {
+        name: "link",
+        type: "object",
+        title: "Link",
+        fields: [
+          defineField({
+            name: "href",
+            title: "URL",
+            type: "url",
+          }),
+        ],
+      },
+    ],
+  },
+});
 
 const calloutBlock = defineArrayMember({
   type: "object",
@@ -277,7 +324,7 @@ export default defineType({
       type: "array",
       fieldset: "details",
       of: [
-        defineArrayMember({type: "block"}),
+        richTextBlock,
         defineArrayMember({type: "image", options: {hotspot: true}}),
         tableBlock,
         calloutBlock,
@@ -316,17 +363,6 @@ export default defineType({
               rows: 4,
             }),
           ],
-          preview: {
-            select: {
-              day: "day",
-              title: "title",
-            },
-            prepare({day, title}) {
-              return {
-                title: `Day ${day}: ${title}`,
-              };
-            },
-          },
         }),
       ],
     }),
@@ -336,13 +372,7 @@ export default defineType({
       title: "Remarks Content",
       type: "array",
       fieldset: "remarksSection",
-      of: [
-        defineArrayMember({type: "block"}),
-        calloutBlock,
-        tableBlock,
-      ],
-      description:
-        "Longer notes, policies, visa remarks, important instructions, seasonal notices, and tables if needed.",
+      of: [richTextBlock, calloutBlock, tableBlock],
     }),
 
     defineField({
@@ -360,40 +390,16 @@ export default defineType({
               name: "question",
               title: "Question",
               type: "string",
-              validation: (r) => r.required(),
             }),
             defineField({
               name: "answer",
               title: "Answer",
               type: "text",
               rows: 4,
-              validation: (r) => r.required(),
             }),
           ],
-          preview: {
-            select: {
-              title: "question",
-            },
-          },
         }),
       ],
     }),
   ],
-
-  preview: {
-    select: {
-      title: "title",
-      category: "category",
-      country: "country",
-      city: "city",
-      media: "heroImage",
-    },
-    prepare({title, category, country, city, media}) {
-      return {
-        title,
-        subtitle: [category, country || city].filter(Boolean).join(" • "),
-        media,
-      };
-    },
-  },
 });
