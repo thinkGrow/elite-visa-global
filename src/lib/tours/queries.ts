@@ -40,3 +40,18 @@ export const tourBySlugQuery = `
   faq
 }
 `;
+
+
+export const countriesLiteQuery = `
+*[_type == "country"] | order(name asc) {
+  _id,
+  name,
+  shortName,
+  flagEmoji,
+  "slug": slug.current,
+  continent->{
+    name,
+    "slug": slug.current
+  }
+}
+`;

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { themeVars } from "@/lib/theme";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/home/layout/Navbar";
+import { client } from "@/sanity/lib/client";
+import { countriesLiteQuery } from "@/lib/tours/queries";
 // import { Footer } from "@/components/home/layout/Footer";
 
 type VisaCategoryKey = "student" | "visit";
@@ -23,113 +25,75 @@ type VisitCountryKey =
   | "singapore"
   | "thailand";
 
+type CmsCountry = {
+  _id: string;
+  name: string;
+  shortName?: string;
+  flagEmoji: string;
+  slug: string;
+  continent?: {
+    name: string;
+    slug: string;
+  };
+};
+
 type CountryBase<K extends string> = {
   key: K;
   name: string;
   flagEmoji: string;
   badge?: string;
-  sectionId?: string; // reserved for future anchors/CMS
+  sectionId?: string;
 };
 
 type StudentCountry = CountryBase<StudentCountryKey>;
 type VisitCountry = CountryBase<VisitCountryKey>;
 
-const studentCountries: StudentCountry[] = [
-  {
-    key: "uk",
-    name: "United Kingdom",
-    flagEmoji: "🇬🇧",
-    sectionId: "uk",
-    badge: "UKVI",
-  },
-  {
-    key: "australia",
-    name: "Australia",
-    flagEmoji: "🇦🇺",
-    sectionId: "australia",
-    badge: "Subclass 500",
-  },
-  {
-    key: "usa",
-    name: "United States",
-    flagEmoji: "🇺🇸",
-    sectionId: "usa",
-    badge: "F-1 / SEVIS",
-  },
+const STUDENT_DESTINATIONS: Array<{
+  slug: StudentCountryKey;
+  badge?: string;
+  sectionId?: string;
+}> = [
+  { slug: "uk", badge: "UKVI", sectionId: "uk" },
+  { slug: "australia", badge: "Subclass 500", sectionId: "australia" },
+  { slug: "usa", badge: "F-1 / SEVIS", sectionId: "usa" },
 ];
 
-const visitCountries: VisitCountry[] = [
-  {
-    key: "uae",
-    name: "United Arab Emirates",
-    flagEmoji: "🇦🇪",
-    sectionId: "uae",
-    badge: "e-Visa",
-  },
-  {
-    key: "saudi",
-    name: "Saudi Arabia",
-    flagEmoji: "🇸🇦",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "qatar",
-    name: "Qatar",
-    flagEmoji: "🇶🇦",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "kuwait",
-    name: "Kuwait",
-    flagEmoji: "🇰🇼",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "bahrain",
-    name: "Bahrain",
-    flagEmoji: "🇧🇭",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "oman",
-    name: "Oman",
-    flagEmoji: "🇴🇲",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "turkey",
-    name: "Turkey",
-    flagEmoji: "🇹🇷",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "malaysia",
-    name: "Malaysia",
-    flagEmoji: "🇲🇾",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "singapore",
-    name: "Singapore",
-    flagEmoji: "🇸🇬",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
-  {
-    key: "thailand",
-    name: "Thailand",
-    flagEmoji: "🇹🇭",
-    sectionId: "visit-dynamic",
-    badge: "Visit",
-  },
+const VISIT_DESTINATIONS: Array<{
+  slug: VisitCountryKey;
+  badge?: string;
+  sectionId?: string;
+}> = [
+  { slug: "uae", badge: "e-Visa", sectionId: "uae" },
+  { slug: "saudi", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "qatar", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "kuwait", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "bahrain", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "oman", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "turkey", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "malaysia", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "singapore", badge: "Visit", sectionId: "visit-dynamic" },
+  { slug: "thailand", badge: "Visit", sectionId: "visit-dynamic" },
 ];
+
+function mapCountriesForFlags<K extends string>(
+  cmsCountries: CmsCountry[],
+  defs: Array<{ slug: K; badge?: string; sectionId?: string }>
+): Array<CountryBase<K>> {
+  return defs
+    .map((def) => {
+      const match = cmsCountries.find((c) => c.slug === def.slug);
+      if (!match) return null;
+
+      return {
+        key: def.slug,
+        name: match.shortName || match.name,
+        flagEmoji: match.flagEmoji,
+        badge: def.badge,
+        sectionId: def.sectionId,
+      };
+    })
+    .filter(Boolean) as Array<CountryBase<K>>;
+}
 
 const studentFutureFlags = [
   "UK",
@@ -182,7 +146,6 @@ function PageShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** refined card look: slightly softer border + subtle shadow + optional top hairline */
 function Card({
   children,
   className = "",
@@ -258,7 +221,7 @@ function Section({
 
 function Subheading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="mt-7 text-base sm:text-lg font-semibold text-[var(--evg-deep)] flex items-center gap-3">
+    <h3 className="mt-7 flex items-center gap-3 text-base font-semibold text-[var(--evg-deep)] sm:text-lg">
       <span className="h-2 w-2 rounded-full bg-[var(--evg-gold)] shadow-[0_0_0_4px_rgba(214,162,58,0.14)]" />
       {children}
     </h3>
@@ -269,7 +232,7 @@ function BulletList({ items }: { items: string[] }) {
   return (
     <ul className="mt-3 space-y-2">
       {items.map((t, i) => (
-        <li key={i} className="flex gap-3 text-sm sm:text-base text-slate-700">
+        <li key={i} className="flex gap-3 text-sm text-slate-700 sm:text-base">
           <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-[var(--evg-blue)]/70" />
           <span className="leading-relaxed">{t}</span>
         </li>
@@ -288,15 +251,12 @@ function KeyValueGrid({
       {rows.map((r, i) => (
         <div
           key={i}
-          className={[
-            "rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4",
-            "shadow-[0_10px_28px_rgba(2,6,23,0.05)]",
-          ].join(" ")}
+          className="rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 shadow-[0_10px_28px_rgba(2,6,23,0.05)]"
         >
           <div className="text-xs uppercase tracking-wide text-slate-500">
             {r.k}
           </div>
-          <div className="mt-1 text-sm sm:text-base text-slate-800 leading-relaxed">
+          <div className="mt-1 text-sm leading-relaxed text-slate-800 sm:text-base">
             {r.v}
           </div>
         </div>
@@ -305,7 +265,6 @@ function KeyValueGrid({
   );
 }
 
-/** DRY flags picker for both student + visit */
 function FlagsPicker<K extends string>({
   title,
   items,
@@ -383,21 +342,19 @@ function Dropdown({
 }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-
-
-      <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
+      <div className="max-w-4xl border-l border-[color:var(--evg-gold)]/60 pl-6">
         <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
           ELITE VISA GLOBAL
         </div>
 
         <div className="mt-3 flex items-center gap-3">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
+          <h2 className="text-3xl font-semibold tracking-tight text-[var(--evg-deep)] md:text-4xl">
             Visa Processing
           </h2>
           <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
         </div>
 
-        <p className="mt-3 max-w-2xl text-sm sm:text-base text-slate-600">
+        <p className="mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
           Compliance-focused guidance for students, tourists, families, and
           business travelers—structured, transparent, and visa-ready.
         </p>
@@ -407,20 +364,14 @@ function Dropdown({
         <label className="block text-xs uppercase tracking-wide text-slate-500">
           Dropdown Menu
         </label>
-        <div className="mt-2 relative">
+        <div className="relative mt-2">
           <select
             value={value}
             onChange={(e) => onChange(e.target.value as VisaCategoryKey)}
-            className={[
-              "w-full appearance-none rounded-2xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm sm:text-base text-slate-800",
-              "shadow-sm outline-none transition",
-              "focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20",
-            ].join(" ")}
+            className="w-full appearance-none rounded-2xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm text-slate-800 shadow-sm outline-none transition focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20 sm:text-base"
           >
             <option value="student">Student Visa Processing</option>
-            <option value="visit">
-              Visit, Family & Business Visa Processing
-            </option>
+            <option value="visit">Visit, Family & Business Visa Processing</option>
           </select>
 
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
@@ -437,21 +388,20 @@ function AccentCallout({ children }: { children: React.ReactNode }) {
     <div className="mt-6 rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4">
       <div className="flex items-start gap-3">
         <div className="mt-0.5 h-2.5 w-2.5 rounded-full bg-[var(--evg-gold)] shadow-[0_0_0_4px_rgba(214,162,58,0.12)]" />
-        <div className="text-sm text-slate-700 leading-relaxed">{children}</div>
+        <div className="text-sm leading-relaxed text-slate-700">{children}</div>
       </div>
     </div>
   );
 }
 
 function VisitTemplate({ countryName }: { countryName: string }) {
-  // Uses UAE copy as placeholder for ALL visit countries for now
   return (
     <Section
       id="visit-dynamic"
       title={`${countryName} (Visit, Family & Business)`}
       subtitle="For now, this uses the UAE reference layout. We will replace each country with accurate requirements later."
     >
-      <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+      <p className="text-sm leading-relaxed text-slate-700 sm:text-base">
         Visas are generally short-term, sponsor-based, and processed
         electronically, making accuracy of documents and sponsor details
         critical. Elite Visa Global provides end-to-end assistance to ensure
@@ -616,7 +566,7 @@ function VisitTemplate({ countryName }: { countryName: string }) {
       <div className="mt-6">
         <Link
           href="/contact"
-          className="inline-flex items-center justify-center rounded-2xl bg-[var(--evg-gold)] px-5 py-3 text-sm font-semibold text-slate-900 transition hover:brightness-110 shadow-[0_10px_30px_rgba(214,162,58,0.22)]"
+          className="inline-flex items-center justify-center rounded-2xl bg-[var(--evg-gold)] px-5 py-3 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_rgba(214,162,58,0.22)] transition hover:brightness-110"
         >
           Get Consultation
         </Link>
@@ -633,12 +583,54 @@ export default function VisaProcessingClient() {
   const initial: VisaCategoryKey = typeParam === "visit" ? "visit" : "student";
 
   const [category, setCategory] = React.useState<VisaCategoryKey>(initial);
+  const [cmsCountries, setCmsCountries] = React.useState<CmsCountry[]>([]);
+  const [countriesLoading, setCountriesLoading] = React.useState(true);
 
   React.useEffect(() => {
     const t = (searchParams.get("type") ?? "").toLowerCase();
     const next: VisaCategoryKey = t === "visit" ? "visit" : "student";
     setCategory(next);
   }, [searchParams]);
+
+  React.useEffect(() => {
+    let mounted = true;
+
+    async function loadCountries() {
+      try {
+        const data = await client.fetch<CmsCountry[]>(countriesLiteQuery);
+        if (mounted) {
+          setCmsCountries(data ?? []);
+        }
+      } catch (error) {
+        console.error("Failed to load countries for visa page:", error);
+      } finally {
+        if (mounted) {
+          setCountriesLoading(false);
+        }
+      }
+    }
+
+    loadCountries();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const studentCountries = React.useMemo(
+    () =>
+      mapCountriesForFlags<StudentCountryKey>(
+        cmsCountries,
+        STUDENT_DESTINATIONS
+      ),
+    [cmsCountries]
+  );
+
+  const visitCountries = React.useMemo(
+    () =>
+      mapCountriesForFlags<VisitCountryKey>(cmsCountries, VISIT_DESTINATIONS),
+    [cmsCountries]
+  );
 
   const onChange = (v: VisaCategoryKey) => {
     setCategory(v);
@@ -661,14 +653,20 @@ export default function VisaProcessingClient() {
         <Divider />
 
         {category === "student" ? (
-          <StudentVisaProcessing />
+          <StudentVisaProcessing
+            countries={studentCountries}
+            loading={countriesLoading}
+          />
         ) : (
-          <VisitFamilyBusinessVisaProcessing />
+          <VisitFamilyBusinessVisaProcessing
+            countries={visitCountries}
+            loading={countriesLoading}
+          />
         )}
 
         <Divider />
 
-        <div className="text-sm text-slate-600 leading-relaxed">
+        <div className="text-sm leading-relaxed text-slate-600">
           For future CMS: store each country as structured blocks (title,
           bullets, kv, notes) and render via map.
         </div>
@@ -677,11 +675,13 @@ export default function VisaProcessingClient() {
   );
 }
 
-/* =========================
-   STUDENT (default country shown)
-========================= */
-
-function StudentVisaProcessing() {
+function StudentVisaProcessing({
+  countries,
+  loading,
+}: {
+  countries: StudentCountry[];
+  loading: boolean;
+}) {
   const [selected, setSelected] = React.useState<StudentCountryKey>("uk");
 
   const studentContent: Record<StudentCountryKey, React.ReactNode> = {
@@ -690,42 +690,87 @@ function StudentVisaProcessing() {
     usa: <UsaStudent />,
   };
 
+  const safeSelected =
+    countries.some((c) => c.key === selected) && studentContent[selected]
+      ? selected
+      : countries[0]?.key ?? "uk";
+
+  React.useEffect(() => {
+    if (!countries.some((c) => c.key === selected) && countries[0]) {
+      setSelected(countries[0].key);
+    }
+  }, [countries, selected]);
+
+  if (loading) {
+    return <div className="text-sm text-slate-500">Loading destinations...</div>;
+  }
+
+  if (!countries.length) {
+    return (
+      <div className="text-sm text-slate-500">
+        No student visa destinations found in CMS.
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-10">
       <FlagsPicker
         title="Student visa destinations"
-        items={studentCountries}
-        selected={selected}
+        items={countries}
+        selected={safeSelected}
         onSelect={setSelected}
         layout="wrap"
         showBadges
       />
 
-      {studentContent[selected]}
+      {studentContent[safeSelected]}
     </div>
   );
 }
 
-/* =========================
-   VISIT/FAMILY/BUSINESS (default UAE shown)
-========================= */
-
-function VisitFamilyBusinessVisaProcessing() {
+function VisitFamilyBusinessVisaProcessing({
+  countries,
+  loading,
+}: {
+  countries: VisitCountry[];
+  loading: boolean;
+}) {
   const [selected, setSelected] = React.useState<VisitCountryKey>("uae");
-  const current = visitCountries.find((c) => c.key === selected);
+
+  React.useEffect(() => {
+    if (!countries.some((c) => c.key === selected) && countries[0]) {
+      setSelected(countries[0].key);
+    }
+  }, [countries, selected]);
+
+  const current = countries.find((c) => c.key === selected);
+  const safeSelected = current?.key ?? countries[0]?.key ?? "uae";
+
+  if (loading) {
+    return <div className="text-sm text-slate-500">Loading destinations...</div>;
+  }
+
+  if (!countries.length) {
+    return (
+      <div className="text-sm text-slate-500">
+        No visit visa destinations found in CMS.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10">
       <FlagsPicker
         title="Visit, family & business destinations"
-        items={visitCountries}
-        selected={selected}
+        items={countries}
+        selected={safeSelected}
         onSelect={setSelected}
         layout="grid"
         showBadges={false}
       />
 
-      {selected === "uae" ? (
+      {safeSelected === "uae" ? (
         <UaeVisit />
       ) : (
         <VisitTemplate countryName={current?.name ?? "Selected Country"} />
@@ -741,7 +786,7 @@ function VisitFamilyBusinessVisaProcessing() {
             <Link
               href="https://www.obokash.com/visa-processing-agent-bangladesh"
               target="_blank"
-              className="text-[var(--evg-deep)] underline underline-offset-4 decoration-[var(--evg-gold)] hover:opacity-80"
+              className="text-[var(--evg-deep)] underline decoration-[var(--evg-gold)] underline-offset-4 hover:opacity-80"
             >
               obokash.com/visa-processing-agent-bangladesh
             </Link>
@@ -894,7 +939,7 @@ function UkStudent() {
       />
 
       <Subheading>Important Advisory</Subheading>
-      <p className="mt-3 text-sm sm:text-base text-slate-700 leading-relaxed">
+      <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">
         UK student visas are assessed based on genuine student intent, academic
         progression, financial credibility, and strict documentation compliance.
         Elite Visa Global conducts pre-application assessments to ensure your
@@ -909,10 +954,6 @@ function UkStudent() {
     </Section>
   );
 }
-
-/* =========================
-   Australia (Student)
-========================= */
 
 function AustraliaStudent() {
   return (
@@ -1057,7 +1098,7 @@ function AustraliaStudent() {
       />
 
       <Subheading>Important Advisory</Subheading>
-      <p className="mt-3 text-sm sm:text-base text-slate-700 leading-relaxed">
+      <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">
         Australian student visas are assessed based on genuine student intent,
         financial capacity, academic progression, and strict compliance with
         visa conditions. Elite Visa Global conducts pre-lodgement assessments to
@@ -1072,10 +1113,6 @@ function AustraliaStudent() {
     </Section>
   );
 }
-
-/* =========================
-   USA (Student)
-========================= */
 
 function UsaStudent() {
   return (
@@ -1227,7 +1264,7 @@ function UsaStudent() {
       />
 
       <Subheading>Important Advisory</Subheading>
-      <p className="mt-3 text-sm sm:text-base text-slate-700 leading-relaxed">
+      <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">
         US student visas are interview-driven and credibility-focused. Visa
         approval depends heavily on academic clarity, financial strength, career
         intent, and ability to articulate study plans and home-country ties.
@@ -1244,10 +1281,6 @@ function UsaStudent() {
   );
 }
 
-/* =========================
-   UAE (Visit/Family/Business)
-========================= */
-
 function UaeVisit() {
   return (
     <Section
@@ -1255,7 +1288,7 @@ function UaeVisit() {
       title="United Arab Emirates (UAE)"
       subtitle="End-to-end assistance to ensure correct visa type selection and compliant submission."
     >
-      <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
+      <p className="text-sm leading-relaxed text-slate-700 sm:text-base">
         UAE visas are generally short-term, sponsor-based, and processed
         electronically, making accuracy of documents and sponsor details
         critical. Elite Visa Global provides end-to-end assistance to ensure
