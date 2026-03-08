@@ -1,16 +1,35 @@
 import {defineField, defineType} from "sanity";
+import {visaContentField} from "../blocks/visaContentField";
 
 export const visaCountryContentType = defineType({
   name: "visaCountryContent",
   title: "Visa Country Content",
   type: "document",
 
+  fieldsets: [
+    {
+      name: "hero",
+      title: "Hero",
+      options: {collapsible: true, collapsed: false},
+    },
+    {
+      name: "contentSections",
+      title: "Visa Sections",
+      options: {collapsible: true, collapsed: false},
+    },
+    {
+      name: "meta",
+      title: "Meta",
+      options: {collapsible: true, collapsed: true},
+    },
+  ],
+
   fields: [
     defineField({
       name: "country",
       title: "Country",
       type: "reference",
-      to: [{ type: "country" }],
+      to: [{type: "country"}],
       validation: (Rule) => Rule.required(),
     }),
 
@@ -20,8 +39,8 @@ export const visaCountryContentType = defineType({
       type: "string",
       options: {
         list: [
-          { title: "Student Visa", value: "student" },
-          { title: "Visit / Family / Business", value: "visit" },
+          {title: "Student Visa", value: "student"},
+          {title: "Visit / Family / Business", value: "visit"},
         ],
         layout: "radio",
       },
@@ -32,6 +51,7 @@ export const visaCountryContentType = defineType({
       name: "badge",
       title: "Badge",
       type: "string",
+      fieldset: "hero",
       description: "Example: UKVI, Subclass 500, F-1 / SEVIS, e-Visa",
       validation: (Rule) => Rule.max(40),
     }),
@@ -40,6 +60,7 @@ export const visaCountryContentType = defineType({
       name: "heroTitle",
       title: "Hero Title",
       type: "string",
+      fieldset: "hero",
       validation: (Rule) => Rule.max(120),
     }),
 
@@ -47,30 +68,60 @@ export const visaCountryContentType = defineType({
       name: "heroSubtitle",
       title: "Hero Subtitle",
       type: "text",
+      fieldset: "hero",
       rows: 3,
       validation: (Rule) => Rule.max(240),
     }),
 
     defineField({
-      name: "intro",
-      title: "Intro Paragraph",
-      type: "text",
-      rows: 4,
-      validation: (Rule) => Rule.max(1200),
+      name: "overview",
+      title: "Overview",
+      fieldset: "contentSections",
+      ...visaContentField,
     }),
 
     defineField({
-      name: "sections",
-      title: "Visa Sections",
-      type: "array",
-      of: [{ type: "visaSection" }],
-      validation: (Rule) => Rule.required().min(1),
+      name: "requirements",
+      title: "Requirements",
+      fieldset: "contentSections",
+      ...visaContentField,
+    }),
+
+    defineField({
+      name: "documents",
+      title: "Required Documents",
+      fieldset: "contentSections",
+      ...visaContentField,
+    }),
+
+    defineField({
+      name: "processingTime",
+      title: "Processing Time",
+      type: "string",
+      fieldset: "contentSections",
+      description: "Example: Usually 3–6 weeks",
+    }),
+
+    defineField({
+      name: "visaFee",
+      title: "Visa Fee",
+      type: "string",
+      fieldset: "contentSections",
+      description: "Example: £490 or Contact us for latest fees",
+    }),
+
+    defineField({
+      name: "notes",
+      title: "Important Notes",
+      fieldset: "contentSections",
+      ...visaContentField,
     }),
 
     defineField({
       name: "displayOrder",
       title: "Display Order",
       type: "number",
+      fieldset: "meta",
       validation: (Rule) => Rule.integer().min(0),
     }),
 
@@ -78,6 +129,7 @@ export const visaCountryContentType = defineType({
       name: "isPublishedDestination",
       title: "Show on Website",
       type: "boolean",
+      fieldset: "meta",
       initialValue: true,
     }),
   ],
@@ -90,7 +142,7 @@ export const visaCountryContentType = defineType({
       badge: "badge",
     },
 
-    prepare({ countryName, flag, visaCategory, badge }) {
+    prepare({countryName, flag, visaCategory, badge}) {
       const category =
         visaCategory === "student"
           ? "Student Visa"

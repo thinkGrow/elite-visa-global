@@ -38,13 +38,7 @@ function SectionHeading({
   );
 }
 
-function InfoCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function InfoCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="text-xs uppercase tracking-wide text-slate-500">
@@ -149,8 +143,8 @@ export default async function TourDetailPage({
           tone === "success"
             ? "border-emerald-200 bg-emerald-50"
             : tone === "warning"
-            ? "border-amber-200 bg-amber-50"
-            : "border-slate-200 bg-slate-50";
+              ? "border-amber-200 bg-amber-50"
+              : "border-slate-200 bg-slate-50";
 
         return (
           <div className={`my-8 rounded-2xl border p-5 ${toneCls}`}>
@@ -209,7 +203,6 @@ export default async function TourDetailPage({
   return (
     <PageShell>
       <Container>
-
         {/* HERO SECTION (unchanged) */}
         {/* ... all your existing code stays exactly the same ... */}
 
@@ -265,6 +258,143 @@ export default async function TourDetailPage({
           </>
         ) : null}
 
+        {!tour.summaryContent?.length &&
+        (tour.includes?.length || tour.excludes?.length) ? (
+          <>
+            <Divider />
+            <section>
+              <SectionHeading
+                eyebrow="Package scope"
+                title="Includes & Excludes"
+              />
+
+              <div className="mt-6 grid gap-6 md:grid-cols-2">
+                {tour.includes?.length ? (
+                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 className="text-lg font-semibold text-[var(--evg-deep)]">
+                      Includes
+                    </h3>
+                    <ul className="mt-4 list-disc space-y-2 pl-5 leading-7 text-slate-700 marker:text-[var(--evg-gold)]">
+                      {tour.includes.map((item: string, i: number) => (
+                        <li key={`${item}-${i}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                {tour.excludes?.length ? (
+                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 className="text-lg font-semibold text-[var(--evg-deep)]">
+                      Excludes
+                    </h3>
+                    <ul className="mt-4 list-disc space-y-2 pl-5 leading-7 text-slate-700 marker:text-[var(--evg-gold)]">
+                      {tour.excludes.map((item: string, i: number) => (
+                        <li key={`${item}-${i}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          </>
+        ) : null}
+
+        {tour.itinerary?.length ? (
+          <>
+            <Divider />
+            <section>
+              <SectionHeading
+                eyebrow="Trip flow"
+                title="Itinerary"
+                subtitle="A day-by-day view of how the package is planned."
+              />
+
+              <div className="mt-8 space-y-5">
+                {tour.itinerary.map((day: any, i: number) => (
+                  <div
+                    key={i}
+                    className="grid gap-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-[90px_1fr] md:p-6"
+                  >
+                    <div className="flex flex-row items-start gap-3 md:flex-col md:gap-2">
+                      <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[var(--evg-deep)] text-sm font-semibold text-white">
+                        {day?.day ?? i + 1}
+                      </div>
+                      <div className="pt-2 text-xs uppercase tracking-[0.18em] text-slate-500 md:pt-0">
+                        Day
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-900 md:text-xl">
+                        {day?.title || `Day ${day?.day ?? i + 1}`}
+                      </h3>
+
+                      {day?.description ? (
+                        <p className="mt-3 whitespace-pre-line leading-8 text-slate-700">
+                          {day.description}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : null}
+
+        {tour.remarksContent?.length ? (
+          <>
+            <Divider />
+            <section>
+              <SectionHeading
+                eyebrow="Important notes"
+                title="Remarks"
+                subtitle="Policies, reminders, travel notes, and any important package-specific instructions."
+              />
+
+              <div className="mt-6 rounded-3xl border border-amber-200 bg-amber-50/60 p-6 shadow-sm md:p-8">
+                <div className="max-w-4xl">
+                  <PortableText
+                    value={tour.remarksContent}
+                    components={ptComponents}
+                  />
+                </div>
+              </div>
+            </section>
+          </>
+        ) : null}
+
+        {tour.faq?.length ? (
+          <>
+            <Divider />
+            <section>
+              <SectionHeading
+                eyebrow="Questions people usually ask"
+                title="FAQ"
+                subtitle="Helpful answers to the most common package questions."
+              />
+
+              <div className="mt-6 space-y-4">
+                {tour.faq.map((item: any, i: number) => (
+                  <div
+                    key={i}
+                    className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+                  >
+                    <h3 className="text-lg font-semibold text-slate-900">
+                      {item?.question}
+                    </h3>
+
+                    {item?.answer ? (
+                      <p className="mt-3 whitespace-pre-line leading-8 text-slate-700">
+                        {item.answer}
+                      </p>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : null}
       </Container>
     </PageShell>
   );

@@ -1,33 +1,40 @@
 import React from "react";
-import {defineArrayMember, defineField, defineType} from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 const richTextBlock = defineArrayMember({
   type: "block",
   styles: [
-    {title: "Normal", value: "normal"},
-    {title: "H2", value: "h2"},
-    {title: "H3", value: "h3"},
-    {title: "Quote", value: "blockquote"},
+    { title: "Normal", value: "normal" },
+    { title: "H2", value: "h2" },
+    { title: "H3", value: "h3" },
   ],
   lists: [
-    {title: "Bullet", value: "bullet"},
-    {title: "Numbered", value: "number"},
+    { title: "Bullet", value: "bullet" },
+    { title: "Numbered", value: "number" },
   ],
   marks: {
     decorators: [
-      {title: "Bold", value: "strong"},
-      {title: "Italic", value: "em"},
+      { title: "Bold", value: "strong" },
+      { title: "Italic", value: "em" },
       {
         title: "Gold Text",
         value: "goldText",
-        component: ({children}: {children: React.ReactNode}) =>
-          React.createElement("span", {style: {color: "#d6a23a"}}, children),
+        component: ({ children }: { children: React.ReactNode }) =>
+          React.createElement(
+            "span",
+            { style: { color: "#d6a23a" } },
+            children,
+          ),
       },
       {
         title: "Blue Text",
         value: "blueText",
-        component: ({children}: {children: React.ReactNode}) =>
-          React.createElement("span", {style: {color: "#1c5aa8"}}, children),
+        component: ({ children }: { children: React.ReactNode }) =>
+          React.createElement(
+            "span",
+            { style: { color: "#1c5aa8" } },
+            children,
+          ),
       },
     ],
     annotations: [
@@ -69,9 +76,9 @@ const calloutBlock = defineArrayMember({
       type: "string",
       options: {
         list: [
-          {title: "Info", value: "info"},
-          {title: "Success", value: "success"},
-          {title: "Warning", value: "warning"},
+          { title: "Info", value: "info" },
+          { title: "Success", value: "success" },
+          { title: "Warning", value: "warning" },
         ],
       },
       initialValue: "info",
@@ -82,7 +89,7 @@ const calloutBlock = defineArrayMember({
       title: "title",
       subtitle: "tone",
     },
-    prepare({title, subtitle}) {
+    prepare({ title, subtitle }) {
       return {
         title: title || "Callout",
         subtitle: subtitle || "info",
@@ -135,7 +142,7 @@ const tableBlock = defineArrayMember({
     select: {
       title: "title",
     },
-    prepare({title}) {
+    prepare({ title }) {
       return {
         title: title || "Table",
         subtitle: "Table block",
@@ -153,22 +160,22 @@ export default defineType({
     {
       name: "details",
       title: "Details",
-      options: {collapsible: true, collapsed: false},
+      options: { collapsible: true, collapsed: false },
     },
     {
       name: "itinerarySection",
       title: "Itinerary",
-      options: {collapsible: true, collapsed: true},
+      options: { collapsible: true, collapsed: true },
     },
     {
       name: "remarksSection",
       title: "Remarks",
-      options: {collapsible: true, collapsed: true},
+      options: { collapsible: true, collapsed: true },
     },
     {
       name: "faqSection",
       title: "FAQ",
-      options: {collapsible: true, collapsed: true},
+      options: { collapsible: true, collapsed: true },
     },
   ],
 
@@ -200,8 +207,8 @@ export default defineType({
       fieldset: "details",
       options: {
         list: [
-          {title: "International", value: "international"},
-          {title: "Local", value: "local"},
+          { title: "International", value: "international" },
+          { title: "Local", value: "local" },
         ],
         layout: "radio",
       },
@@ -215,16 +222,16 @@ export default defineType({
       fieldset: "details",
       options: {
         list: [
-          {title: "Europe", value: "europe"},
-          {title: "Asia", value: "asia"},
-          {title: "North America", value: "na"},
-          {title: "South America", value: "sa"},
-          {title: "Africa", value: "africa"},
-          {title: "Oceania", value: "oceania"},
-          {title: "Multi Countries", value: "multi"},
+          { title: "Europe", value: "europe" },
+          { title: "Asia", value: "asia" },
+          { title: "North America", value: "na" },
+          { title: "South America", value: "sa" },
+          { title: "Africa", value: "africa" },
+          { title: "Oceania", value: "oceania" },
+          { title: "Multi Countries", value: "multi" },
         ],
       },
-      hidden: ({document}) => document?.category !== "international",
+      hidden: ({ document }) => document?.category !== "international",
     }),
 
     defineField({
@@ -232,8 +239,9 @@ export default defineType({
       title: "Country",
       type: "string",
       fieldset: "details",
-      hidden: ({document}) =>
-        document?.category !== "international" || document?.continent === "multi",
+      hidden: ({ document }) =>
+        document?.category !== "international" ||
+        document?.continent === "multi",
     }),
 
     defineField({
@@ -264,7 +272,7 @@ export default defineType({
       title: "Hero Image",
       type: "image",
       fieldset: "details",
-      options: {hotspot: true},
+      options: { hotspot: true },
     }),
 
     defineField({
@@ -272,8 +280,8 @@ export default defineType({
       title: "Tags",
       type: "array",
       fieldset: "details",
-      of: [defineArrayMember({type: "string"})],
-      options: {layout: "tags"},
+      of: [defineArrayMember({ type: "string" })],
+      options: { layout: "tags" },
     }),
 
     defineField({
@@ -281,8 +289,8 @@ export default defineType({
       title: "Badges",
       type: "array",
       fieldset: "details",
-      of: [defineArrayMember({type: "string"})],
-      options: {layout: "tags"},
+      of: [defineArrayMember({ type: "string" })],
+      options: { layout: "tags" },
     }),
 
     defineField({
@@ -290,7 +298,7 @@ export default defineType({
       title: "Highlights",
       type: "array",
       fieldset: "details",
-      of: [defineArrayMember({type: "string"})],
+      of: [defineArrayMember({ type: "string" })],
       description: "Short bullet points for the package.",
     }),
 
@@ -299,7 +307,7 @@ export default defineType({
       title: "Includes",
       type: "array",
       fieldset: "details",
-      of: [defineArrayMember({type: "string"})],
+      of: [defineArrayMember({ type: "string" })],
     }),
 
     defineField({
@@ -307,7 +315,7 @@ export default defineType({
       title: "Excludes",
       type: "array",
       fieldset: "details",
-      of: [defineArrayMember({type: "string"})],
+      of: [defineArrayMember({ type: "string" })],
     }),
 
     defineField({
@@ -325,7 +333,7 @@ export default defineType({
       fieldset: "details",
       of: [
         richTextBlock,
-        defineArrayMember({type: "image", options: {hotspot: true}}),
+        defineArrayMember({ type: "image", options: { hotspot: true } }),
         tableBlock,
         calloutBlock,
       ],
