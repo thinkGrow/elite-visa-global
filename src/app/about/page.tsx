@@ -9,19 +9,19 @@ const leadership = [
     name: "Nadeem Ahamed",
     role: "Owner",
     bio: "With over 20 years in the travel industry, Nadeem Ahamed brings deep operational insight shaped by experience across multiple industries and extensive travel across numerous countries. His leadership anchors EVG’s strategic direction, service quality, and long-term vision.",
-    imageSrc: "/team/nadeem.jpg", // put your file in /public/team/nadeem.jpg
+    imageSrc: "/team/nadeem.jpg",
   },
   {
     name: "Fahad Md Ariful",
     role: "Chief Consultant",
     bio: "With 15+ years of cross-industry experience, including student consultancy, insurance, and UK-based professional exposure, Fahad leads Student Services, Visa Processing, and Travel Compass. He is responsible for case strategy, compliance, documentation standards, and outcome-focused guidance.",
-    imageSrc: "/team/fahad.jpg", // /public/team/fahad.jpg
+    imageSrc: "/team/fahad.jpg",
   },
   {
     name: "Yakub Al Ikran Madani",
     role: "Kafela Consultant",
     bio: "Bringing over 10 years of industry experience, including Saudi Arabia–based exposure, Yakub oversees Hajj & Umrah tours and visa processing through Elite Hajj Kafela. His role ensures religious responsibility, logistical precision, and respectful service delivery.",
-    imageSrc: "/team/yakub.jpg", // /public/team/yakub.jpg
+    imageSrc: "/team/yakub.jpg",
   },
 ];
 
@@ -33,19 +33,38 @@ const goals = [
   "Continuously evolve while preserving our core values of integrity and professionalism",
 ];
 
-function Hairline() {
+function SectionIntro({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+}) {
   return (
-    <div
-      className="h-px w-full"
-      style={{
-        background:
-          "linear-gradient(to right, rgba(255,255,255,0), rgba(214,162,58,0.5), rgba(255,255,255,0))",
-      }}
-    />
+    <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
+      <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
+        {eyebrow}
+      </div>
+
+      <div className="mt-3 flex items-center gap-3">
+        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[var(--evg-deep)]">
+          {title}
+        </h2>
+        <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
+      </div>
+
+      {subtitle ? (
+        <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600">
+          {subtitle}
+        </p>
+      ) : null}
+    </div>
   );
 }
 
-function GlassCard({
+function WhiteCard({
   children,
   className = "",
 }: {
@@ -55,8 +74,8 @@ function GlassCard({
   return (
     <div
       className={[
-        "rounded-3xl border border-white/10 bg-white/[0.055] backdrop-blur-2xl",
-        "shadow-[0_22px_90px_rgba(0,0,0,0.55)]",
+        "rounded-3xl border border-slate-200 bg-white",
+        "shadow-[0_18px_60px_rgba(2,6,23,0.08)]",
         className,
       ].join(" ")}
     >
@@ -65,134 +84,98 @@ function GlassCard({
   );
 }
 
-function TeamCard({
-  name,
-  role,
-  bio,
-  imageSrc,
-}: {
-  name: string;
-  role: string;
-  bio: string;
-  imageSrc: string;
-}) {
-  return (
-    <GlassCard className="overflow-hidden">
-      {/* bigger portrait */}
-      <div className="relative aspect-[4/3] w-full">
-        <Image
-          src={imageSrc}
-          alt={name}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover"
-          priority={false}
-        />
-
-        {/* cinematic overlay for readability */}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.05),rgba(0,0,0,0.55)_70%,rgba(0,0,0,0.78))]" />
-
-        {/* role pill */}
-        <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs text-white/80 backdrop-blur">
-          <span className="h-2 w-2 rounded-full bg-[var(--evg-gold)]" />
-          {role}
-        </div>
-      </div>
-
-      <div className="p-6">
-        <p className="text-lg font-semibold">{name}</p>
-        <div className="mt-4 h-px w-full bg-white/10" />
-        <p className="mt-4 text-sm leading-relaxed text-white/70">{bio}</p>
-      </div>
-    </GlassCard>
-  );
-}
-
 export default function AboutPage() {
   return (
     <main
-      className="relative min-h-screen overflow-hidden text-white"
+      className="relative min-h-screen overflow-hidden bg-white text-slate-900"
       style={themeVars}
     >
-      {/* GLOBAL BACKGROUND */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        {/* Base gradient */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,#040912_0%,#06122b_25%,#0a1f46_55%,#071531_80%,#030814_100%)]" />
+        <div className="absolute inset-0 bg-white" />
 
-        {/* Blue atmosphere */}
-        <div className="absolute -top-60 left-[-250px] h-[900px] w-[900px] rounded-full bg-[rgba(28,90,168,0.30)] blur-[160px]" />
+        <div
+          className="absolute -top-32 -left-32 h-[500px] w-[500px] rounded-full blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(28,90,168,0.10) 0%, rgba(28,90,168,0.04) 40%, transparent 70%)",
+          }}
+        />
 
-        {/* Gold glow */}
-        <div className="absolute top-10 right-[-300px] h-[950px] w-[950px] rounded-full bg-[rgba(214,162,58,0.20)] blur-[180px]" />
+        <div
+          className="absolute top-20 right-[-160px] h-[420px] w-[420px] rounded-full blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(214,162,58,0.10) 0%, rgba(214,162,58,0.04) 40%, transparent 72%)",
+          }}
+        />
 
-        {/* Soft radial depth */}
-        <div className="absolute inset-0 bg-[radial-gradient(1100px_circle_at_20%_15%,rgba(255,255,255,0.08),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(900px_circle_at_75%_20%,rgba(28,90,168,0.15),transparent_60%)]" />
-
-        {/* Bottom vignette */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.0),rgba(0,0,0,0.35)_70%,rgba(0,0,0,0.55))]" />
+        <div className="absolute top-0 left-0 h-px w-full bg-black/5" />
+        <div className="absolute bottom-0 left-0 h-16 w-full bg-gradient-to-b from-transparent to-black/[0.03]" />
       </div>
 
       <Navbar />
 
-      {/* HERO */}
-      <section className="mx-auto max-w-7xl px-6 pt-28 pb-16">
-        <div className="max-w-3xl">
+      <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-20">
+        <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
           <div
             className={[
-              "rounded-3xl px-7 py-10 max-w-2xl",
+              "rounded-3xl px-5 py-7 md:px-7 md:py-10 max-w-2xl",
               "bg-gradient-to-b from-white/18 to-white/10",
               "backdrop-blur-xl ring-1 ring-white/20",
               "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
               "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[2px]",
             ].join(" ")}
           >
-            <h1 className="font-[var(--font-playfair)] text-5xl leading-[1.02] font-semibold text-white">
-              <span className="block">Experience driven by</span>
-
-              <span className="block text-[var(--evg-gold)]">
-                ethics & execution
-              </span>
+            <h1 className="font-[var(--font-playfair)] text-4xl sm:text-5xl md:text-5xl leading-[1.02] font-semibold text-black">
+              <span className="text-[var(--evg-gold)]">Experience</span>, driven
+              by <br />
+              ethics & execution
             </h1>
           </div>
 
-          <p className="mt-6 text-base leading-relaxed text-white/75 md:text-lg">
-            Elite Visa Global (EVG) began its journey in 2016, initially
-            offering professional air ticketing services. Over time, guided by
-            client trust and evolving global needs, EVG expanded into a
-            full-service Visa, Tours & Travel consultancy—covering student visa
-            support, tourist and business visas, curated travel solutions, and
-            dedicated Hajj & Umrah services.
-          </p>
+          <div className="mt-8 space-y-6 text-[17px] leading-relaxed text-slate-700">
+            <p>
+              Elite Visa Global (EVG) began its journey in 2016, initially
+              offering professional air ticketing services. Over time, guided by
+              client trust and evolving global needs, EVG expanded into a
+              full-service Visa, Tours & Travel consultancy—covering student
+              visa support, tourist and business visas, curated travel
+              solutions, and dedicated Hajj & Umrah services.
+            </p>
 
-          <p className="mt-4 text-base leading-relaxed text-white/75 md:text-lg">
-            Today, EVG stands for experience, ethics, and execution. Our growth
-            has been deliberate, ensuring every new service meets the same
-            standards of accuracy, compliance, and client care that defined us
-            from day one.
-          </p>
+            <p>
+              Today, EVG stands for experience, ethics, and execution. Our
+              growth has been deliberate, ensuring every new service meets the
+              same standards of accuracy, compliance, and client care that
+              defined us from day one.
+            </p>
+
+            <p>
+              We believe international mobility should feel guided, not
+              overwhelming. Every application, journey, and consultation is
+              approached with responsibility, professionalism, and respect for
+              the people placing their trust in us.
+            </p>
+
+            <p>
+              <span className="text-[color:var(--evg-gold)] font-semibold">
+                Follow your dreams. We’ll help you reach them.
+              </span>
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* TEAM */}
-      <section className="mx-auto max-w-7xl px-6 pb-20">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <p className="text-xs tracking-[0.22em] text-white/50">TEAM</p>
-            <h2 className="mt-2 text-2xl font-semibold md:text-3xl">
-              Leadership & Expertise
-            </h2>
-          </div>
-          <div className="hidden h-px flex-1 bg-white/10 md:block" />
-        </div>
+      <section className="relative mx-auto max-w-7xl px-6 pb-20">
+        <SectionIntro
+          eyebrow="TEAM"
+          title="Leadership & Expertise"
+          subtitle="A leadership team shaped by industry experience, operational discipline, and a long-term commitment to ethical client service."
+        />
 
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
+        <div className="mt-14 grid gap-8 md:grid-cols-3">
           {leadership.map((p) => (
-            <div
-              key={p.name}
-              className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.05] backdrop-blur-2xl shadow-[0_25px_100px_rgba(0,0,0,0.6)]"
-            >
-              {/* LARGE IMAGE */}
+            <WhiteCard key={p.name} className="overflow-hidden">
               <div className="relative aspect-[4/3] w-full">
                 <Image
                   src={p.imageSrc}
@@ -202,44 +185,50 @@ export default function AboutPage() {
                   className="object-cover"
                 />
 
-                {/* Overlay for readability */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.05),rgba(0,0,0,0.65)_70%,rgba(0,0,0,0.85))]" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.04),rgba(0,0,0,0.28)_72%,rgba(0,0,0,0.45))]" />
 
-                <div className="absolute left-5 top-5 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs text-white/80 backdrop-blur">
+                <div className="absolute left-5 top-5 rounded-full border border-white/50 bg-white/80 px-3 py-1.5 text-xs text-[var(--evg-deep)] backdrop-blur">
                   {p.role}
                 </div>
               </div>
 
               <div className="p-6">
-                <p className="text-lg font-semibold">{p.name}</p>
-                <div className="mt-4 h-px w-full bg-white/10" />
-                <p className="mt-4 text-sm leading-relaxed text-white/70">
+                <p className="text-lg font-semibold text-slate-900">{p.name}</p>
+                <div className="mt-4 h-px w-full bg-slate-200" />
+                <p className="mt-4 text-sm leading-relaxed text-slate-600">
                   {p.bio}
                 </p>
               </div>
-            </div>
+            </WhiteCard>
           ))}
         </div>
       </section>
 
-      {/* VISION + GOALS */}
-      <section className="mx-auto max-w-7xl px-6 pb-24">
+      <section className="relative mx-auto max-w-7xl px-6 pb-24">
         <div className="grid gap-8 md:grid-cols-2">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.05] p-8 backdrop-blur-2xl shadow-[0_25px_100px_rgba(0,0,0,0.6)]">
-            <p className="text-xs tracking-[0.22em] text-white/50">VISION</p>
-            <h3 className="mt-3 text-xl font-semibold">Our Vision</h3>
-            <p className="mt-5 text-sm leading-relaxed text-white/70">
+          <WhiteCard className="p-8">
+            <div className="text-xs tracking-[0.22em] text-[var(--evg-deep)]/55">
+              VISION
+            </div>
+            <h3 className="mt-3 text-xl font-semibold text-[var(--evg-deep)]">
+              Our Vision
+            </h3>
+            <p className="mt-5 text-sm leading-relaxed text-slate-600">
               To be a trusted global mobility partner, empowering individuals
               and families to follow their dreams responsibly—through ethical
               guidance, compliant processes, and world-class service standards.
             </p>
-          </div>
+          </WhiteCard>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.05] p-8 backdrop-blur-2xl shadow-[0_25px_100px_rgba(0,0,0,0.6)]">
-            <p className="text-xs tracking-[0.22em] text-white/50">GOALS</p>
-            <h3 className="mt-3 text-xl font-semibold">Our Goals</h3>
+          <WhiteCard className="p-8">
+            <div className="text-xs tracking-[0.22em] text-[var(--evg-deep)]/55">
+              GOALS
+            </div>
+            <h3 className="mt-3 text-xl font-semibold text-[var(--evg-deep)]">
+              Our Goals
+            </h3>
 
-            <ul className="mt-5 space-y-4 text-sm leading-relaxed text-white/70">
+            <ul className="mt-5 space-y-4 text-sm leading-relaxed text-slate-600">
               {goals.map((g) => (
                 <li key={g} className="flex gap-3">
                   <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[var(--evg-gold)]" />
@@ -247,12 +236,12 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
-          </div>
+          </WhiteCard>
         </div>
       </section>
 
-      <footer className="border-t border-white/10 py-10">
-        <div className="mx-auto max-w-7xl px-6 text-sm text-white/60">
+      <footer className="border-t border-black/5 py-10">
+        <div className="mx-auto max-w-7xl px-6 text-sm text-slate-500">
           Elite Visa Global • Dhaka, Bangladesh • Since 2016
         </div>
       </footer>
