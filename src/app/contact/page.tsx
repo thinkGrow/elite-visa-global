@@ -3,10 +3,7 @@ import { Navbar } from "@/components/home/layout/Navbar";
 import { ContactForm } from "@/components/contact/ContactForm";
 // import { GlassHeadlineCard } from "@/components/ui/GlassHeadlineCard";
 import styles from "@/components/ui/GlassHeadlineCard.module.css";
-import {
-  GlassHeadlineCard,
-  headlineMotion,
-} from "@/components/ui/GlassHeadlineCard";
+import { GlassHeadlineCard } from "@/components/ui/GlassHeadlineCard";
 
 type ThemeVars = React.CSSProperties & {
   "--evg-blue": string;

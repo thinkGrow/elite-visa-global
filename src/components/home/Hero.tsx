@@ -145,11 +145,7 @@ export function Hero() {
           {/* top content */}
           <div className="max-w-3xl">
             {/* HEADLINE - desktop glass card preserved */}
-            <GlassHeadlineCard
-              textColor="white"
-              size="md"
-              animateIn={contentIn}
-            >
+            <GlassHeadlineCard textColor="white" size="md">
               <h1>
                 Dreams beyond{" "}
                 <span className="text-[var(--evg-gold)]">borders</span>,

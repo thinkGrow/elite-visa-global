@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styles from "./GlassHeadlineCard.module.css";
+// import styles from "./GlassHeadlineCard.module.css";
 
 type GlassHeadlineCardProps = {
   children: React.ReactNode;
