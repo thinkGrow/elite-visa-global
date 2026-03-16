@@ -1,47 +1,50 @@
-// src/components/ui/GlassHeadlineCard.tsx
+"use client";
+
 import React from "react";
-import clsx from "clsx";
+import styles from "./GlassHeadlineCard.module.css";
 
 type GlassHeadlineCardProps = {
   children: React.ReactNode;
-  className?: string;
-  contentIn?: boolean;
   textColor?: "white" | "black";
   size?: "md" | "lg";
-  maxWidth?: string;
+  className?: string;
 };
 
 export function GlassHeadlineCard({
   children,
-  className,
-  contentIn = false,
   textColor = "white",
   size = "md",
-  maxWidth = "max-w-2xl",
+  className = "",
 }: GlassHeadlineCardProps) {
+  const [visible, setVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 120);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div
-      className={clsx(
-        "rounded-3xl",
-        maxWidth,
+      className={[
+        "relative rounded-3xl",
         "bg-gradient-to-b from-white/18 to-white/10",
         "backdrop-blur-xl ring-1 ring-white/20",
         "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
-        "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[2px]",
-        size === "md" && "px-5 py-7 md:px-7 md:py-10",
-        size === "lg" && "px-7 py-10",
-        contentIn && "hero-headline-in",
-        className
-      )}
+        "transition-all duration-700 ease-[cubic-bezier(.22,1,.36,1)]",
+        "hover:-translate-y-[4px]",
+        size === "md"
+          ? "px-5 py-7 md:px-7 md:py-10 max-w-2xl"
+          : "px-7 py-10 max-w-2xl",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
+        className,
+      ].join(" ")}
     >
       <div
-        className={clsx(
-          "font-[var(--font-playfair)] leading-[1.02] font-semibold",
-          textColor === "white" && "text-white",
-          textColor === "black" && "text-black",
-          size === "md" && "text-4xl sm:text-5xl md:text-5xl",
-          size === "lg" && "text-5xl"
-        )}
+        className={[
+          "font-[var(--font-playfair)] leading-[1.05] font-semibold",
+          textColor === "white" ? "text-white" : "text-[var(--evg-deep)]",
+          size === "md" ? "text-4xl sm:text-5xl md:text-5xl" : "text-5xl",
+        ].join(" ")}
       >
         {children}
       </div>

@@ -1,7 +1,12 @@
 import React from "react";
 import { Navbar } from "@/components/home/layout/Navbar";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { GlassHeadlineCard } from "@/components/ui/GlassHeadlineCard";
+// import { GlassHeadlineCard } from "@/components/ui/GlassHeadlineCard";
+import styles from "@/components/ui/GlassHeadlineCard.module.css";
+import {
+  GlassHeadlineCard,
+  headlineMotion,
+} from "@/components/ui/GlassHeadlineCard";
 
 type ThemeVars = React.CSSProperties & {
   "--evg-blue": string;
@@ -77,8 +82,10 @@ export default function ContactPage() {
         <GlassHeadlineCard textColor="black" size="lg">
           <h1 className="text-balance">
             Let’s talk about your{" "}
-            <span className="text-[var(--evg-gold)]">next journey</span>.
+            <span className={styles.goldMotion}>next journey</span>.
           </h1>
+
+          <div className={`${styles.underlineMotion} mt-4`} />
         </GlassHeadlineCard>
 
         <p className="mt-6 text-base leading-relaxed text-black/65 md:text-lg">

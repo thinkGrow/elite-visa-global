@@ -145,7 +145,11 @@ export function Hero() {
           {/* top content */}
           <div className="max-w-3xl">
             {/* HEADLINE - desktop glass card preserved */}
-            <GlassHeadlineCard contentIn textColor="white" size="md">
+            <GlassHeadlineCard
+              textColor="white"
+              size="md"
+              animateIn={contentIn}
+            >
               <h1>
                 Dreams beyond{" "}
                 <span className="text-[var(--evg-gold)]">borders</span>,
@@ -153,7 +157,6 @@ export function Hero() {
                 guided with confidence.
               </h1>
             </GlassHeadlineCard>
-
             {/* SUBTEXT */}
             <p
               className={[

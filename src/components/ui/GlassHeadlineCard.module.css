@@ -1,0 +1,48 @@
+/* src/components/ui/GlassHeadlineCard.module.css */
+
+.goldMotion {
+  background-image: linear-gradient(
+    90deg,
+    rgba(214, 162, 58, 0.78) 0%,
+    rgba(255, 239, 184, 1) 22%,
+    rgba(214, 162, 58, 0.82) 45%,
+    rgba(255, 245, 210, 1) 52%,
+    rgba(214, 162, 58, 0.82) 60%,
+    rgba(214, 162, 58, 0.78) 100%
+  );
+  background-size: 220% auto;
+  background-position: 200% center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: evgShimmer 5.2s linear infinite;
+}
+
+.underlineMotion {
+  height: 1px;
+  width: 92px;
+  background: rgba(214, 162, 58, 0.68);
+  transform-origin: left center;
+  animation: evgUnderlinePulse 3.2s ease-in-out infinite;
+}
+
+@keyframes evgShimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes evgUnderlinePulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scaleX(1.08);
+  }
+}

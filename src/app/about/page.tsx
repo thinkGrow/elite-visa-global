@@ -118,7 +118,7 @@ export default function AboutPage() {
 
       <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-20">
         <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
-          <GlassHeadlineCard textColor="black" size="md">
+          <GlassHeadlineCard textCaolor="black" size="md">
             <h1>
               <span className="text-[var(--evg-gold)]">Experience</span>, driven
               by
