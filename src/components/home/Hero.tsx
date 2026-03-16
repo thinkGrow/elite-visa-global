@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React from "react";
 import { BookingWidget } from "./BookingWidget";
+import { GlassHeadlineCard } from "../ui/GlassHeadlineCard";
 
 type Slide = {
   key: string;
@@ -101,7 +102,7 @@ export function Hero() {
                 prevSlide.mobileFocus ?? "object-center",
                 `md:${(prevSlide.desktopFocus ?? "object-center").replace(
                   "object-",
-                  "object-"
+                  "object-",
                 )}`,
               ].join(" ")}
             />
@@ -127,7 +128,7 @@ export function Hero() {
               currentSlide.mobileFocus ?? "object-center",
               `md:${(currentSlide.desktopFocus ?? "object-center").replace(
                 "object-",
-                "object-"
+                "object-",
               )}`,
             ].join(" ")}
           />
@@ -144,23 +145,14 @@ export function Hero() {
           {/* top content */}
           <div className="max-w-3xl">
             {/* HEADLINE - desktop glass card preserved */}
-            <div
-              className={[
-                "rounded-3xl px-5 py-7 md:px-7 md:py-10 max-w-2xl",
-                "bg-gradient-to-b from-white/18 to-white/10",
-                "backdrop-blur-xl ring-1 ring-white/20",
-                "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
-                "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[2px]",
-                contentIn ? "hero-headline-in" : "",
-              ].join(" ")}
-            >
-              <h1 className="font-[var(--font-playfair)] text-4xl sm:text-5xl md:text-5xl leading-[1.02] font-semibold text-white">
+            <GlassHeadlineCard contentIn textColor="white" size="md">
+              <h1>
                 Dreams beyond{" "}
                 <span className="text-[var(--evg-gold)]">borders</span>,
                 <br />
                 guided with confidence.
               </h1>
-            </div>
+            </GlassHeadlineCard>
 
             {/* SUBTEXT */}
             <p

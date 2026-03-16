@@ -1,3 +1,6 @@
+// src/lib/theme.ts
+import type React from "react";
+
 export const themeVars = {
   "--evg-blue": "#1c5aa8",
   "--evg-deep": "#06122b",

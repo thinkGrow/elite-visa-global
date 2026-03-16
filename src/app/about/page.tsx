@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { Navbar } from "@/components/home/layout/Navbar";
 import { themeVars } from "@/lib/theme";
+import { GlassHeadlineCard } from "@/components/ui/GlassHeadlineCard";
 
 const leadership = [
   {
@@ -117,21 +118,14 @@ export default function AboutPage() {
 
       <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-20">
         <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
-          <div
-            className={[
-              "rounded-3xl px-5 py-7 md:px-7 md:py-10 max-w-2xl",
-              "bg-gradient-to-b from-white/18 to-white/10",
-              "backdrop-blur-xl ring-1 ring-white/20",
-              "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
-              "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[2px]",
-            ].join(" ")}
-          >
-            <h1 className="font-[var(--font-playfair)] text-4xl sm:text-5xl md:text-5xl leading-[1.02] font-semibold text-black">
+          <GlassHeadlineCard textColor="black" size="md">
+            <h1>
               <span className="text-[var(--evg-gold)]">Experience</span>, driven
-              by <br />
+              by
+              <br />
               ethics & execution
             </h1>
-          </div>
+          </GlassHeadlineCard>
 
           <div className="mt-8 space-y-6 text-[17px] leading-relaxed text-slate-700">
             <p>

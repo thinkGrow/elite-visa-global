@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar } from "@/components/home/layout/Navbar";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { GlassHeadlineCard } from "@/components/ui/GlassHeadlineCard";
 
 type ThemeVars = React.CSSProperties & {
   "--evg-blue": string;
@@ -24,8 +25,9 @@ function GlassCard({
   return (
     <div
       className={[
-        "rounded-3xl border border-white/10 bg-white/[0.055] backdrop-blur-2xl",
-        "shadow-[0_22px_90px_rgba(0,0,0,0.55)]",
+        "relative overflow-hidden rounded-3xl",
+        "border border-slate-200/80 bg-white",
+        "shadow-[0_12px_40px_rgba(2,6,23,0.06)]",
         className,
       ].join(" ")}
     >
@@ -40,10 +42,16 @@ function SocialRow({ label, href }: { label: string; href: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
+      className={[
+        "group flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm",
+        "text-[var(--evg-deep)] shadow-sm transition-all duration-300",
+        "hover:-translate-y-0.5 hover:border-[var(--evg-gold)]/60 hover:shadow-md",
+      ].join(" ")}
     >
       <span>{label}</span>
-      <span className="text-white/40">→</span>
+      <span className="text-[var(--evg-gold)] transition-transform duration-300 group-hover:translate-x-1">
+        →
+      </span>
     </a>
   );
 }
@@ -51,61 +59,51 @@ function SocialRow({ label, href }: { label: string; href: string }) {
 export default function ContactPage() {
   return (
     <main
-      className="relative min-h-screen overflow-hidden text-white"
+      className="relative min-h-screen overflow-hidden text-black"
       style={themeVars}
     >
-      {/* Global premium background */}
+      {/* Global premium white background */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,#040912_0%,#06122b_25%,#0a1f46_55%,#071531_80%,#030814_100%)]" />
-        <div className="absolute -top-60 left-[-260px] h-[980px] w-[980px] rounded-full bg-[rgba(28,90,168,0.30)] blur-[170px]" />
-        <div className="absolute top-10 right-[-320px] h-[1050px] w-[1050px] rounded-full bg-[rgba(214,162,58,0.20)] blur-[190px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(1200px_circle_at_18%_12%,rgba(255,255,255,0.09),transparent_56%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(1000px_circle_at_78%_18%,rgba(28,90,168,0.16),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.0),rgba(0,0,0,0.35)_70%,rgba(0,0,0,0.55))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,#fcfdff_0%,#f7f9fc_30%,#f9f7f2_65%,#ffffff_100%)]" />
+        <div className="absolute -top-56 left-[-220px] h-[820px] w-[820px] rounded-full bg-[rgba(28,90,168,0.10)] blur-[140px]" />
+        <div className="absolute top-0 right-[-260px] h-[860px] w-[860px] rounded-full bg-[rgba(214,162,58,0.10)] blur-[160px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(900px_circle_at_18%_12%,rgba(255,255,255,0.95),transparent_58%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(1000px_circle_at_82%_18%,rgba(28,90,168,0.06),transparent_60%)]" />
       </div>
 
       <Navbar />
 
       <section className="mx-auto max-w-7xl px-6 pt-28 pb-16">
-        {/* Hero glass headline block */}
-        {/* Hero glass headline block */}
-        <div
-          className={[
-            "rounded-3xl px-7 py-10 max-w-2xl",
-            "bg-gradient-to-b from-white/18 to-white/10",
-            "backdrop-blur-xl ring-1 ring-white/20",
-            "shadow-[0_30px_80px_rgba(0,0,0,.35)]",
-            "transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] hover:-translate-y-[2px]",
-          ].join(" ")}
-        >
-          <h1 className="font-[var(--font-playfair)] text-5xl leading-[1.02] font-semibold text-white text-balance">
+        <GlassHeadlineCard textColor="black" size="lg">
+          <h1 className="text-balance">
             Let’s talk about your{" "}
             <span className="text-[var(--evg-gold)]">next journey</span>.
           </h1>
-        </div>
-        <p className="mt-6 text-base md:text-lg text-white/75 leading-relaxed">
+        </GlassHeadlineCard>
+
+        <p className="mt-6 text-base leading-relaxed text-black/65 md:text-lg">
           Share your details and we’ll get back with clear guidance, compliant
           steps, and realistic timelines.
         </p>
 
-        <hr className="my-4 border-gray-400 dark:border-gray-600 border"></hr>
+        <hr className="my-6 border-black/10" />
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[1.25fr_.75fr] ">
+        <div className="mt-10 grid gap-6 lg:grid-cols-[1.25fr_.75fr]">
           {/* Form */}
           <GlassCard className="p-7 md:p-8">
             <div className="flex items-end justify-between gap-6">
               <div>
-                <p className="text-xs tracking-[0.22em] text-white/50">
+                <p className="text-xs tracking-[0.22em] text-black/40">
                   CONTACT FORM
                 </p>
-                <h2 className="mt-2 text-xl md:text-2xl font-semibold">
+                <h2 className="mt-2 text-xl font-semibold md:text-2xl">
                   Send a message
                 </h2>
               </div>
-              <div className="hidden md:block h-px flex-1 bg-white/10" />
+              <div className="hidden h-px flex-1 bg-black/10 md:block" />
             </div>
 
-            <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-2xl">
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-black/55">
               This form sends directly to elitevisaglobal@gmail.com.
             </p>
 
@@ -114,63 +112,90 @@ export default function ContactPage() {
             </div>
           </GlassCard>
 
-          {/* Right column: premium contact info */}
+          {/* Right column */}
           <div className="grid gap-6">
             <GlassCard className="p-7">
-              <p className="text-xs tracking-[0.22em] text-white/50">PHONE</p>
+              <p className="text-xs tracking-[0.22em] text-black/40">PHONE</p>
               <h3 className="mt-2 text-lg font-semibold">Call us</h3>
 
-              <div className="mt-5 space-y-4 text-sm text-white/75">
+              <div className="mt-5 space-y-4 text-sm text-black/70">
                 <div className="flex flex-col gap-1">
-                  <span className="text-white/55">Phone</span>
-                  <a className="hover:text-white" href="tel:+880247120404">
+                  <span className="text-black/45">Phone</span>
+                  <a
+                    className="transition hover:text-[var(--evg-blue)]"
+                    href="tel:+880247120404"
+                  >
                     +880247120404
                   </a>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <span className="text-white/55">General</span>
-                  <a className="hover:text-white" href="tel:+8801805464661">
+                  <span className="text-black/45">General</span>
+                  <a
+                    className="transition hover:text-[var(--evg-blue)]"
+                    href="tel:+8801805464661"
+                  >
                     +8801805464661
                   </a>
                 </div>
 
-                <div className="h-px w-full bg-white/10" />
+                <div className="h-px w-full bg-black/10" />
 
                 <div className="flex flex-col gap-1">
-                  <span className="text-white/55">Elite Visa Global</span>
+                  <span className="text-black/45">Elite Visa Global</span>
                   <div className="flex flex-wrap gap-x-4 gap-y-2">
-                    <a className="hover:text-white" href="tel:+8801805464660">
+                    <a
+                      className="transition hover:text-[var(--evg-blue)]"
+                      href="tel:+8801805464660"
+                    >
                       +8801805464660
                     </a>
-                    <a className="hover:text-white" href="tel:+8801805464667">
+                    <a
+                      className="transition hover:text-[var(--evg-blue)]"
+                      href="tel:+8801805464667"
+                    >
                       +8801805464667
                     </a>
-                    <a className="hover:text-white" href="tel:+8801726986666">
+                    <a
+                      className="transition hover:text-[var(--evg-blue)]"
+                      href="tel:+8801726986666"
+                    >
                       +8801726986666
                     </a>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <span className="text-white/55">Elite Hajj Kafela</span>
+                  <span className="text-black/45">Elite Hajj Kafela</span>
                   <div className="flex flex-wrap gap-x-4 gap-y-2">
-                    <a className="hover:text-white" href="tel:+8801805464664">
+                    <a
+                      className="transition hover:text-[var(--evg-blue)]"
+                      href="tel:+8801805464664"
+                    >
                       +8801805464664
                     </a>
-                    <a className="hover:text-white" href="tel:+8801999996686">
+                    <a
+                      className="transition hover:text-[var(--evg-blue)]"
+                      href="tel:+8801999996686"
+                    >
                       +8801999996686
                     </a>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <span className="text-white/55">Travel Compass</span>
+                  <span className="text-black/45">Travel Compass</span>
                   <div className="flex flex-wrap gap-x-4 gap-y-2">
-                    <a className="hover:text-white" href="tel:+8801726986666">
+                    <a
+                      className="transition hover:text-[var(--evg-blue)]"
+                      href="tel:+8801726986666"
+                    >
                       +8801726986666
                     </a>
-                    <a className="hover:text-white" href="tel:+8801805464667">
+                    <a
+                      className="transition hover:text-[var(--evg-blue)]"
+                      href="tel:+8801805464667"
+                    >
                       +8801805464667
                     </a>
                   </div>
@@ -179,7 +204,7 @@ export default function ContactPage() {
             </GlassCard>
 
             <GlassCard className="p-7">
-              <p className="text-xs tracking-[0.22em] text-white/50">SOCIAL</p>
+              <p className="text-xs tracking-[0.22em] text-black/40">SOCIAL</p>
               <h3 className="mt-2 text-lg font-semibold">Connect</h3>
 
               <div className="mt-5 grid gap-3">
@@ -197,10 +222,10 @@ export default function ContactPage() {
                 />
               </div>
 
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/70">
-                <div className="text-white/55">Email</div>
+              <div className="mt-6 rounded-2xl border border-black/8 bg-white/75 p-5 text-sm text-black/65">
+                <div className="text-black/45">Email</div>
                 <a
-                  className="mt-2 inline-block text-white underline decoration-white/30 underline-offset-4 hover:decoration-white/60"
+                  className="mt-2 inline-block text-[var(--evg-blue)] underline decoration-black/15 underline-offset-4 transition hover:decoration-[var(--evg-blue)]"
                   href="mailto:elitevisaglobal@gmail.com"
                 >
                   elitevisaglobal@gmail.com
@@ -210,12 +235,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      <footer className="border-t border-white/10 py-10">
-        <div className="mx-auto max-w-7xl px-6 text-sm text-white/60">
-          Elite Visa Global • Dhaka, Bangladesh • Since 2016
-        </div>
-      </footer>
     </main>
   );
 }

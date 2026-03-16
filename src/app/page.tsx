@@ -3,7 +3,6 @@ import React from "react";
 import { Hero } from "@/components/home/Hero";
 import { WelcomeSection } from "@/components/home/WelcomeSection";
 import { CoreServiceSection } from "@/components/home/CoreServiceSection";
-import { TrustSection } from "@/components/home/TrustSection";
 import { Navbar } from "@/components/home/layout/Navbar";
 import { Footer } from "@/components/home/layout/Footer";
 
@@ -32,7 +31,6 @@ export default function HomePage() {
 
       <WelcomeSection />
       <CoreServiceSection />
-      <TrustSection />
     </main>
   );
 }
