@@ -4,8 +4,11 @@ export const toursListQuery = `
   title,
   "slug": slug.current,
   category,
-  continent,
-  country,
+  "continent": coalesce(continentRef->slug.current, continent),
+  "country": coalesce(countryRef->slug.current, lower(country)),
+  "continentName": continentRef->name,
+  "countryName": countryRef->name,
+  "flagEmoji": countryRef->flagEmoji,
   city,
   durationText,
   fromPriceText,
@@ -22,8 +25,11 @@ export const tourBySlugQuery = `
   title,
   "slug": slug.current,
   category,
-  continent,
-  country,
+  "continent": coalesce(continentRef->slug.current, continent),
+  "country": coalesce(countryRef->slug.current, lower(country)),
+  "continentName": continentRef->name,
+  "countryName": countryRef->name,
+  "flagEmoji": countryRef->flagEmoji,
   city,
   durationText,
   fromPriceText,
@@ -40,7 +46,6 @@ export const tourBySlugQuery = `
   faq
 }
 `;
-
 
 export const countriesLiteQuery = `
 *[_type == "country"] | order(name asc) {

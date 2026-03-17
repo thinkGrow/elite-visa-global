@@ -32,8 +32,12 @@ export type CmsTour = {
   title: string;
   slug: string;
   category: TourCategoryKey;
-  continent?: ContinentKey;
+  continent?: ContinentKey | string;
   country?: string;
+
+  continentName?: string;
+  countryName?: string;
+
   city?: string;
   durationText?: string;
   fromPriceText?: string;
@@ -42,4 +46,12 @@ export type CmsTour = {
   tags?: string[];
   summary?: string;
   isFeatured?: boolean;
+
+  highlights?: string[];
+  includes?: string[];
+  excludes?: string[];
+  summaryContent?: any[];
+  remarksContent?: any[];
+  itinerary?: any[];
+  flagEmoji?: string;
 };

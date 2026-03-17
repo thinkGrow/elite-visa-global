@@ -7,7 +7,11 @@ import { Card } from "../components/Ui";
 import { Tabs } from "../components/Tabs";
 import { CountrySubnav } from "../components/CountrySubnav";
 import { PackageGrid } from "../components/PackageGrid";
-import { buildCountriesByContinent, buildMultiCards, toImg } from "../lib/mappers";
+import {
+  buildCountriesByContinent,
+  buildMultiCards,
+  toImg,
+} from "../lib/mappers";
 
 const allowedContinents = [
   "europe",
@@ -23,17 +27,21 @@ function isContinentKey(v: string): v is ContinentKey {
   return (allowedContinents as readonly string[]).includes(v);
 }
 
+function normalize(value: string | null | undefined) {
+  return (value ?? "").trim().toLowerCase();
+}
+
 export function InternationalTours({ tours }: { tours: CmsTour[] }) {
   const router = useRouter();
   const sp = useSearchParams();
 
   const countriesByContinent = React.useMemo(
     () => buildCountriesByContinent(tours),
-    [tours],
+    [tours]
   );
 
-  const urlContinent = (sp.get("continent") ?? "europe").toLowerCase();
-  const urlCountry = (sp.get("country") ?? "").toLowerCase();
+  const urlContinent = normalize(sp.get("continent") ?? "europe");
+  const urlCountry = normalize(sp.get("country") ?? "");
 
   const safeContinent: ContinentKey = isContinentKey(urlContinent)
     ? urlContinent
@@ -47,13 +55,16 @@ export function InternationalTours({ tours }: { tours: CmsTour[] }) {
 
   const setQuery = (next: { continent?: ContinentKey; country?: string }) => {
     const params = new URLSearchParams(sp.toString());
+    params.set("type", "international");
+
     if (next.continent) params.set("continent", next.continent);
+
     if (next.country !== undefined) {
       if (next.country) params.set("country", next.country);
       else params.delete("country");
     }
 
-    router.replace(`/tour-packages?type=international&${params.toString()}`, {
+    router.replace(`/tour-packages?${params.toString()}`, {
       scroll: false,
     });
   };
@@ -61,40 +72,47 @@ export function InternationalTours({ tours }: { tours: CmsTour[] }) {
   const onPickContinent = (v: ContinentKey) => {
     setContinent(v);
 
-    if (v === "multi") setQuery({ continent: v, country: "" });
-    else {
-      const list = countriesByContinent[v as Exclude<ContinentKey, "multi">];
-      const first = list?.[0]?.slug ?? "";
-      setQuery({ continent: v, country: first });
+    if (v === "multi") {
+      setQuery({ continent: v, country: "" });
+      return;
     }
+
+    const list = countriesByContinent[v as Exclude<ContinentKey, "multi">];
+    const first = list?.[0]?.slug ?? "";
+    setQuery({ continent: v, country: first });
   };
 
   const activeCountrySlug = React.useMemo(() => {
     if (continent === "multi") return "";
+
     const list = countriesByContinent[continent];
     if (!list?.length) return "";
-    const exists = list.some((c) => c.slug === urlCountry);
+
+    const exists = list.some((c) => normalize(c.slug) === urlCountry);
     return exists ? urlCountry : list[0].slug;
   }, [continent, urlCountry, countriesByContinent]);
 
   const activeCountry = React.useMemo(() => {
     if (continent === "multi") return null;
+
     const list = countriesByContinent[continent] || [];
-    return list.find((c) => c.slug === activeCountrySlug) ?? list[0] ?? null;
+    return (
+      list.find((c) => normalize(c.slug) === normalize(activeCountrySlug)) ??
+      list[0] ??
+      null
+    );
   }, [continent, activeCountrySlug, countriesByContinent]);
 
   const packages: PackageCard[] = React.useMemo(() => {
     if (continent === "multi") return buildMultiCards(tours);
     if (!activeCountry) return [];
 
-    const countryName = activeCountry.name.trim().toLowerCase();
-
     return tours
       .filter(
         (t) =>
           t.category === "international" &&
-          t.continent === continent &&
-          (t.country ?? "").trim().toLowerCase() === countryName,
+          normalize(t.continent) === normalize(continent) &&
+          normalize(t.country) === normalize(activeCountry.slug)
       )
       .map((t) => ({
         id: t.slug,
@@ -138,7 +156,10 @@ export function InternationalTours({ tours }: { tours: CmsTour[] }) {
 
               <div className="mt-5 text-sm text-slate-600">
                 Showing packages for{" "}
-                <span className="text-slate-900">{activeCountry?.name}</span>.
+                <span className="text-slate-900">
+                  {activeCountry?.name || activeCountrySlug}
+                </span>
+                .
               </div>
             </div>
           ) : (

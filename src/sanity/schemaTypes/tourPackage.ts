@@ -216,8 +216,53 @@ export default defineType({
     }),
 
     defineField({
+      name: "continentRef",
+      title: "Region / Continent",
+      type: "reference",
+      to: [{ type: "continent" }],
+      fieldset: "details",
+      hidden: ({ document }) => {
+        const doc = document as { category?: string };
+        return doc?.category !== "international";
+      },
+      validation: (r) =>
+        r.custom((value, context) => {
+          const doc = context.document as { category?: string };
+          if (doc?.category === "international" && !value) {
+            return "Region is required for international tours";
+          }
+          return true;
+        }),
+    }),
+
+    defineField({
+      name: "countryRef",
+      title: "Country",
+      type: "reference",
+      to: [{ type: "country" }],
+      fieldset: "details",
+      hidden: ({ document }) => {
+        const doc = document as { category?: string };
+        return doc?.category !== "international";
+      },
+      options: {
+        filter: ({ document }) => {
+          const doc = document as { continentRef?: { _ref?: string } };
+          const continentRef = doc?.continentRef?._ref;
+
+          if (!continentRef) return {};
+
+          return {
+            filter: "continent._ref == $continentRef",
+            params: { continentRef },
+          };
+        },
+      },
+    }),
+
+    defineField({
       name: "continent",
-      title: "Continent",
+      title: "Legacy Continent Code",
       type: "string",
       fieldset: "details",
       options: {
@@ -231,17 +276,17 @@ export default defineType({
           { title: "Multi Countries", value: "multi" },
         ],
       },
-      hidden: ({ document }) => document?.category !== "international",
+      hidden: true,
+      readOnly: true,
     }),
 
     defineField({
       name: "country",
-      title: "Country",
+      title: "Legacy Country",
       type: "string",
       fieldset: "details",
-      hidden: ({ document }) =>
-        document?.category !== "international" ||
-        document?.continent === "multi",
+      hidden: true,
+      readOnly: true,
     }),
 
     defineField({

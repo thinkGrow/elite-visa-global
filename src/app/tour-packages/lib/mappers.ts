@@ -6,6 +6,13 @@ export function toImg(heroImage: any) {
   return urlFor(heroImage).width(1400).height(900).fit("crop").url();
 }
 
+function prettifyLabel(value: string) {
+  return value
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 /** Build countries list from CMS */
 export function buildCountriesByContinent(tours: CmsTour[]) {
   const out: Record<string, Country[]> = {};
@@ -15,16 +22,16 @@ export function buildCountriesByContinent(tours: CmsTour[]) {
     if (!t.continent || t.continent === "multi") continue;
     if (!t.country) continue;
 
-    const key = t.country.toLowerCase().replace(/\s+/g, "-");
-    const slug = key; // country page route (for now)
+    const slug = t.country.toLowerCase().replace(/\s+/g, "-");
+    const key = slug;
     const hero = toImg(t.heroImage) || "/tours/hero-international.jpg";
 
     out[t.continent] ??= [];
     if (!out[t.continent].some((c) => c.slug === slug)) {
       out[t.continent].push({
         key,
-        name: t.country,
-        flag: undefined, // add later if you add a country doc
+        name: t.countryName || prettifyLabel(slug),
+        flag: t.flagEmoji,
         slug,
         heroImage: hero,
         badge: t.city || t.badges?.[0],
