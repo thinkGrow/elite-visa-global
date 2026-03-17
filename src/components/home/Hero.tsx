@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React from "react";
-import { BookingWidget } from "./BookingWidget";
+import { BookingWidget } from "./booking-widget/BookingWidget";
 import { GlassHeadlineCard } from "../ui/GlassHeadlineCard";
 import styles from "@/components/ui/GlassHeadlineCard.module.css";
 
