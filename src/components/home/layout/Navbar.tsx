@@ -6,6 +6,7 @@ import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
 import { themeVars } from "@/lib/theme";
+import { PrimaryCTA } from "@/components/ui/PrimaryCTA";
 
 type DesktopMenuKey = "visa" | "tours" | "hajj";
 
@@ -15,13 +16,11 @@ export function Navbar() {
 
   const [scrolled, setScrolled] = React.useState(false);
 
-  // mobile sheet
   const [open, setOpen] = React.useState(false);
   const [mobileVisaOpen, setMobileVisaOpen] = React.useState(false);
   const [mobileToursOpen, setMobileToursOpen] = React.useState(false);
   const [mobileHajjOpen, setMobileHajjOpen] = React.useState(false);
 
-  // desktop dropdown
   const [openDesktopMenu, setOpenDesktopMenu] =
     React.useState<DesktopMenuKey | null>(null);
 
@@ -63,7 +62,6 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // close menus on route change
   React.useEffect(() => {
     setOpen(false);
     setMobileVisaOpen(false);
@@ -88,52 +86,45 @@ export function Navbar() {
 
   function navLinkClasses(isActive: boolean) {
     const base =
-      "relative inline-flex items-center h-10 text-sm tracking-wide transition-colors";
+      "relative inline-flex items-center h-10 will-change-transform text-[13.5px] font-semibold tracking-[0.05em] transition-all duration-300 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-[1px]";
 
     const text = useLightNav
       ? isActive
         ? "text-slate-900"
-        : "text-slate-600 hover:text-slate-900"
+        : "text-slate-600/80 hover:text-slate-900"
       : isActive
         ? "text-white"
-        : "text-white/80 hover:text-white";
+        : "text-white/60 hover:text-white/95";
 
     const underlineBase =
-      "after:absolute after:left-0 after:right-0 after:bottom-1 after:h-[2px] after:origin-left after:transition-transform after:duration-300";
+      "after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[4px] after:h-[1px] after:w-0 after:rounded-full after:transition-all after:duration-300 after:ease-[cubic-bezier(.22,1,.36,1)]";
 
     const underline = isActive
-      ? "after:scale-x-100 after:bg-[var(--evg-gold)]"
+      ? "after:w-[60%] after:bg-[var(--evg-gold)]"
       : useLightNav
-        ? "after:scale-x-0 after:bg-slate-900/20 hover:after:scale-x-100"
-        : "after:scale-x-0 after:bg-white/30 hover:after:scale-x-100";
+        ? "after:bg-slate-900/40 hover:after:w-[60%]"
+        : "after:bg-[rgba(214,162,58,0.7)] hover:after:w-[60%]";
 
     return [base, text, underlineBase, underline].join(" ");
   }
-
   const dropdownPanelClasses = [
-    "absolute left-0 top-full z-50 w-[320px]",
-    "translate-y-2",
-    "rounded-2xl overflow-hidden",
-    "shadow-[0_30px_80px_rgba(0,0,0,0.25)]",
+    "absolute left-0 top-full z-50 w-[280px]",
+    "translate-y-3 rounded-[22px] p-2",
+    "backdrop-blur-xl",
+    "shadow-[0_24px_70px_rgba(0,0,0,0.30)]",
+    "transition-all duration-300 ease-[cubic-bezier(.22,1,.36,1)]",
     useLightNav
-      ? "border border-slate-200 bg-white"
-      : "border border-white/10 bg-[rgba(6,18,43,0.98)]",
+      ? "border border-slate-200/80 bg-white/95"
+      : "border border-white/10 bg-[rgba(3,14,40,0.88)]",
   ].join(" ");
 
   const dropdownLinkClasses = [
-    "block rounded-xl px-4 py-3 text-sm transition",
+    "group block rounded-2xl px-4 py-3",
+    "text-[14px] font-medium tracking-[0.01em]",
+    "transition-all duration-300 ease-[cubic-bezier(.22,1,.36,1)]",
     useLightNav
-      ? "text-slate-800 hover:bg-slate-900/5"
-      : "text-white hover:bg-white/10",
-  ].join(" ");
-
-  const desktopCtaClasses = [
-    "group relative inline-flex h-11 items-center justify-center overflow-hidden rounded-xl px-[4px] py-[4px] isolate",
-    "transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)]",
-    "cta-border-gradient",
-    "shadow-[0_8px_24px_rgba(0,0,0,0.1),0_0_20px_rgba(214,162,58,0.18)]",
-    "hover:-translate-y-[2px] hover:scale-[1.02]",
-    "hover:shadow-[0_12px_34px_rgba(0,0,0,0.14),0_0_28px_rgba(214,162,58,0.32)]",
+      ? "text-slate-800 hover:bg-[rgba(15,23,42,0.05)]"
+      : "text-white/92 hover:bg-[rgba(255,255,255,0.06)] hover:text-white",
   ].join(" ");
 
   const mobilePanelClasses = [
@@ -164,7 +155,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-4">
         <div
           className={[
-            "relative flex h-16 items-center justify-between rounded-2xl px-3 sm:px-4",
+            "relative flex h-[68px] items-center justify-between rounded-[22px] px-4 sm:px-5",
             "transition-all duration-300",
             scrolled
               ? "bg-[rgba(6,18,43,0.86)] backdrop-blur-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.35)]"
@@ -173,11 +164,10 @@ export function Navbar() {
                 : "bg-transparent",
           ].join(" ")}
         >
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <div
               className={[
-                "relative h-12 w-12 rounded-full overflow-hidden",
+                "relative h-12 w-12 xl:h-14 xl:w-14 rounded-full overflow-hidden",
                 useLightNav
                   ? "bg-white/70 border border-black/5 shadow-[0_10px_30px_rgba(2,6,23,0.08)]"
                   : "bg-white/10 border border-white/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)]",
@@ -188,23 +178,26 @@ export function Navbar() {
                 alt="Elite Visa Global"
                 fill
                 priority
-                className="object-contain"
+                className="object-contain scale-[1.02]"
               />
             </div>
 
             <div className="leading-tight">
               <div
                 className={[
-                  "text-[12px] sm:text-sm tracking-[0.22em] font-semibold",
+                  "whitespace-nowrap font-[var(--font-playfair)] font-semibold tracking-[0.16em]",
+                  "text-[15px] xl:text-[17px]",
                   useLightNav ? "text-slate-900" : "text-white",
                 ].join(" ")}
               >
-                ELITE VISA GLOBAL
+                <span className="gold-motion relative">ELITE</span>{" "}
+                <span className="opacity-90">VISA GLOBAL</span>
               </div>
+
               <div
                 className={[
-                  "text-[11px] tracking-wide",
-                  useLightNav ? "text-slate-500" : "text-white/60",
+                  "mt-1 text-[10px] xl:text-[11px] tracking-[0.14em]",
+                  useLightNav ? "text-slate-500/70" : "text-white/42",
                 ].join(" ")}
               >
                 Follow your dreams.
@@ -213,32 +206,34 @@ export function Navbar() {
           </Link>
 
           {/* Desktop */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/#services" className={navLinkClasses(isHome)}>
-              Services
+          <nav className="hidden md:flex items-center gap-7 xl:gap-8">
+            <Link href="/" className={navLinkClasses(isHome)}>
+              Home
             </Link>
 
-            {/* Visa dropdown */}
+            {/* Visa */}
             <div
-              className="relative after:content-[''] after:absolute after:left-0 after:right-0 after:top-full after:h-4"
+              className="relative after:absolute after:left-0 after:right-0 after:top-full after:h-4 after:content-['']"
               onMouseEnter={() => openMenu("visa")}
               onMouseLeave={scheduleClose}
               onBlur={onDropdownBlur}
             >
               <button
                 type="button"
-                className={[navLinkClasses(isVisa), "gap-2"].join(" ")}
+                className={[navLinkClasses(isVisa), "gap-1.5"].join(" ")}
                 aria-haspopup="menu"
                 aria-expanded={openDesktopMenu === "visa"}
                 onFocus={() => openMenu("visa")}
                 onClick={() => toggleMenu("visa")}
               >
-                <span>Visa Processing</span>
+                <span>Visas</span>
                 <span
                   className={[
-                    "text-xs leading-none transition-transform",
-                    openDesktopMenu === "visa" ? "rotate-180" : "",
-                    useLightNav ? "text-slate-500" : "text-white/70",
+                    "text-[9px] transition-all duration-300",
+                    openDesktopMenu === "visa"
+                      ? "rotate-180 translate-y-[1px]"
+                      : "",
+                    useLightNav ? "text-slate-400" : "text-white/45",
                   ].join(" ")}
                   aria-hidden="true"
                 >
@@ -248,47 +243,60 @@ export function Navbar() {
 
               {openDesktopMenu === "visa" && (
                 <div className={dropdownPanelClasses} role="menu">
-                  <div className="p-2">
+                  <div className="flex flex-col gap-1">
                     <Link
                       href="/visa-processing?type=student"
                       className={dropdownLinkClasses}
                       onClick={closeNow}
                     >
-                      Student Visa
+                      <div className="flex items-center justify-between gap-3">
+                        <span>Student Visa</span>
+                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          →
+                        </span>
+                      </div>
                     </Link>
+
                     <Link
                       href="/visa-processing?type=visit"
                       className={dropdownLinkClasses}
                       onClick={closeNow}
                     >
-                      Visit, Family & Business Visa
+                      <div className="flex items-center justify-between gap-3">
+                        <span>Visit, Family &amp; Business Visa</span>
+                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          →
+                        </span>
+                      </div>
                     </Link>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Tours dropdown */}
+            {/* Tours */}
             <div
-              className="relative after:content-[''] after:absolute after:left-0 after:right-0 after:top-full after:h-4"
+              className="relative after:absolute after:left-0 after:right-0 after:top-full after:h-4 after:content-['']"
               onMouseEnter={() => openMenu("tours")}
               onMouseLeave={scheduleClose}
               onBlur={onDropdownBlur}
             >
               <button
                 type="button"
-                className={[navLinkClasses(isTours), "gap-2"].join(" ")}
+                className={[navLinkClasses(isTours), "gap-1.5"].join(" ")}
                 aria-haspopup="menu"
                 aria-expanded={openDesktopMenu === "tours"}
                 onFocus={() => openMenu("tours")}
                 onClick={() => toggleMenu("tours")}
               >
-                <span>Tour Packages</span>
+                <span>Tours</span>
                 <span
                   className={[
-                    "text-xs leading-none transition-transform",
-                    openDesktopMenu === "tours" ? "rotate-180" : "",
-                    useLightNav ? "text-slate-500" : "text-white/70",
+                    "text-[9px] transition-all duration-300",
+                    openDesktopMenu === "tours"
+                      ? "rotate-180 translate-y-[1px]"
+                      : "",
+                    useLightNav ? "text-slate-400" : "text-white/45",
                   ].join(" ")}
                   aria-hidden="true"
                 >
@@ -298,36 +306,47 @@ export function Navbar() {
 
               {openDesktopMenu === "tours" && (
                 <div className={dropdownPanelClasses} role="menu">
-                  <div className="p-2">
+                  <div className="flex flex-col gap-1">
                     <Link
                       href="/tour-packages?type=international"
                       className={dropdownLinkClasses}
                       onClick={closeNow}
                     >
-                      International Tours
+                      <div className="flex items-center justify-between gap-3">
+                        <span>International Tours</span>
+                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          →
+                        </span>
+                      </div>
                     </Link>
+
                     <Link
                       href="/tour-packages?type=local"
                       className={dropdownLinkClasses}
                       onClick={closeNow}
                     >
-                      Local Tours
+                      <div className="flex items-center justify-between gap-3">
+                        <span>Local Tours</span>
+                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          →
+                        </span>
+                      </div>
                     </Link>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Hajj dropdown */}
+            {/* Hajj */}
             <div
-              className="relative after:content-[''] after:absolute after:left-0 after:right-0 after:top-full after:h-4"
+              className="relative after:absolute after:left-0 after:right-0 after:top-full after:h-4 after:content-['']"
               onMouseEnter={() => openMenu("hajj")}
               onMouseLeave={scheduleClose}
               onBlur={onDropdownBlur}
             >
               <button
                 type="button"
-                className={[navLinkClasses(isHajjUmrah), "gap-2"].join(" ")}
+                className={[navLinkClasses(isHajjUmrah), "gap-1.5"].join(" ")}
                 aria-haspopup="menu"
                 aria-expanded={openDesktopMenu === "hajj"}
                 onFocus={() => openMenu("hajj")}
@@ -336,32 +355,44 @@ export function Navbar() {
                 <span>Hajj &amp; Umrah</span>
                 <span
                   className={[
-                    "text-xs leading-none transition-transform",
-                    openDesktopMenu === "hajj" ? "rotate-180" : "",
-                    useLightNav ? "text-slate-500" : "text-white/70",
+                    "text-[9px] transition-all duration-300",
+                    openDesktopMenu === "hajj"
+                      ? "rotate-180 translate-y-[1px]"
+                      : "",
+                    useLightNav ? "text-slate-400" : "text-white/45",
                   ].join(" ")}
                   aria-hidden="true"
                 >
                   ▼
                 </span>
               </button>
-
               {openDesktopMenu === "hajj" && (
                 <div className={dropdownPanelClasses} role="menu">
-                  <div className="p-2">
+                  <div className="flex flex-col gap-1">
                     <Link
                       href="/hajj-umrah?type=umrah"
                       className={dropdownLinkClasses}
                       onClick={closeNow}
                     >
-                      Umrah Packages
+                      <div className="flex items-center justify-between gap-3">
+                        <span>Umrah Packages</span>
+                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          →
+                        </span>
+                      </div>
                     </Link>
+
                     <Link
                       href="/hajj-umrah?type=hajj"
                       className={dropdownLinkClasses}
                       onClick={closeNow}
                     >
-                      Hajj Packages
+                      <div className="flex items-center justify-between gap-3">
+                        <span>Hajj Packages</span>
+                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          →
+                        </span>
+                      </div>
                     </Link>
                   </div>
                 </div>
@@ -376,18 +407,7 @@ export function Navbar() {
               Contact
             </Link>
 
-            <Link href="/contact" className={desktopCtaClasses}>
-              <span className="pointer-events-none absolute inset-0 rounded-xl">
-                <span className="cta-gold-beam absolute inset-y-0 -left-1/3 w-1/3" />
-              </span>
-
-              <span className="relative z-10 flex h-full w-full items-center justify-center gap-2 rounded-[10px] bg-white/95 px-5 text-sm font-semibold text-[var(--evg-deep)] transition-all duration-500 group-hover:bg-[var(--evg-gold)] group-hover:text-white">
-                Get Consultation
-                <span className="text-[var(--evg-gold)] transition-all duration-300 group-hover:translate-x-1 group-hover:text-white">
-                  →
-                </span>
-              </span>
-            </Link>
+            <PrimaryCTA href="/contact">Get Consultation</PrimaryCTA>
           </nav>
 
           {/* Mobile toggle */}
@@ -396,29 +416,28 @@ export function Navbar() {
             className={[
               "md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl backdrop-blur transition",
               useLightNav
-                ? "border border-slate-200 bg-white/60 text-slate-900 hover:bg-white/80"
-                : "border border-white/10 bg-white/5 text-white/85 hover:bg-white/10",
+                ? "border border-slate-200 bg-white/60 text-slate-900"
+                : "border border-white/10 bg-white/5 text-white/85",
             ].join(" ")}
             onClick={() => setOpen((v) => !v)}
             aria-label="Open menu"
             aria-expanded={open}
           >
-            <span className="text-lg">{open ? "✕" : "☰"}</span>
+            {open ? "✕" : "☰"}
           </button>
 
           {/* Mobile menu */}
           {open && (
             <div className={mobilePanelClasses}>
-              <div className="p-3 grid gap-1">
+              <div className="grid gap-1 p-3">
                 <Link
-                  href="/#services"
+                  href="/"
                   className={[mobileItemBase, mobileItemText].join(" ")}
                   onClick={() => setOpen(false)}
                 >
-                  Services
+                  Home
                 </Link>
 
-                {/* Visa collapsible */}
                 <button
                   type="button"
                   className={[
@@ -459,12 +478,11 @@ export function Navbar() {
                       ].join(" ")}
                       onClick={() => setOpen(false)}
                     >
-                      Visit, Family & Business Visa
+                      Visit, Family &amp; Business Visa
                     </Link>
                   </div>
                 )}
 
-                {/* Tours collapsible */}
                 <button
                   type="button"
                   className={[
@@ -510,7 +528,6 @@ export function Navbar() {
                   </div>
                 )}
 
-                {/* Hajj collapsible */}
                 <button
                   type="button"
                   className={[
@@ -574,7 +591,7 @@ export function Navbar() {
 
                 <Link
                   href="/contact"
-                  className="mt-2 rounded-xl bg-[var(--evg-gold)] px-4 py-3 text-center text-sm font-medium text-slate-900 transition hover:brightness-110"
+                  className="mt-2 rounded-xl bg-[var(--evg-gold)] px-4 py-3 text-center text-sm font-medium text-slate-900"
                   onClick={() => setOpen(false)}
                 >
                   Get Consultation

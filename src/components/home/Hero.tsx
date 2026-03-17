@@ -148,8 +148,8 @@ export function Hero() {
             {/* HEADLINE - desktop glass card preserved */}
             <GlassHeadlineCard textColor="white" size="lg">
               <h1 className="text-balance">
-                Dreams beyond <span className={styles.goldMotion}>borders</span>
-                , without limits.
+                Dreams beyond <span className="gold-motion">borders</span>
+                {/* without limits. */}
               </h1>
 
               <div className={`${styles.underlineMotion} mt-4`} />

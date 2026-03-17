@@ -304,3 +304,26 @@ body {
     opacity: 0.35;
   }
 }
+
+/* gold motion */
+@layer utilities {
+  .gold-motion {
+    background: linear-gradient(
+      110deg,
+      #b8892c 0%,
+      #f6e2aa 40%,
+      #d6a23a 60%,
+      #b8892c 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: goldMotionMove 3.5s linear infinite;
+  }
+}
+
+@keyframes goldMotionMove {
+  to {
+    background-position: 200% center;
+  }
+}
