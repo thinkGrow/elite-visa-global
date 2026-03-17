@@ -128,9 +128,12 @@ export function Navbar() {
   ].join(" ");
 
   const desktopCtaClasses = [
-    "inline-flex items-center justify-center h-10 rounded-xl px-5 text-sm font-medium transition",
-    "transform hover:-translate-y-[1px] active:translate-y-0",
-    "bg-[var(--evg-gold)] text-slate-900 hover:brightness-110 shadow-[0_10px_30px_rgba(214,162,58,0.22)]",
+    "group relative inline-flex h-11 items-center justify-center overflow-hidden rounded-xl px-[4px] py-[4px] isolate",
+    "transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)]",
+    "cta-border-gradient",
+    "shadow-[0_8px_24px_rgba(0,0,0,0.1),0_0_20px_rgba(214,162,58,0.18)]",
+    "hover:-translate-y-[2px] hover:scale-[1.02]",
+    "hover:shadow-[0_12px_34px_rgba(0,0,0,0.14),0_0_28px_rgba(214,162,58,0.32)]",
   ].join(" ");
 
   const mobilePanelClasses = [
@@ -374,7 +377,16 @@ export function Navbar() {
             </Link>
 
             <Link href="/contact" className={desktopCtaClasses}>
-              Get Consultation
+              <span className="pointer-events-none absolute inset-0 rounded-xl">
+                <span className="cta-gold-beam absolute inset-y-0 -left-1/3 w-1/3" />
+              </span>
+
+              <span className="relative z-10 flex h-full w-full items-center justify-center gap-2 rounded-[10px] bg-white/95 px-5 text-sm font-semibold text-[var(--evg-deep)] transition-all duration-500 group-hover:bg-[var(--evg-gold)] group-hover:text-white">
+                Get Consultation
+                <span className="text-[var(--evg-gold)] transition-all duration-300 group-hover:translate-x-1 group-hover:text-white">
+                  →
+                </span>
+              </span>
             </Link>
           </nav>
 
