@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { BookingWidget } from "./BookingWidget";
 import { GlassHeadlineCard } from "../ui/GlassHeadlineCard";
+import styles from "@/components/ui/GlassHeadlineCard.module.css";
 
 type Slide = {
   key: string;
@@ -145,13 +146,13 @@ export function Hero() {
           {/* top content */}
           <div className="max-w-3xl">
             {/* HEADLINE - desktop glass card preserved */}
-            <GlassHeadlineCard textColor="white" size="md">
-              <h1>
-                Dreams beyond{" "}
-                <span className="text-[var(--evg-gold)]">borders</span>,
-                <br />
-                guided with confidence.
+            <GlassHeadlineCard textColor="white" size="lg">
+              <h1 className="text-balance">
+                Dreams beyond <span className={styles.goldMotion}>borders</span>
+                , without limits.
               </h1>
+
+              <div className={`${styles.underlineMotion} mt-4`} />
             </GlassHeadlineCard>
             {/* SUBTEXT */}
             <p

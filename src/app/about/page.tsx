@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Navbar } from "@/components/home/layout/Navbar";
 import { themeVars } from "@/lib/theme";
 import { GlassHeadlineCard } from "@/components/ui/GlassHeadlineCard";
+import styles from "@/components/ui/GlassHeadlineCard.module.css";
+
 
 const leadership = [
   {
@@ -119,12 +121,13 @@ export default function AboutPage() {
       <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-20">
         <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
           <GlassHeadlineCard textColor="black" size="md">
-            <h1>
-              <span className="text-[var(--evg-gold)]">Experience</span>, driven
-              by
+            <h1 className="leading-[1.1]">
+              <span className={styles.goldMotion}>Experience</span>, built on
               <br />
               ethics & execution
             </h1>
+
+            <div className={`${styles.underlineMotion} mt-4`} />
           </GlassHeadlineCard>
 
           <div className="mt-8 space-y-6 text-[17px] leading-relaxed text-slate-700">
