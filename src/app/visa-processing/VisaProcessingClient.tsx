@@ -304,12 +304,8 @@ const ptComponents = {
   },
 
   listItem: {
-    bullet: ({ children }: any) => (
-      <li className="leading-relaxed">{children}</li>
-    ),
-    number: ({ children }: any) => (
-      <li className="leading-relaxed">{children}</li>
-    ),
+    bullet: ({ children }: any) => <li className="leading-relaxed">{children}</li>,
+    number: ({ children }: any) => <li className="leading-relaxed">{children}</li>,
   },
 
   marks: {
@@ -443,6 +439,8 @@ export default function VisaProcessingPage() {
   const searchParams = useSearchParams();
 
   const typeParam = (searchParams.get("type") ?? "").toLowerCase();
+  const countryParam = (searchParams.get("country") ?? "").toLowerCase();
+
   const initialCategory: VisaCategoryKey =
     typeParam === "visit" ? "visit" : "student";
 
@@ -450,12 +448,16 @@ export default function VisaProcessingPage() {
     React.useState<VisaCategoryKey>(initialCategory);
   const [destinations, setDestinations] = React.useState<VisaDestination[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [selectedCountrySlug, setSelectedCountrySlug] = React.useState("");
+  const [selectedCountrySlug, setSelectedCountrySlug] =
+    React.useState(countryParam);
 
   React.useEffect(() => {
     const t = (searchParams.get("type") ?? "").toLowerCase();
     const nextCategory: VisaCategoryKey = t === "visit" ? "visit" : "student";
+    const nextCountry = (searchParams.get("country") ?? "").toLowerCase();
+
     setCategory(nextCategory);
+    setSelectedCountrySlug(nextCountry);
   }, [searchParams]);
 
   React.useEffect(() => {
@@ -467,9 +469,7 @@ export default function VisaProcessingPage() {
       try {
         const data = await client.fetch<VisaDestination[]>(
           visaDestinationsQuery,
-          {
-            category,
-          },
+          { category },
         );
 
         if (!mounted) return;
@@ -501,7 +501,22 @@ export default function VisaProcessingPage() {
 
   const onChangeCategory = (v: VisaCategoryKey) => {
     setCategory(v);
-    router.replace(`/visa-processing?type=${v}`, { scroll: false });
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("type", v);
+    params.delete("country");
+
+    router.replace(`/visa-processing?${params.toString()}`, { scroll: false });
+  };
+
+  const onSelectCountry = (slug: string) => {
+    setSelectedCountrySlug(slug);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("type", category);
+    params.set("country", slug);
+
+    router.replace(`/visa-processing?${params.toString()}`, { scroll: false });
   };
 
   const selected = destinations.find(
@@ -542,7 +557,7 @@ export default function VisaProcessingPage() {
               title={pickerTitle}
               items={destinations}
               selected={selectedCountrySlug}
-              onSelect={setSelectedCountrySlug}
+              onSelect={onSelectCountry}
               layout={pickerLayout}
             />
 
