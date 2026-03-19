@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { client } from "@/sanity/lib/client";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
 type TourInventoryRow = {
   continent?: string;
@@ -72,7 +73,7 @@ export function TourTab() {
     async function loadInventory() {
       try {
         const data = await client.fetch<TourInventoryData>(
-          availableTourInventoryQuery
+          availableTourInventoryQuery,
         );
 
         if (!mounted) return;
@@ -193,20 +194,15 @@ export function TourTab() {
         </div>
 
         <div>
-          <button
+          <PrimaryButton
             type="button"
             onClick={handleSearch}
             disabled={isLoading || !selectedRegion}
-            className="h-11 w-full rounded-xl border border-white/10 bg-[var(--evg-gold)] text-white inline-flex cursor-pointer items-center justify-center gap-2 text-sm tracking-[0.2em] transition hover:brightness-110 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100"
+            className="w-full"
           >
-            🔎 SEARCH
-          </button>
+            SEARCH
+          </PrimaryButton>
         </div>
-      </div>
-
-      <div className="mt-3 text-[11px] text-white/50">
-        Select a region to explore available tours, or narrow down to a
-        specific country.
       </div>
     </>
   );

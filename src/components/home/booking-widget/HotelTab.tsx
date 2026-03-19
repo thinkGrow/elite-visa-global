@@ -1,5 +1,6 @@
 "use client";
 
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import React from "react";
 
 type HotelInquiryForm = {
@@ -29,6 +30,9 @@ const initialForm: HotelInquiryForm = {
   contactNumber: "",
   emailAddress: "",
 };
+
+const inputClass =
+  "h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70";
 
 export function HotelTab() {
   const [form, setForm] = React.useState<HotelInquiryForm>(initialForm);
@@ -67,7 +71,7 @@ export function HotelTab() {
 
       setStatus({
         type: "success",
-        message: "Inquiry sent successfully.",
+        message: "Hotel inquiry sent successfully.",
       });
 
       setForm(initialForm);
@@ -87,19 +91,21 @@ export function HotelTab() {
       <div className="text-xs tracking-[0.2em] text-white/70">HOTEL SEARCH</div>
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-        <Field label="Where do you want to go">
-          <input
-            type="text"
-            value={form.destination}
-            onChange={(e) => updateField("destination", e.target.value)}
-            placeholder="City / State / Country / Country Code"
-            className={inputClass}
-            required
-          />
-        </Field>
+        <div className="grid gap-3">
+          <Field label="WHERE DO YOU WANT TO GO">
+            <input
+              type="text"
+              value={form.destination}
+              onChange={(e) => updateField("destination", e.target.value)}
+              placeholder="City / State / Country / Country Code"
+              className={inputClass}
+              required
+            />
+          </Field>
+        </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Check in">
+        <div className="grid gap-3 md:grid-cols-2 items-end">
+          <Field label="CHECK IN">
             <input
               type="date"
               value={form.checkIn}
@@ -109,7 +115,7 @@ export function HotelTab() {
             />
           </Field>
 
-          <Field label="Check out">
+          <Field label="CHECK OUT">
             <input
               type="date"
               value={form.checkOut}
@@ -120,8 +126,8 @@ export function HotelTab() {
           </Field>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Field label="Rooms">
+        <div className="grid gap-3 md:grid-cols-4 items-end">
+          <Field label="ROOMS">
             <select
               value={form.rooms}
               onChange={(e) => updateField("rooms", e.target.value)}
@@ -137,7 +143,7 @@ export function HotelTab() {
             </select>
           </Field>
 
-          <Field label="Adult (12+ yrs)">
+          <Field label="ADULT (12+ YRS)">
             <select
               value={form.adults}
               onChange={(e) => updateField("adults", e.target.value)}
@@ -153,7 +159,7 @@ export function HotelTab() {
             </select>
           </Field>
 
-          <Field label="Child (3-11 yrs)">
+          <Field label="CHILD (3-11 YRS)">
             <select
               value={form.children}
               onChange={(e) => updateField("children", e.target.value)}
@@ -168,7 +174,7 @@ export function HotelTab() {
             </select>
           </Field>
 
-          <Field label="Infant (0-2 yrs)">
+          <Field label="INFANT (0-2 YRS)">
             <select
               value={form.infants}
               onChange={(e) => updateField("infants", e.target.value)}
@@ -184,8 +190,8 @@ export function HotelTab() {
           </Field>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Residence">
+        <div className="grid gap-3 md:grid-cols-2 items-end">
+          <Field label="RESIDENCE">
             <input
               type="text"
               value={form.residence}
@@ -196,7 +202,7 @@ export function HotelTab() {
             />
           </Field>
 
-          <Field label="Your nationality">
+          <Field label="YOUR NATIONALITY">
             <input
               type="text"
               value={form.nationality}
@@ -208,8 +214,8 @@ export function HotelTab() {
           </Field>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Contact number">
+        <div className="grid gap-3 md:grid-cols-2 items-end">
+          <Field label="CONTACT NUMBER">
             <input
               type="tel"
               value={form.contactNumber}
@@ -220,7 +226,7 @@ export function HotelTab() {
             />
           </Field>
 
-          <Field label="Email address">
+          <Field label="EMAIL ADDRESS">
             <input
               type="email"
               value={form.emailAddress}
@@ -232,26 +238,33 @@ export function HotelTab() {
           </Field>
         </div>
 
+        <div className="grid gap-3 md:grid-cols-[1fr_auto] items-end">
+          <div className="text-[11px] text-white/50">
+            Share your stay details and the team will follow up with available
+            hotel options and pricing.
+          </div>
+
+          <PrimaryButton
+            type="submit"
+            disabled={submitting}
+            className="w-full md:w-[180px]"
+          >
+            {submitting ? "SENDING..." : "SEARCH"}
+          </PrimaryButton>
+        </div>
+
         {status.type !== "idle" ? (
           <div
             className={[
-              "rounded-2xl border px-4 py-3 text-sm",
+              "rounded-xl border px-4 py-3 text-sm",
               status.type === "success"
-                ? "border-emerald-300 bg-emerald-50 text-emerald-700"
-                : "border-red-300 bg-red-50 text-red-700",
+                ? "border-emerald-300/70 bg-emerald-50 text-emerald-700"
+                : "border-red-300/70 bg-red-50 text-red-700",
             ].join(" ")}
           >
             {status.message}
           </div>
         ) : null}
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-2xl bg-[var(--evg-gold)] px-5 py-3 text-sm font-semibold text-[var(--evg-deep)] transition hover:-translate-y-[1px] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {submitting ? "Sending..." : "Search Hotel"}
-        </button>
       </form>
     </>
   );
@@ -266,13 +279,10 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-white/65">
+      <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
         {label}
       </label>
       {children}
     </div>
   );
 }
-
-const inputClass =
-  "w-full rounded-2xl border border-white/10 bg-white/95 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20";

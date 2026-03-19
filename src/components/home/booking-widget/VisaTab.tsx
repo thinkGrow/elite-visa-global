@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { client } from "@/sanity/lib/client";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
 type VisaCategoryKey = "student" | "visit";
 
@@ -29,29 +30,35 @@ const visaWidgetQuery = `
 }
 `;
 
+const inputClass =
+  "h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70";
+
 export function VisaTab() {
   const router = useRouter();
 
   const [category, setCategory] = React.useState<VisaCategoryKey>("student");
   const [countries, setCountries] = React.useState<VisaWidgetCountry[]>([]);
   const [selectedCountrySlug, setSelectedCountrySlug] = React.useState("");
-  const [loading, setLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     let mounted = true;
 
     async function loadCountries() {
-      setLoading(true);
-
       try {
         const data = await client.fetch<VisaWidgetCountry[]>(visaWidgetQuery);
+
         if (!mounted) return;
+
         setCountries(data ?? []);
       } catch (error) {
         console.error("Failed to load visa widget countries:", error);
-        if (mounted) setCountries([]);
+
+        if (!mounted) return;
+
+        setCountries([]);
       } finally {
-        if (mounted) setLoading(false);
+        if (mounted) setIsLoading(false);
       }
     }
 
@@ -63,7 +70,13 @@ export function VisaTab() {
   }, []);
 
   const filteredCountries = React.useMemo(() => {
-    return countries.filter((item) => item.visaCategory === category);
+    return countries
+      .filter((item) => item.visaCategory === category)
+      .sort((a, b) =>
+        (a.shortName || a.countryName).localeCompare(
+          b.shortName || b.countryName,
+        ),
+      );
   }, [countries, category]);
 
   React.useEffect(() => {
@@ -75,8 +88,9 @@ export function VisaTab() {
     });
   }, [filteredCountries]);
 
-  const handleGo = () => {
+  const handleSearch = () => {
     if (!selectedCountrySlug) return;
+
     router.push(
       `/visa-processing?type=${category}&country=${selectedCountrySlug}`,
     );
@@ -86,75 +100,76 @@ export function VisaTab() {
     <>
       <div className="text-xs tracking-[0.2em] text-white/70">VISA SEARCH</div>
 
-      <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md sm:p-5">
-        <div className="grid gap-3 md:grid-cols-[1fr_1fr_auto]">
-          <div>
-            <label className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-white/60">
-              Visa Type
-            </label>
+      <div className="mt-4 grid gap-3 md:grid-cols-3 items-end">
+        <Field label="SELECT VISA TYPE">
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value as VisaCategoryKey)}
+            disabled={isLoading}
+            className={inputClass}
+          >
+            <option value="student">Student Visa</option>
+            <option value="visit">Visit / Family / Business</option>
+          </select>
+        </Field>
 
-            <div className="relative">
-              <select
-                value={category}
-                onChange={(e) =>
-                  setCategory(e.target.value as VisaCategoryKey)
-                }
-                className="w-full appearance-none rounded-2xl border border-white/10 bg-white/95 px-4 py-3 pr-10 text-sm text-slate-900 outline-none transition focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20"
-              >
-                <option value="student">Student Visa</option>
-                <option value="visit">Visit / Family / Business</option>
-              </select>
+        <Field label="SELECT COUNTRY">
+          <select
+            value={selectedCountrySlug}
+            onChange={(e) => setSelectedCountrySlug(e.target.value)}
+            disabled={isLoading || !filteredCountries.length}
+            className={inputClass}
+          >
+            <option value="" disabled>
+              {isLoading
+                ? "Loading countries..."
+                : filteredCountries.length
+                  ? "Choose a country"
+                  : "No countries available"}
+            </option>
 
-              <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">
-                ▼
-              </div>
-            </div>
-          </div>
+            {filteredCountries.map((country) => (
+              <option key={country.countrySlug} value={country.countrySlug}>
+                {country.flagEmoji ? `${country.flagEmoji} ` : ""}
+                {country.shortName || country.countryName}
+              </option>
+            ))}
+          </select>
+        </Field>
 
-          <div>
-            <label className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-white/60">
-              Country
-            </label>
-
-            <div className="relative">
-              <select
-                value={selectedCountrySlug}
-                onChange={(e) => setSelectedCountrySlug(e.target.value)}
-                disabled={loading || filteredCountries.length === 0}
-                className="w-full appearance-none rounded-2xl border border-white/10 bg-white/95 px-4 py-3 pr-10 text-sm text-slate-900 outline-none transition disabled:cursor-not-allowed disabled:opacity-60 focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20"
-              >
-                {loading ? (
-                  <option value="">Loading countries...</option>
-                ) : filteredCountries.length === 0 ? (
-                  <option value="">No countries available</option>
-                ) : (
-                  filteredCountries.map((country) => (
-                    <option key={country.countrySlug} value={country.countrySlug}>
-                      {country.flagEmoji ? `${country.flagEmoji} ` : ""}
-                      {country.shortName || country.countryName}
-                    </option>
-                  ))
-                )}
-              </select>
-
-              <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">
-                ▼
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-end">
-            <button
-              type="button"
-              onClick={handleGo}
-              disabled={loading || !selectedCountrySlug}
-              className="w-full rounded-2xl bg-[var(--evg-gold)] px-5 py-3 text-sm font-semibold text-[var(--evg-deep)] transition hover:-translate-y-[1px] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50 md:w-auto md:min-w-[150px]"
-            >
-              Explore
-            </button>
-          </div>
+        <div>
+          <PrimaryButton
+            type="button"
+            onClick={handleSearch}
+            disabled={isLoading || !selectedCountrySlug}
+            className="w-full"
+          >
+            SEARCH
+          </PrimaryButton>
         </div>
       </div>
+
+      <div className="mt-3 text-[11px] text-white/50">
+        Choose a visa category first, then select a country to view the relevant
+        processing details.
+      </div>
     </>
+  );
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
+        {label}
+      </label>
+      {children}
+    </div>
   );
 }

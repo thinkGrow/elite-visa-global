@@ -1,5 +1,6 @@
 "use client";
 
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import React from "react";
 
 type TripType = "one-way" | "round-trip" | "multi-city";
@@ -34,6 +35,9 @@ const initialForm: FlightInquiryForm = {
   emailAddress: "",
 };
 
+const inputClass =
+  "h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70";
+
 export function FlightTab() {
   const [form, setForm] = React.useState<FlightInquiryForm>(initialForm);
   const [submitting, setSubmitting] = React.useState(false);
@@ -64,7 +68,7 @@ export function FlightTab() {
     if (form.tripType === "round-trip" && !form.returning) {
       setStatus({
         type: "error",
-        message: "Please select a return date for round-trip inquiries.",
+        message: "Please select a return date for round-trip.",
       });
       return;
     }
@@ -72,7 +76,7 @@ export function FlightTab() {
     if (form.tripType === "multi-city") {
       setStatus({
         type: "error",
-        message: "Multi-city inquiry is not available yet.",
+        message: "Multi-city will be added later.",
       });
       return;
     }
@@ -117,20 +121,20 @@ export function FlightTab() {
         FLIGHT SEARCH
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-4 space-y-5">
-        <div className="flex flex-wrap gap-5 border-b border-white/10 pb-4">
-          <TripTypeRadio
-            label="1 Way"
+      <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <div className="flex flex-wrap gap-5 border-b border-white/10 pb-4 text-sm text-white/80">
+          <TripTypeOption
+            label="1 WAY"
             checked={form.tripType === "one-way"}
             onClick={() => setTripType("one-way")}
           />
-          <TripTypeRadio
-            label="Round-Trip"
+          <TripTypeOption
+            label="ROUND-TRIP"
             checked={form.tripType === "round-trip"}
             onClick={() => setTripType("round-trip")}
           />
-          <TripTypeRadio
-            label="Multi-City"
+          <TripTypeOption
+            label="MULTI-CITY"
             checked={form.tripType === "multi-city"}
             onClick={() => setTripType("multi-city")}
           />
@@ -138,13 +142,13 @@ export function FlightTab() {
 
         <div
           className={[
-            "grid gap-4",
+            "grid gap-3 items-end",
             form.tripType === "round-trip"
-              ? "md:grid-cols-2 lg:grid-cols-4"
+              ? "md:grid-cols-4"
               : "md:grid-cols-3",
           ].join(" ")}
         >
-          <Field label="Flying from">
+          <Field label="FLYING FROM">
             <input
               type="text"
               value={form.flyingFrom}
@@ -155,7 +159,7 @@ export function FlightTab() {
             />
           </Field>
 
-          <Field label="Flying to">
+          <Field label="FLYING TO">
             <input
               type="text"
               value={form.flyingTo}
@@ -166,7 +170,7 @@ export function FlightTab() {
             />
           </Field>
 
-          <Field label="Departing">
+          <Field label="DEPARTING">
             <input
               type="date"
               value={form.departing}
@@ -177,7 +181,7 @@ export function FlightTab() {
           </Field>
 
           {form.tripType === "round-trip" ? (
-            <Field label="Returning">
+            <Field label="RETURNING">
               <input
                 type="date"
                 value={form.returning}
@@ -189,8 +193,8 @@ export function FlightTab() {
           ) : null}
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <Field label="Adult (12+ yrs)">
+        <div className="grid gap-3 md:grid-cols-3 items-end">
+          <Field label="ADULT (12+ YRS)">
             <select
               value={form.adults}
               onChange={(e) => updateField("adults", e.target.value)}
@@ -206,7 +210,7 @@ export function FlightTab() {
             </select>
           </Field>
 
-          <Field label="Child (3-11 yrs)">
+          <Field label="CHILD (3-11 YRS)">
             <select
               value={form.children}
               onChange={(e) => updateField("children", e.target.value)}
@@ -221,7 +225,7 @@ export function FlightTab() {
             </select>
           </Field>
 
-          <Field label="Infant (0-2 yrs)">
+          <Field label="INFANT (0-2 YRS)">
             <select
               value={form.infants}
               onChange={(e) => updateField("infants", e.target.value)}
@@ -237,8 +241,8 @@ export function FlightTab() {
           </Field>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Class">
+        <div className="grid gap-3 md:grid-cols-2 items-end">
+          <Field label="CLASS">
             <select
               value={form.travelClass}
               onChange={(e) => updateField("travelClass", e.target.value)}
@@ -253,7 +257,7 @@ export function FlightTab() {
             </select>
           </Field>
 
-          <Field label="Nationality">
+          <Field label="NATIONALITY">
             <input
               type="text"
               value={form.nationality}
@@ -265,8 +269,8 @@ export function FlightTab() {
           </Field>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Contact number">
+        <div className="grid gap-3 md:grid-cols-2 items-end">
+          <Field label="CONTACT NUMBER">
             <input
               type="tel"
               value={form.contactNumber}
@@ -277,7 +281,7 @@ export function FlightTab() {
             />
           </Field>
 
-          <Field label="Email address">
+          <Field label="EMAIL ADDRESS">
             <input
               type="email"
               value={form.emailAddress}
@@ -289,26 +293,33 @@ export function FlightTab() {
           </Field>
         </div>
 
+        <div className="grid gap-3 md:grid-cols-[1fr_auto] items-end">
+          <div className="text-[11px] text-white/50">
+            Submit your route and travel preferences and the team will follow up
+            with flight options.
+          </div>
+
+          <PrimaryButton
+            type="submit"
+            disabled={submitting}
+            className="w-full md:w-[180px]"
+          >
+            {submitting ? "SENDING..." : "SEARCH"}
+          </PrimaryButton>
+        </div>
+
         {status.type !== "idle" ? (
           <div
             className={[
-              "rounded-2xl border px-4 py-3 text-sm",
+              "rounded-xl border px-4 py-3 text-sm",
               status.type === "success"
-                ? "border-emerald-300 bg-emerald-50 text-emerald-700"
-                : "border-red-300 bg-red-50 text-red-700",
+                ? "border-emerald-300/70 bg-emerald-50 text-emerald-700"
+                : "border-red-300/70 bg-red-50 text-red-700",
             ].join(" ")}
           >
             {status.message}
           </div>
         ) : null}
-
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-2xl bg-[var(--evg-gold)] px-5 py-3 text-sm font-semibold text-[var(--evg-deep)] transition hover:-translate-y-[1px] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {submitting ? "Sending..." : "Search Flight"}
-        </button>
       </form>
     </>
   );
@@ -323,7 +334,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-[11px] uppercase tracking-[0.18em] text-white/65">
+      <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
         {label}
       </label>
       {children}
@@ -331,7 +342,7 @@ function Field({
   );
 }
 
-function TripTypeRadio({
+function TripTypeOption({
   label,
   checked,
   onClick,
@@ -344,22 +355,21 @@ function TripTypeRadio({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-3 text-sm text-white/85"
+      className="inline-flex items-center gap-3"
     >
       <span
         className={[
-          "flex h-5 w-5 items-center justify-center rounded-full border transition",
+          "relative h-5 w-5 rounded-full border transition",
           checked
             ? "border-[var(--evg-gold)] bg-[var(--evg-gold)]"
             : "border-white/35 bg-white/10",
         ].join(" ")}
       >
-        <span className="h-2.5 w-2.5 rounded-full bg-[var(--evg-deep)]" />
+        {checked ? (
+          <span className="absolute inset-1 rounded-full bg-[var(--evg-deep)]" />
+        ) : null}
       </span>
       <span>{label}</span>
     </button>
   );
 }
-
-const inputClass =
-  "w-full rounded-2xl border border-white/10 bg-white/95 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20";
