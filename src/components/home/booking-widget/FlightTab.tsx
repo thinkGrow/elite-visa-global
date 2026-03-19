@@ -361,7 +361,7 @@ function TripTypeOption({
         className={[
           "relative h-5 w-5 rounded-full border transition",
           checked
-            ? "border-[var(--evg-gold)] bg-[var(--evg-gold)]"
+            ? "border-[var(--evg-gold)]"
             : "border-white/35 bg-white/10",
         ].join(" ")}
       >
