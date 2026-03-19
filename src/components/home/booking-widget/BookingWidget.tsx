@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Map, FileText, Hotel, PlaneTakeoff } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { TourTab } from "./TourTab";
 import { VisaTab } from "./VisaTab";
 import { HotelTab } from "./HotelTab";
@@ -20,6 +21,21 @@ const tabs: Array<{
   { key: "flight", label: "Flight", icon: PlaneTakeoff },
 ];
 
+function renderTabContent(active: TabKey) {
+  switch (active) {
+    case "tour":
+      return <TourTab />;
+    case "visa":
+      return <VisaTab />;
+    case "hotel":
+      return <HotelTab />;
+    case "flight":
+      return <FlightTab />;
+    default:
+      return null;
+  }
+}
+
 export function BookingWidget() {
   const [active, setActive] = React.useState<TabKey>("tour");
 
@@ -34,14 +50,12 @@ export function BookingWidget() {
           "shadow-[0_24px_80px_rgba(0,0,0,0.34)]",
         ].join(" ")}
       >
-        {/* ambient layers */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.10),transparent_38%)]" />
           <div className="absolute -top-24 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-[var(--evg-gold)]/12 blur-3xl" />
           <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
         </div>
 
-        {/* tabs */}
         <div className="relative border-b border-white/10 bg-black/10 px-2 pt-2 md:px-3 md:pt-3">
           <div className="grid grid-cols-4 gap-2">
             {tabs.map((t) => {
@@ -54,22 +68,23 @@ export function BookingWidget() {
                   type="button"
                   onClick={() => setActive(t.key)}
                   className={[
-                    "group relative h-12 md:h-14 rounded-t-[20px]",
+                    "group relative z-0 h-12 rounded-t-[20px] md:h-14",
                     "flex items-center justify-center gap-2.5",
                     "px-2 md:px-3",
-                    "cursor-pointer transform transition-all duration-300",
+                    "cursor-pointer",
+                    "transform transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)]",
                     isActive
                       ? [
+                          "z-10 -translate-y-[2px]",
                           "bg-white/20 text-white",
                           "shadow-[0_10px_30px_rgba(0,0,0,0.25)]",
-                          "-translate-y-[2px] z-10",
                         ].join(" ")
-                      : "text-white/65 hover:bg-white/8 hover:text-white",
+                      : "text-white/65 hover:bg-white/8 hover:text-white hover:-translate-y-[1px]",
                   ].join(" ")}
                 >
                   <span
                     className={[
-                      "transition-all duration-300",
+                      "transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)]",
                       isActive
                         ? "text-[var(--evg-gold)] drop-shadow-[0_0_10px_rgba(214,162,58,0.35)]"
                         : "text-white/70 group-hover:text-white",
@@ -78,7 +93,7 @@ export function BookingWidget() {
                     <Icon className="h-4 w-4" />
                   </span>
 
-                  <span className="hidden sm:inline text-[11px] md:text-xs tracking-[0.18em] uppercase">
+                  <span className="hidden text-[11px] uppercase tracking-[0.18em] sm:inline md:text-xs">
                     {t.label}
                   </span>
 
@@ -94,9 +109,10 @@ export function BookingWidget() {
           </div>
         </div>
 
-        {/* content */}
         <div className="relative p-4 md:p-6">
-          <div
+          <motion.div
+            layout
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className={[
               "relative overflow-hidden rounded-[24px]",
               "border border-white/10",
@@ -107,13 +123,25 @@ export function BookingWidget() {
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(214,162,58,0.08),transparent_28%)]" />
 
-            <div className="relative">
-              {active === "tour" && <TourTab />}
-              {active === "visa" && <VisaTab />}
-              {active === "hotel" && <HotelTab />}
-              {active === "flight" && <FlightTab />}
+            <div className="relative overflow-hidden">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={active}
+                  layout
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{
+                    duration: 0.24,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="relative"
+                >
+                  {renderTabContent(active)}
+                </motion.div>
+              </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
