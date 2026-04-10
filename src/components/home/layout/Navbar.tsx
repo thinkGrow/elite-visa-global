@@ -1,4 +1,3 @@
-// src/components/home/layout/Navbar.tsx
 "use client";
 
 import Image from "next/image";
@@ -8,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { themeVars } from "@/lib/theme";
 import { PrimaryCTA } from "@/components/ui/PrimaryCTA";
 
-type DesktopMenuKey = "visa" | "tours" | "hajj";
+type DesktopMenuKey = "visa" | "tours";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -19,7 +18,6 @@ export function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [mobileVisaOpen, setMobileVisaOpen] = React.useState(false);
   const [mobileToursOpen, setMobileToursOpen] = React.useState(false);
-  const [mobileHajjOpen, setMobileHajjOpen] = React.useState(false);
 
   const [openDesktopMenu, setOpenDesktopMenu] =
     React.useState<DesktopMenuKey | null>(null);
@@ -66,23 +64,31 @@ export function Navbar() {
     setOpen(false);
     setMobileVisaOpen(false);
     setMobileToursOpen(false);
-    setMobileHajjOpen(false);
     setOpenDesktopMenu(null);
     clearCloseTimer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const isVisa =
-    pathname === "/visa-processing" || pathname.startsWith("/visa-processing/");
-  const isHajjUmrah =
-    pathname === "/hajj-umrah" || pathname.startsWith("/hajj-umrah/");
-  const isTours =
-    pathname === "/tour-packages" || pathname.startsWith("/tour-packages/");
-  const isAbout = pathname === "/about" || pathname.startsWith("/about/");
-  const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
+const isVisa =
+  pathname === "/visa-processing" || pathname.startsWith("/visa-processing/");
+const isHajjUmrah =
+  pathname === "/hajj-umrah" || pathname.startsWith("/hajj-umrah/");
+const isTours =
+  pathname === "/tour-packages" || pathname.startsWith("/tour-packages/");
+const isUmrah =
+  pathname === "/umrah" ||
+  pathname.startsWith("/umrah/") ||
+  (isHajjUmrah && (new URLSearchParams(window.location.search).get("type") ?? "").toLowerCase() === "umrah");
+const isHajj =
+  pathname === "/hajj" ||
+  pathname.startsWith("/hajj/") ||
+  (isHajjUmrah && ((new URLSearchParams(window.location.search).get("type") ?? "").toLowerCase() !== "umrah"));
+const isAbout = pathname === "/about" || pathname.startsWith("/about/");
+const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
 
-  const isLightPage = isVisa || isHajjUmrah || isTours || isAbout || isContact;
-  const useLightNav = isLightPage && !scrolled;
+const isLightPage =
+  isVisa || isHajjUmrah || isTours || isUmrah || isHajj || isAbout || isContact;
+const useLightNav = isLightPage && !scrolled;
 
   function navLinkClasses(isActive: boolean) {
     const base =
@@ -337,67 +343,13 @@ export function Navbar() {
               )}
             </div>
 
-            {/* Hajj */}
-            <div
-              className="relative after:absolute after:left-0 after:right-0 after:top-full after:h-4 after:content-['']"
-              onMouseEnter={() => openMenu("hajj")}
-              onMouseLeave={scheduleClose}
-              onBlur={onDropdownBlur}
-            >
-              <button
-                type="button"
-                className={[navLinkClasses(isHajjUmrah), "gap-1.5"].join(" ")}
-                aria-haspopup="menu"
-                aria-expanded={openDesktopMenu === "hajj"}
-                onFocus={() => openMenu("hajj")}
-                onClick={() => toggleMenu("hajj")}
-              >
-                <span>Hajj &amp; Umrah</span>
-                <span
-                  className={[
-                    "text-[9px] transition-all duration-300",
-                    openDesktopMenu === "hajj"
-                      ? "rotate-180 translate-y-[1px]"
-                      : "",
-                    useLightNav ? "text-slate-400" : "text-white/45",
-                  ].join(" ")}
-                  aria-hidden="true"
-                >
-                  ▼
-                </span>
-              </button>
-              {openDesktopMenu === "hajj" && (
-                <div className={dropdownPanelClasses} role="menu">
-                  <div className="flex flex-col gap-1">
-                    <Link
-                      href="/hajj-umrah?type=umrah"
-                      className={dropdownLinkClasses}
-                      onClick={closeNow}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <span>Umrah Packages</span>
-                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                          →
-                        </span>
-                      </div>
-                    </Link>
+            <Link href="/umrah" className={navLinkClasses(isUmrah)}>
+              Umrah
+            </Link>
 
-                    <Link
-                      href="/hajj-umrah?type=hajj"
-                      className={dropdownLinkClasses}
-                      onClick={closeNow}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <span>Hajj Packages</span>
-                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                          →
-                        </span>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
+            <Link href="/hajj" className={navLinkClasses(isHajj)}>
+              Hajj
+            </Link>
 
             <Link href="/about" className={navLinkClasses(isAbout)}>
               About
@@ -528,50 +480,21 @@ export function Navbar() {
                   </div>
                 )}
 
-                <button
-                  type="button"
-                  className={[
-                    mobileItemBase,
-                    mobileItemText,
-                    "flex items-center justify-between",
-                  ].join(" ")}
-                  onClick={() => setMobileHajjOpen((v) => !v)}
-                  aria-expanded={mobileHajjOpen}
+                <Link
+                  href="/umrah"
+                  className={[mobileItemBase, mobileItemText].join(" ")}
+                  onClick={() => setOpen(false)}
                 >
-                  <span>Hajj &amp; Umrah</span>
-                  <span
-                    className={
-                      mobileHajjOpen ? "rotate-180 transition" : "transition"
-                    }
-                  >
-                    ▼
-                  </span>
-                </button>
+                  Umrah
+                </Link>
 
-                {mobileHajjOpen && (
-                  <div className="ml-2 mr-1 rounded-2xl border border-white/10 p-2">
-                    <Link
-                      href="/hajj-umrah?type=umrah"
-                      className={[
-                        "block rounded-xl px-4 py-2 text-sm transition",
-                        mobileSubItemText,
-                      ].join(" ")}
-                      onClick={() => setOpen(false)}
-                    >
-                      Umrah Packages
-                    </Link>
-                    <Link
-                      href="/hajj-umrah?type=hajj"
-                      className={[
-                        "block rounded-xl px-4 py-2 text-sm transition",
-                        mobileSubItemText,
-                      ].join(" ")}
-                      onClick={() => setOpen(false)}
-                    >
-                      Hajj Packages
-                    </Link>
-                  </div>
-                )}
+                <Link
+                  href="/hajj"
+                  className={[mobileItemBase, mobileItemText].join(" ")}
+                  onClick={() => setOpen(false)}
+                >
+                  Hajj
+                </Link>
 
                 <Link
                   href="/about"
