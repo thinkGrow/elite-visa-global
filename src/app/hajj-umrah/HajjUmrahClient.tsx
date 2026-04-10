@@ -165,9 +165,9 @@ function Dropdown({
         </div>
 
         <div className="mt-3 flex items-center gap-3">
-          <h2 className="text-3xl font-semibold tracking-tight text-[var(--evg-deep)] md:text-4xl">
-            Hajj &amp; Umrah
-          </h2>
+<h2 className="text-3xl font-semibold tracking-tight text-[var(--evg-deep)] md:text-4xl">
+  {value === "umrah" ? "Umrah" : "Hajj"}
+</h2>
           <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
         </div>
 
