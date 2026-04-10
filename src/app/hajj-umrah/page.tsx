@@ -1,10 +1,23 @@
-import React, { Suspense } from "react";
+import { client } from "@/sanity/lib/client";
 import HajjUmrahClient from "./HajjUmrahClient";
+import { pilgrimagePackagesQuery } from "@/lib/pilgrimage/queries";
+import { Suspense } from "react";
 
-export default function HajjUmrahPage() {
+export default async function Page() {
+  const umrahPackages = await client.fetch(pilgrimagePackagesQuery, {
+    category: "umrah",
+  });
+
+  const hajjPackages = await client.fetch(pilgrimagePackagesQuery, {
+    category: "hajj",
+  });
+
   return (
-    <Suspense fallback={null}>
-      <HajjUmrahClient />
+    <Suspense fallback={<div>Loading...</div>}>
+      <HajjUmrahClient
+        umrahPackages={umrahPackages}
+        hajjPackages={hajjPackages}
+      />
     </Suspense>
   );
 }
