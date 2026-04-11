@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { PortableText } from "@portabletext/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { themeVars } from "@/lib/theme";
 import { Navbar } from "@/components/home/layout/Navbar";
@@ -15,15 +14,11 @@ type VisaDestination = {
   shortName?: string;
   flagEmoji: string;
   badge?: string;
-  displayOrder?: number;
-  heroTitle?: string;
-  heroSubtitle?: string;
-  processingTime?: string;
-  visaFee?: string;
-  overview?: any[];
-  requirements?: any[];
-  documents?: any[];
-  notes?: any[];
+  continent?: {
+    name: string;
+    slug: string;
+    displayOrder?: number;
+  };
 };
 
 const visaDestinationsQuery = `
@@ -33,25 +28,21 @@ const visaDestinationsQuery = `
   isPublishedDestination == true
 ] | order(displayOrder asc, country->name asc) {
   badge,
-  heroTitle,
-  heroSubtitle,
-  processingTime,
-  visaFee,
-  overview,
-  requirements,
-  documents,
-  notes,
-  displayOrder,
   "countrySlug": country->slug.current,
   "countryName": country->name,
   "shortName": country->shortName,
-  "flagEmoji": country->flagEmoji
+  "flagEmoji": country->flagEmoji,
+  "continent": country->continent->{
+    name,
+    "slug": slug.current,
+    displayOrder
+  }
 }
 `;
 
 function Container({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto w-full max-w-8xl px-4 sm:px-6 lg:px-8">
       {children}
     </div>
   );
@@ -69,27 +60,18 @@ function PageShell({ children }: { children: React.ReactNode }) {
 function Card({
   children,
   className = "",
-  hairline = false,
 }: {
   children: React.ReactNode;
   className?: string;
-  hairline?: boolean;
 }) {
   return (
     <div
       className={[
-        "relative overflow-hidden rounded-3xl",
-        "border border-slate-200/70 bg-white",
+        "rounded-3xl border border-slate-200/70 bg-white",
         "shadow-[0_12px_40px_rgba(2,6,23,0.06)]",
         className,
       ].join(" ")}
     >
-      {hairline ? (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--evg-gold)]/35 to-transparent"
-        />
-      ) : null}
       {children}
     </div>
   );
@@ -107,113 +89,6 @@ function Badge({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Section({
-  title,
-  subtitle,
-  children,
-}: {
-  title: string;
-  subtitle?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="scroll-mt-28">
-      <div className="mb-4">
-        <div className="flex items-center gap-3">
-          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--evg-deep)]">
-            {title}
-          </h2>
-          <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
-        </div>
-        {subtitle ? (
-          <p className="mt-3 text-sm sm:text-base text-slate-600">{subtitle}</p>
-        ) : null}
-      </div>
-
-      <Card hairline className="p-5 sm:p-7">
-        {children}
-      </Card>
-    </section>
-  );
-}
-
-function Subheading({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="mt-7 flex items-center gap-3 text-base font-semibold text-[var(--evg-deep)] sm:text-lg">
-      <span className="h-2 w-2 rounded-full bg-[var(--evg-gold)] shadow-[0_0_0_4px_rgba(214,162,58,0.14)]" />
-      {children}
-    </h3>
-  );
-}
-
-function FlagsPicker({
-  title,
-  items,
-  selected,
-  onSelect,
-  layout = "wrap",
-}: {
-  title: string;
-  items: VisaDestination[];
-  selected: string;
-  onSelect: (slug: string) => void;
-  layout?: "wrap" | "grid";
-}) {
-  const listClass =
-    layout === "grid"
-      ? "mt-1 grid grid-cols-2 gap-2 sm:mt-0 sm:grid-cols-4 lg:grid-cols-5"
-      : "flex flex-wrap gap-2";
-
-  return (
-    <Card hairline className="p-4 sm:p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-sm font-medium text-[var(--evg-deep)]">
-          {title}
-        </div>
-
-        <div className={listClass}>
-          {items.map((c) => {
-            const isActive = c.countrySlug === selected;
-
-            return (
-              <button
-                key={c.countrySlug}
-                type="button"
-                onClick={() => onSelect(c.countrySlug)}
-                className={[
-                  "group inline-flex items-center gap-2 rounded-full",
-                  "border bg-white px-3 py-2 text-sm",
-                  "shadow-sm transition",
-                  layout === "grid" ? "justify-start" : "",
-                  isActive
-                    ? "border-[var(--evg-gold)]/70 bg-[rgba(214,162,58,0.08)] text-[var(--evg-deep)]"
-                    : "border-slate-200 text-slate-700 hover:-translate-y-0.5 hover:border-[var(--evg-gold)]/70 hover:shadow-md",
-                  "focus:outline-none focus:ring-2 focus:ring-[var(--evg-gold)]/25",
-                ].join(" ")}
-                aria-pressed={isActive}
-              >
-                <span className="text-base transition-transform duration-300 group-hover:scale-[1.08]">
-                  {c.flagEmoji}
-                </span>
-
-                <span className="truncate underline-offset-4 group-hover:underline group-hover:decoration-[var(--evg-gold)]">
-                  {c.shortName || c.countryName}
-                </span>
-
-                {c.badge ? (
-                  <span className="ml-1 hidden sm:inline-flex">
-                    <Badge>{c.badge}</Badge>
-                  </span>
-                ) : null}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </Card>
-  );
-}
-
 function Dropdown({
   value,
   onChange,
@@ -228,224 +103,137 @@ function Dropdown({
           ELITE VISA GLOBAL
         </div>
 
-        <div className="mt-3 flex items-center gap-3">
-          <h2 className="text-3xl font-semibold tracking-tight text-[var(--evg-deep)] md:text-4xl">
-            Visa Processing
-          </h2>
-          <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
-        </div>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--evg-deep)] md:text-4xl">
+          Visa Processing
+        </h2>
 
         <p className="mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
           Compliance-focused guidance for students, visitors, families, business
-          travelers, and transit passengers—structured, transparent, and
-          visa-ready.
+          travelers, and transit passengers.
         </p>
       </div>
 
       <div className="w-full sm:w-[420px]">
         <label className="block text-xs uppercase tracking-wide text-slate-500">
-          Dropdown Menu
+          Visa category
         </label>
-        <div className="relative mt-2">
-          <select
-            value={value}
-            onChange={(e) => onChange(e.target.value as VisaCategoryKey)}
-            className="w-full appearance-none rounded-2xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm text-slate-800 shadow-sm outline-none transition focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20 sm:text-base"
-          >
-            <option value="student">Student Visa Processing</option>
-            <option value="visit">
-              Visit, Family &amp; Business Visa Processing
-            </option>
-            <option value="transit">Transit Visa Processing</option>
-          </select>
-
-          <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-            ▼
-          </div>
-        </div>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value as VisaCategoryKey)}
+          className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition focus:border-[var(--evg-gold)]/60 focus:ring-2 focus:ring-[var(--evg-gold)]/20"
+        >
+          <option value="student">Student Visa</option>
+          <option value="visit">Visit Visa</option>
+          <option value="transit">Transit Visa</option>
+        </select>
       </div>
     </div>
   );
 }
 
-const ptComponents = {
-  block: {
-    h2: ({ children }: any) => (
-      <h2 className="mt-8 text-xl font-semibold text-[var(--evg-deep)] sm:text-2xl">
-        {children}
-      </h2>
-    ),
-    h3: ({ children }: any) => (
-      <h3 className="mt-6 text-lg font-semibold text-[var(--evg-deep)]">
-        {children}
-      </h3>
-    ),
-    normal: ({ children }: any) => (
-      <p className="mt-3 text-sm leading-relaxed text-slate-700 sm:text-base">
-        {children}
-      </p>
-    ),
-    blockquote: ({ children }: any) => (
-      <blockquote className="mt-4 rounded-2xl border border-slate-200/70 bg-slate-50/60 p-4 text-sm leading-relaxed text-slate-700 sm:text-base">
-        {children}
-      </blockquote>
-    ),
-  },
-
-  list: {
-    bullet: ({ children }: any) => (
-      <ul className="mt-3 list-disc space-y-2 pl-6 text-sm text-slate-700 marker:text-[var(--evg-gold)] sm:text-base">
-        {children}
-      </ul>
-    ),
-    number: ({ children }: any) => (
-      <ol className="mt-3 list-decimal space-y-2 pl-6 text-sm text-slate-700 marker:text-[var(--evg-gold)] sm:text-base">
-        {children}
-      </ol>
-    ),
-  },
-
-  listItem: {
-    bullet: ({ children }: any) => (
-      <li className="leading-relaxed">{children}</li>
-    ),
-    number: ({ children }: any) => (
-      <li className="leading-relaxed">{children}</li>
-    ),
-  },
-
-  marks: {
-    goldText: ({ children }: any) => (
-      <span className="text-[var(--evg-gold)]">{children}</span>
-    ),
-    blueText: ({ children }: any) => (
-      <span className="text-[var(--evg-blue)]">{children}</span>
-    ),
-    link: ({ children, value }: any) => {
-      const href = value?.href || "#";
-      const isExternal = /^https?:\/\//.test(href);
-
-      return (
-        <a
-          href={href}
-          className="text-[var(--evg-deep)] underline underline-offset-4 hover:opacity-80"
-          target={isExternal ? "_blank" : undefined}
-          rel={isExternal ? "noreferrer" : undefined}
-        >
-          {children}
-        </a>
-      );
-    },
-  },
-
-  types: {
-    callout: ({ value }: any) => {
-      const tone = value?.tone ?? "info";
-      const toneCls =
-        tone === "success"
-          ? "border-emerald-200 bg-emerald-50"
-          : tone === "warning"
-            ? "border-amber-200 bg-amber-50"
-            : "border-slate-200 bg-slate-50";
-
-      return (
-        <div className={`mt-5 rounded-2xl border p-4 ${toneCls}`}>
-          {value?.title ? (
-            <div className="text-sm font-semibold text-slate-900">
-              {value.title}
-            </div>
-          ) : null}
-          {value?.text ? (
-            <div className="mt-2 whitespace-pre-line text-sm leading-relaxed text-slate-700 sm:text-base">
-              {value.text}
-            </div>
-          ) : null}
-        </div>
-      );
-    },
-
-    tableBlock: ({ value }: any) => {
-      const rows = value?.rows ?? [];
-
-      return (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
-          {value?.title ? (
-            <div className="border-b border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900">
-              {value.title}
-            </div>
-          ) : null}
-
-          <table className="w-full text-sm">
-            <tbody>
-              {rows.map((r: any, i: number) => (
-                <tr key={i} className="border-t first:border-t-0">
-                  <td className="w-[38%] bg-slate-50 px-4 py-3 font-medium text-slate-600">
-                    {r?.label}
-                  </td>
-                  <td className="px-4 py-3 text-slate-900">{r?.value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-    },
-  },
-};
-
-function VisaContentSection({ data }: { data: VisaDestination }) {
+function ContinentTabs({
+  continents,
+  active,
+  onChange,
+}: {
+  continents: Array<{ slug: string; name: string }>;
+  active: string;
+  onChange: (value: string) => void;
+}) {
   return (
-    <Section
-      title={data.heroTitle || `${data.countryName} Visa`}
-      subtitle={data.heroSubtitle}
-    >
-      {data.badge || data.processingTime || data.visaFee ? (
-        <div className="mb-2 flex flex-wrap gap-2">
-          {data.badge ? <Badge>{data.badge}</Badge> : null}
-          {data.processingTime ? (
-            <Badge>Processing: {data.processingTime}</Badge>
-          ) : null}
-          {data.visaFee ? <Badge>Fee: {data.visaFee}</Badge> : null}
-        </div>
-      ) : null}
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <h3 className="text-xl font-semibold text-[var(--evg-deep)] sm:text-2xl">
+          Browse by continent
+        </h3>
+        <span className="h-[2px] flex-1 bg-gradient-to-r from-[var(--evg-gold)]/75 to-transparent" />
+      </div>
 
-      {data.overview?.length ? (
-        <>
-          <Subheading>Overview</Subheading>
-          <PortableText value={data.overview} components={ptComponents} />
-        </>
-      ) : null}
+      <div className="flex flex-wrap gap-2">
+        {continents.map((continent) => {
+          const isActive = continent.slug === active;
 
-      {data.requirements?.length ? (
-        <>
-          <Subheading>Requirements</Subheading>
-          <PortableText value={data.requirements} components={ptComponents} />
-        </>
-      ) : null}
-
-      {data.documents?.length ? (
-        <>
-          <Subheading>Required Documents</Subheading>
-          <PortableText value={data.documents} components={ptComponents} />
-        </>
-      ) : null}
-
-      {data.notes?.length ? (
-        <>
-          <Subheading>Important Notes</Subheading>
-          <PortableText value={data.notes} components={ptComponents} />
-        </>
-      ) : null}
-    </Section>
+          return (
+            <button
+              key={continent.slug}
+              type="button"
+              onClick={() => onChange(continent.slug)}
+              className={[
+                "cursor-pointer rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 border",
+                isActive
+                  ? "border-[var(--evg-gold)]/70 bg-[rgba(214,162,58,0.10)] text-[var(--evg-deep)] shadow-sm"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-[var(--evg-gold)]/50 hover:text-[var(--evg-deep)]",
+              ].join(" ")}
+            >
+              {continent.name}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
-export default function VisaProcessingPage() {
+function CountryCards({
+  items,
+  onSelect,
+}: {
+  items: VisaDestination[];
+  onSelect: (slug: string) => void;
+}) {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {items.map((c) => (
+        <button
+          key={c.countrySlug}
+          type="button"
+          onClick={() => onSelect(c.countrySlug)}
+          className="group cursor-pointer rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] active:scale-[0.98] hover:border-[var(--evg-gold)]/60 hover:shadow-md"
+        >
+          <div className="flex items-start justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border bg-white text-3xl shadow-sm transition group-hover:scale-105">
+                {c.flagEmoji}
+              </div>
+
+              <div>
+                <div className="text-lg font-semibold text-[var(--evg-deep)]">
+                  {c.countryName}
+                </div>
+
+                {c.shortName && c.shortName !== c.countryName ? (
+                  <div className="text-sm text-slate-500">{c.shortName}</div>
+                ) : null}
+
+                {c.continent?.name ? (
+                  <div className="mt-1 text-xs uppercase tracking-wide text-slate-400">
+                    {c.continent.name}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="text-slate-300 transition group-hover:translate-x-1 group-hover:text-[var(--evg-gold)]">
+              →
+            </div>
+          </div>
+
+          {c.badge ? (
+            <div className="mt-4">
+              <Badge>{c.badge}</Badge>
+            </div>
+          ) : null}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default function VisaProcessingClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const typeParam = (searchParams.get("type") ?? "").toLowerCase();
-  const countryParam = (searchParams.get("country") ?? "").toLowerCase();
 
   const initialCategory: VisaCategoryKey =
     typeParam === "visit"
@@ -458,8 +246,7 @@ export default function VisaProcessingPage() {
     React.useState<VisaCategoryKey>(initialCategory);
   const [destinations, setDestinations] = React.useState<VisaDestination[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [selectedCountrySlug, setSelectedCountrySlug] =
-    React.useState(countryParam);
+  const [activeContinent, setActiveContinent] = React.useState("");
 
   React.useEffect(() => {
     const t = (searchParams.get("type") ?? "").toLowerCase();
@@ -471,16 +258,13 @@ export default function VisaProcessingPage() {
           ? "transit"
           : "student";
 
-    const nextCountry = (searchParams.get("country") ?? "").toLowerCase();
-
     setCategory(nextCategory);
-    setSelectedCountrySlug(nextCountry);
   }, [searchParams]);
 
   React.useEffect(() => {
     let mounted = true;
 
-    async function loadDestinations() {
+    async function load() {
       setLoading(true);
 
       try {
@@ -490,76 +274,73 @@ export default function VisaProcessingPage() {
         );
 
         if (!mounted) return;
-
-        const safeData = data ?? [];
-        setDestinations(safeData);
-
-        setSelectedCountrySlug((prev) => {
-          if (safeData.some((item) => item.countrySlug === prev)) return prev;
-          return safeData[0]?.countrySlug ?? "";
-        });
+        setDestinations(data ?? []);
       } catch (error) {
         console.error("Failed to load visa destinations:", error);
-        if (mounted) {
-          setDestinations([]);
-          setSelectedCountrySlug("");
-        }
+        if (mounted) setDestinations([]);
       } finally {
         if (mounted) setLoading(false);
       }
     }
 
-    loadDestinations();
+    load();
 
     return () => {
       mounted = false;
     };
   }, [category]);
 
+  const continents = React.useMemo(() => {
+    const map = new Map<
+      string,
+      { slug: string; name: string; displayOrder?: number }
+    >();
+
+    destinations.forEach((item) => {
+      const continent = item.continent;
+      if (!continent?.slug || !continent?.name) return;
+
+      if (!map.has(continent.slug)) {
+        map.set(continent.slug, {
+          slug: continent.slug,
+          name: continent.name,
+          displayOrder: continent.displayOrder,
+        });
+      }
+    });
+
+    return Array.from(map.values()).sort(
+      (a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999),
+    );
+  }, [destinations]);
+
+  React.useEffect(() => {
+    if (!continents.length) return;
+    if (!continents.some((c) => c.slug === activeContinent)) {
+      setActiveContinent(continents[0].slug);
+    }
+  }, [continents, activeContinent]);
+
+  const filteredDestinations = React.useMemo(() => {
+    return destinations.filter(
+      (item) => item.continent?.slug === activeContinent,
+    );
+  }, [destinations, activeContinent]);
+
   const onChangeCategory = (v: VisaCategoryKey) => {
     setCategory(v);
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("type", v);
-    params.delete("country");
-
-    router.replace(`/visa-processing?${params.toString()}`, { scroll: false });
+    router.replace(`/visa-processing?type=${v}`, { scroll: false });
   };
 
   const onSelectCountry = (slug: string) => {
-    setSelectedCountrySlug(slug);
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("type", category);
-    params.set("country", slug);
-
-    router.replace(`/visa-processing?${params.toString()}`, { scroll: false });
+    router.push(`/visa-processing/${slug}?type=${category}`);
   };
-
-  const selected = destinations.find(
-    (item) => item.countrySlug === selectedCountrySlug,
-  );
-
-  const pickerTitle =
-    category === "student"
-      ? "Student visa destinations"
-      : category === "visit"
-        ? "Visit, family & business destinations"
-        : "Transit visa destinations";
-
-  const pickerLayout = "wrap";
 
   return (
     <PageShell>
       <Container>
-        <Card hairline className="p-5 sm:p-8">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_circle_at_20%_0%,rgba(28,90,168,0.10),transparent_55%),radial-gradient(700px_circle_at_85%_20%,rgba(214,162,58,0.10),transparent_55%)]"
-          />
-          <div className="relative">
-            <Dropdown value={category} onChange={onChangeCategory} />
-          </div>
+        <Card className="p-6">
+          <Dropdown value={category} onChange={onChangeCategory} />
         </Card>
 
         <Divider />
@@ -571,16 +352,17 @@ export default function VisaProcessingPage() {
             No visa destinations found in CMS.
           </div>
         ) : (
-          <div className="space-y-10">
-            <FlagsPicker
-              title={pickerTitle}
-              items={destinations}
-              selected={selectedCountrySlug}
-              onSelect={onSelectCountry}
-              layout={pickerLayout}
+          <div className="space-y-8">
+            <ContinentTabs
+              continents={continents}
+              active={activeContinent}
+              onChange={setActiveContinent}
             />
 
-            {selected ? <VisaContentSection data={selected} /> : null}
+            <CountryCards
+              items={filteredDestinations}
+              onSelect={onSelectCountry}
+            />
           </div>
         )}
       </Container>

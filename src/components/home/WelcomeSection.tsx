@@ -16,7 +16,7 @@ export function WelcomeSection() {
       {/* subtle top divider */}
       <div className="absolute top-0 left-0 w-full h-px bg-black/5" />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-24">
+      <div className="relative mx-auto max-w-8xl px-6 py-24">
         <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
           <div className="text-sm tracking-[0.22em] text-[var(--evg-deep)]/60">
             WELCOME

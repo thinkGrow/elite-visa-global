@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { themeVars } from "@/lib/theme";
 import { PrimaryCTA } from "@/components/ui/PrimaryCTA";
 
@@ -11,9 +11,10 @@ type DesktopMenuKey = "visa" | "tours";
 
 export function Navbar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const isHome = pathname === "/";
 
-  const [visaType, setVisaType] = React.useState("");
+  const visaType = (searchParams.get("type") ?? "").toLowerCase();
 
   const [scrolled, setScrolled] = React.useState(false);
 
@@ -63,32 +64,17 @@ export function Navbar() {
   }, []);
 
   React.useEffect(() => {
-    const syncVisaType = () => {
-      const params = new URLSearchParams(window.location.search);
-      setVisaType((params.get("type") ?? "").toLowerCase());
-    };
-
-    syncVisaType();
-
-    window.addEventListener("popstate", syncVisaType);
-    return () => window.removeEventListener("popstate", syncVisaType);
-  }, [pathname]);
-
-  React.useEffect(() => {
     setOpen(false);
     setMobileVisaOpen(false);
     setMobileToursOpen(false);
     setOpenDesktopMenu(null);
     clearCloseTimer();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const isStudentVisa =
-    pathname === "/visa-processing" && visaType === "student";
+  const isVisaRoute = pathname.startsWith("/visa-processing");
 
-  const isVisa =
-    pathname === "/visa-processing" &&
-    (visaType === "visit" || visaType === "transit");
+  const isStudentVisa = isVisaRoute && visaType === "student";
+  const isVisa = isVisaRoute && (visaType === "visit" || visaType === "transit");
 
   const isHajjUmrah =
     pathname === "/hajj-umrah" || pathname.startsWith("/hajj-umrah/");
@@ -100,8 +86,7 @@ export function Navbar() {
   const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
 
   const isLightPage =
-    isStudentVisa ||
-    isVisa ||
+    isVisaRoute ||
     isHajjUmrah ||
     isTours ||
     isUmrah ||

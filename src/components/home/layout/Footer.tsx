@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer style={themeVars} className="bg-[var(--evg-deep)] text-white">
       {/* Top Section */}
-      <div className="mx-auto max-w-7xl px-6 py-14">
+      <div className="mx-auto max-w-8xl px-6 py-14">
         <div className="grid gap-10 md:grid-cols-4">
           {/* Brand Column */}
           <div>
@@ -100,7 +100,7 @@ export function Footer() {
       <div className="h-px w-full bg-white/10" />
 
       {/* Bottom Bar */}
-      <div className="mx-auto max-w-7xl px-6 py-6 text-xs text-white/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="mx-auto max-w-8xl px-6 py-6 text-xs text-white/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           © {new Date().getFullYear()} Elite Visa Global. All rights reserved.
         </div>

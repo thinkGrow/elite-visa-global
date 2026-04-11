@@ -257,7 +257,7 @@ export function CoreServiceSection() {
       className="relative overflow-visible bg-white"
       style={themeVars}
     >
-      <div className="mx-auto max-w-7xl px-6 py-24">
+      <div className="mx-auto max-w-8xl px-6 py-24">
         <div
           className={[
             "max-w-4xl border-l border-[var(--evg-gold)]/60 pl-6",

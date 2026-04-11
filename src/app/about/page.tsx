@@ -118,7 +118,7 @@ export default function AboutPage() {
 
       <Navbar />
 
-      <section className="relative mx-auto max-w-7xl px-6 pt-28 pb-20">
+      <section className="relative mx-auto max-w-8xl px-6 pt-28 pb-20">
         <div className="max-w-4xl pl-6 border-l border-[color:var(--evg-gold)]/60">
           <GlassHeadlineCard textColor="black" size="md">
             <h1 className="leading-[1.1]">
@@ -163,7 +163,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative mx-auto max-w-7xl px-6 pb-20">
+      <section className="relative mx-auto max-w-8xl px-6 pb-20">
         <SectionIntro
           eyebrow="TEAM"
           title="Leadership & Expertise"
@@ -201,7 +201,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative mx-auto max-w-7xl px-6 pb-24">
+      <section className="relative mx-auto max-w-8xl px-6 pb-24">
         <div className="grid gap-8 md:grid-cols-2">
           <WhiteCard className="p-8">
             <div className="text-xs tracking-[0.22em] text-[var(--evg-deep)]/55">
@@ -238,7 +238,7 @@ export default function AboutPage() {
       </section>
 
       <footer className="border-t border-black/5 py-10">
-        <div className="mx-auto max-w-7xl px-6 text-sm text-slate-500">
+        <div className="mx-auto max-w-8xl px-6 text-sm text-slate-500">
           Elite Visa Global • Dhaka, Bangladesh • Since 2016
         </div>
       </footer>

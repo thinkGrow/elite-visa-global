@@ -75,7 +75,7 @@ export default function ContactPage() {
 
       <Navbar />
 
-      <section className="mx-auto max-w-7xl px-6 pt-28 pb-16">
+      <section className="mx-auto max-w-8xl px-6 pt-28 pb-16">
         <GlassHeadlineCard textColor="black" size="lg">
           <h1 className="text-balance">
             Let’s talk about your{" "}
