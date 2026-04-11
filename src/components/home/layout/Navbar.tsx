@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { themeVars } from "@/lib/theme";
 import { PrimaryCTA } from "@/components/ui/PrimaryCTA";
 
 type DesktopMenuKey = "visa" | "tours";
 
-export function Navbar() {
+function NavbarInner() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isHome = pathname === "/";
@@ -543,5 +543,46 @@ export function Navbar() {
         </div>
       </div>
     </header>
+  );
+}
+
+function NavbarFallback() {
+  return (
+    <header className="fixed left-0 right-0 top-0 z-50" style={themeVars}>
+      <div className="mx-auto max-w-8xl px-4 sm:px-6 pt-4">
+        <div className="relative flex h-[68px] items-center justify-between rounded-[22px] px-4 sm:px-5 bg-white/70 backdrop-blur-xl border border-slate-200 shadow-[0_18px_60px_rgba(2,6,23,0.08)]">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="relative h-12 w-12 xl:h-14 xl:w-14 rounded-full overflow-hidden bg-white/70 border border-black/5 shadow-[0_10px_30px_rgba(2,6,23,0.08)]">
+              <Image
+                src="/evg-logo.png"
+                alt="Elite Visa Global"
+                fill
+                priority
+                className="object-contain scale-[1.02]"
+              />
+            </div>
+
+            <div className="leading-tight">
+              <div className="whitespace-nowrap font-[var(--font-playfair)] font-semibold tracking-[0.16em] text-[15px] xl:text-[17px] text-slate-900">
+                <span className="gold-motion relative">ELITE</span>{" "}
+                <span className="opacity-90">VISA GLOBAL</span>
+              </div>
+
+              <div className="mt-1 text-[10px] xl:text-[11px] tracking-[0.14em] text-slate-500/70">
+                Follow your dreams.
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function Navbar() {
+  return (
+    <Suspense fallback={<NavbarFallback />}>
+      <NavbarInner />
+    </Suspense>
   );
 }
