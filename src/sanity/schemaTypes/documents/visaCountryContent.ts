@@ -41,6 +41,7 @@ export const visaCountryContentType = defineType({
         list: [
           {title: "Student Visa", value: "student"},
           {title: "Visit / Family / Business", value: "visit"},
+          {title: "Transit Visa", value: "transit"},
         ],
         layout: "radio",
       },
@@ -146,7 +147,9 @@ export const visaCountryContentType = defineType({
       const category =
         visaCategory === "student"
           ? "Student Visa"
-          : "Visit / Family / Business";
+          : visaCategory === "visit"
+            ? "Visit / Family / Business"
+            : "Transit Visa";
 
       return {
         title: `${flag ?? ""} ${countryName ?? "Untitled"}`,
