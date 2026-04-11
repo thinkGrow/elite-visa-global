@@ -142,7 +142,7 @@ export function Hero() {
 
       {/* Content Layer */}
       <div className="relative z-10">
-        <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col px-4 pt-24 pb-5 sm:px-6 sm:pt-28 md:min-h-screen md:pb-10">
+        <div className="mx-auto flex min-h-[100svh] max-w-8xl flex-col pt-24 pb-5 sm:px-6 sm:pt-28 md:px-10 md:min-h-screen md:pb-10">
           {/* top content */}
           <div className="max-w-3xl">
             {/* HEADLINE - desktop glass card preserved */}

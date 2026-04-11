@@ -13,6 +13,8 @@ export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
+  const [visaType, setVisaType] = React.useState("");
+
   const [scrolled, setScrolled] = React.useState(false);
 
   const [open, setOpen] = React.useState(false);
@@ -61,6 +63,18 @@ export function Navbar() {
   }, []);
 
   React.useEffect(() => {
+    const syncVisaType = () => {
+      const params = new URLSearchParams(window.location.search);
+      setVisaType((params.get("type") ?? "").toLowerCase());
+    };
+
+    syncVisaType();
+
+    window.addEventListener("popstate", syncVisaType);
+    return () => window.removeEventListener("popstate", syncVisaType);
+  }, [pathname]);
+
+  React.useEffect(() => {
     setOpen(false);
     setMobileVisaOpen(false);
     setMobileToursOpen(false);
@@ -69,26 +83,33 @@ export function Navbar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-const isVisa =
-  pathname === "/visa-processing" || pathname.startsWith("/visa-processing/");
-const isHajjUmrah =
-  pathname === "/hajj-umrah" || pathname.startsWith("/hajj-umrah/");
-const isTours =
-  pathname === "/tour-packages" || pathname.startsWith("/tour-packages/");
-const isUmrah =
-  pathname === "/umrah" ||
-  pathname.startsWith("/umrah/") ||
-  (isHajjUmrah && (new URLSearchParams(window.location.search).get("type") ?? "").toLowerCase() === "umrah");
-const isHajj =
-  pathname === "/hajj" ||
-  pathname.startsWith("/hajj/") ||
-  (isHajjUmrah && ((new URLSearchParams(window.location.search).get("type") ?? "").toLowerCase() !== "umrah"));
-const isAbout = pathname === "/about" || pathname.startsWith("/about/");
-const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
+  const isStudentVisa =
+    pathname === "/visa-processing" && visaType === "student";
 
-const isLightPage =
-  isVisa || isHajjUmrah || isTours || isUmrah || isHajj || isAbout || isContact;
-const useLightNav = isLightPage && !scrolled;
+  const isVisa =
+    pathname === "/visa-processing" &&
+    (visaType === "visit" || visaType === "transit");
+
+  const isHajjUmrah =
+    pathname === "/hajj-umrah" || pathname.startsWith("/hajj-umrah/");
+  const isTours =
+    pathname === "/tour-packages" || pathname.startsWith("/tour-packages/");
+  const isUmrah = pathname === "/umrah" || pathname.startsWith("/umrah/");
+  const isHajj = pathname === "/hajj" || pathname.startsWith("/hajj/");
+  const isAbout = pathname === "/about" || pathname.startsWith("/about/");
+  const isContact = pathname === "/contact" || pathname.startsWith("/contact/");
+
+  const isLightPage =
+    isStudentVisa ||
+    isVisa ||
+    isHajjUmrah ||
+    isTours ||
+    isUmrah ||
+    isHajj ||
+    isAbout ||
+    isContact;
+
+  const useLightNav = isLightPage && !scrolled;
 
   function navLinkClasses(isActive: boolean) {
     const base =
@@ -113,6 +134,7 @@ const useLightNav = isLightPage && !scrolled;
 
     return [base, text, underlineBase, underline].join(" ");
   }
+
   const dropdownPanelClasses = [
     "absolute left-0 top-full z-50 w-[280px]",
     "translate-y-3 rounded-[22px] p-2",
@@ -158,7 +180,7 @@ const useLightNav = isLightPage && !scrolled;
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50" style={themeVars}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-4">
+      <div className="mx-auto max-w-8xl px-4 sm:px-6 pt-4">
         <div
           className={[
             "relative flex h-[68px] items-center justify-between rounded-[22px] px-4 sm:px-5",
@@ -211,13 +233,18 @@ const useLightNav = isLightPage && !scrolled;
             </div>
           </Link>
 
-          {/* Desktop */}
-          <nav className="hidden md:flex items-center gap-7 xl:gap-8">
+          <nav className="hidden md:flex items-center gap-7 xl:gap-8 text-balance text-center">
             <Link href="/" className={navLinkClasses(isHome)}>
               Home
             </Link>
 
-            {/* Visa */}
+            <Link
+              href="/visa-processing?type=student"
+              className={navLinkClasses(isStudentVisa)}
+            >
+              Student Visa
+            </Link>
+
             <div
               className="relative after:absolute after:left-0 after:right-0 after:top-full after:h-4 after:content-['']"
               onMouseEnter={() => openMenu("visa")}
@@ -232,7 +259,7 @@ const useLightNav = isLightPage && !scrolled;
                 onFocus={() => openMenu("visa")}
                 onClick={() => toggleMenu("visa")}
               >
-                <span>Visas</span>
+                <span>Visa Processing</span>
                 <span
                   className={[
                     "text-[9px] transition-all duration-300",
@@ -251,19 +278,6 @@ const useLightNav = isLightPage && !scrolled;
                 <div className={dropdownPanelClasses} role="menu">
                   <div className="flex flex-col gap-1">
                     <Link
-                      href="/visa-processing?type=student"
-                      className={dropdownLinkClasses}
-                      onClick={closeNow}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <span>Student Visa</span>
-                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                          →
-                        </span>
-                      </div>
-                    </Link>
-
-                    <Link
                       href="/visa-processing?type=visit"
                       className={dropdownLinkClasses}
                       onClick={closeNow}
@@ -275,12 +289,24 @@ const useLightNav = isLightPage && !scrolled;
                         </span>
                       </div>
                     </Link>
+
+                    <Link
+                      href="/visa-processing?type=transit"
+                      className={dropdownLinkClasses}
+                      onClick={closeNow}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span>Transit Visa</span>
+                        <span className="text-[11px] text-[var(--evg-gold)] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          →
+                        </span>
+                      </div>
+                    </Link>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Tours */}
             <div
               className="relative after:absolute after:left-0 after:right-0 after:top-full after:h-4 after:content-['']"
               onMouseEnter={() => openMenu("tours")}
@@ -362,7 +388,6 @@ const useLightNav = isLightPage && !scrolled;
             <PrimaryCTA href="/contact">Get Consultation</PrimaryCTA>
           </nav>
 
-          {/* Mobile toggle */}
           <button
             type="button"
             className={[
@@ -378,7 +403,6 @@ const useLightNav = isLightPage && !scrolled;
             {open ? "✕" : "☰"}
           </button>
 
-          {/* Mobile menu */}
           {open && (
             <div className={mobilePanelClasses}>
               <div className="grid gap-1 p-3">
@@ -388,6 +412,14 @@ const useLightNav = isLightPage && !scrolled;
                   onClick={() => setOpen(false)}
                 >
                   Home
+                </Link>
+
+                <Link
+                  href="/visa-processing?type=student"
+                  className={[mobileItemBase, mobileItemText].join(" ")}
+                  onClick={() => setOpen(false)}
+                >
+                  Student Visa
                 </Link>
 
                 <button
@@ -413,16 +445,6 @@ const useLightNav = isLightPage && !scrolled;
                 {mobileVisaOpen && (
                   <div className="ml-2 mr-1 rounded-2xl border border-white/10 p-2">
                     <Link
-                      href="/visa-processing?type=student"
-                      className={[
-                        "block rounded-xl px-4 py-2 text-sm transition",
-                        mobileSubItemText,
-                      ].join(" ")}
-                      onClick={() => setOpen(false)}
-                    >
-                      Student Visa
-                    </Link>
-                    <Link
                       href="/visa-processing?type=visit"
                       className={[
                         "block rounded-xl px-4 py-2 text-sm transition",
@@ -431,6 +453,17 @@ const useLightNav = isLightPage && !scrolled;
                       onClick={() => setOpen(false)}
                     >
                       Visit, Family &amp; Business Visa
+                    </Link>
+
+                    <Link
+                      href="/visa-processing?type=transit"
+                      className={[
+                        "block rounded-xl px-4 py-2 text-sm transition",
+                        mobileSubItemText,
+                      ].join(" ")}
+                      onClick={() => setOpen(false)}
+                    >
+                      Transit Visa
                     </Link>
                   </div>
                 )}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { themeVars } from "@/lib/theme";
 import { Navbar } from "@/components/home/layout/Navbar";
+import { PrimaryCTA } from "@/components/ui/PrimaryCTA";
 
 type HajjCategoryKey = "hajj" | "umrah";
 
@@ -364,12 +365,7 @@ function RenderPilgrimageBody({ pkg }: { pkg: CmsPilgrimagePackage }) {
       })}
 
       <div className="mt-6">
-        <Link
-          href="/contact"
-          className="inline-flex items-center justify-center rounded-2xl bg-[var(--evg-gold)] px-5 py-3 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_rgba(214,162,58,0.22)] transition hover:brightness-110"
-        >
-          Get Consultation
-        </Link>
+{/* <PrimaryCTA> */}
       </div>
     </>
   );

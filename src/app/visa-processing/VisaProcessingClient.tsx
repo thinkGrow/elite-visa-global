@@ -7,7 +7,7 @@ import { themeVars } from "@/lib/theme";
 import { Navbar } from "@/components/home/layout/Navbar";
 import { client } from "@/sanity/lib/client";
 
-type VisaCategoryKey = "student" | "visit";
+type VisaCategoryKey = "student" | "visit" | "transit";
 
 type VisaDestination = {
   countrySlug: string;
@@ -236,8 +236,9 @@ function Dropdown({
         </div>
 
         <p className="mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
-          Compliance-focused guidance for students, tourists, families, and
-          business travelers—structured, transparent, and visa-ready.
+          Compliance-focused guidance for students, visitors, families, business
+          travelers, and transit passengers—structured, transparent, and
+          visa-ready.
         </p>
       </div>
 
@@ -253,8 +254,9 @@ function Dropdown({
           >
             <option value="student">Student Visa Processing</option>
             <option value="visit">
-              Visit, Family & Business Visa Processing
+              Visit, Family &amp; Business Visa Processing
             </option>
+            <option value="transit">Transit Visa Processing</option>
           </select>
 
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
@@ -304,8 +306,12 @@ const ptComponents = {
   },
 
   listItem: {
-    bullet: ({ children }: any) => <li className="leading-relaxed">{children}</li>,
-    number: ({ children }: any) => <li className="leading-relaxed">{children}</li>,
+    bullet: ({ children }: any) => (
+      <li className="leading-relaxed">{children}</li>
+    ),
+    number: ({ children }: any) => (
+      <li className="leading-relaxed">{children}</li>
+    ),
   },
 
   marks: {
@@ -442,7 +448,11 @@ export default function VisaProcessingPage() {
   const countryParam = (searchParams.get("country") ?? "").toLowerCase();
 
   const initialCategory: VisaCategoryKey =
-    typeParam === "visit" ? "visit" : "student";
+    typeParam === "visit"
+      ? "visit"
+      : typeParam === "transit"
+        ? "transit"
+        : "student";
 
   const [category, setCategory] =
     React.useState<VisaCategoryKey>(initialCategory);
@@ -453,7 +463,14 @@ export default function VisaProcessingPage() {
 
   React.useEffect(() => {
     const t = (searchParams.get("type") ?? "").toLowerCase();
-    const nextCategory: VisaCategoryKey = t === "visit" ? "visit" : "student";
+
+    const nextCategory: VisaCategoryKey =
+      t === "visit"
+        ? "visit"
+        : t === "transit"
+          ? "transit"
+          : "student";
+
     const nextCountry = (searchParams.get("country") ?? "").toLowerCase();
 
     setCategory(nextCategory);
@@ -526,7 +543,9 @@ export default function VisaProcessingPage() {
   const pickerTitle =
     category === "student"
       ? "Student visa destinations"
-      : "Visit, family & business destinations";
+      : category === "visit"
+        ? "Visit, family & business destinations"
+        : "Transit visa destinations";
 
   const pickerLayout = "wrap";
 
