@@ -254,7 +254,7 @@ export function CoreServiceSection() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative overflow-visible bg-white"
+      className="relative overflow-x-clip bg-white"
       style={themeVars}
     >
       <div className="mx-auto max-w-8xl px-6 py-24">

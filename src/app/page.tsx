@@ -27,7 +27,7 @@ export default function HomePage() {
     >
       <Navbar></Navbar>
 
-      <Hero />
+       <Hero /> 
 
       <WelcomeSection />
       <CoreServiceSection />
