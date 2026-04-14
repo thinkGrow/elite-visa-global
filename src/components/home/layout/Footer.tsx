@@ -10,9 +10,9 @@ export function Footer() {
     <footer style={themeVars} className="bg-[var(--evg-deep)] text-white">
       {/* Top Section */}
       <div className="mx-auto max-w-8xl px-6 py-14">
-        <div className="grid gap-10 md:grid-cols-4">
+        <div className="flex flex-col justify-between gap-12 sm:flex-row">
           {/* Brand Column */}
-          <div>
+          <div className="max-w-sm">
             <div className="text-sm tracking-[0.22em] text-white/60">
               ELITE VISA GLOBAL
             </div>
