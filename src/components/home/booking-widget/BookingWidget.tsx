@@ -23,10 +23,10 @@ const tabs: Array<{
 
 function renderTabContent(active: TabKey) {
   switch (active) {
-    case "tour":
-      return <TourTab />;
     case "visa":
       return <VisaTab />;
+    case "tour":
+      return <TourTab />;
     case "hotel":
       return <HotelTab />;
     case "flight":
@@ -37,7 +37,7 @@ function renderTabContent(active: TabKey) {
 }
 
 export function BookingWidget() {
-  const [active, setActive] = React.useState<TabKey>("tour");
+  const [active, setActive] = React.useState<TabKey>("visa");
 
   return (
     <section className="w-full bg-white">
