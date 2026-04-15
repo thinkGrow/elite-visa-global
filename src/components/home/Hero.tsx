@@ -40,10 +40,9 @@ export function Hero() {
               ].join(" ")}
             >
  
-
 <h1 className="mt-5 text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
-  Visa, Travel & Pilgrimage
-  <span className="block text-[var(--evg-gold)]">
+  Visa, Travel & Hajj Services
+  <span className="block text-[var(--evg-gold)] gold-motion">
     in One Place
   </span>
 </h1>
