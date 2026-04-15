@@ -57,6 +57,9 @@ function normalize(value: string | null | undefined) {
   return (value ?? "").trim().toLowerCase();
 }
 
+const inputClass =
+  "h-12 w-full rounded-lg border border-black/12 bg-white px-4 text-sm text-[var(--evg-deep)] outline-none transition focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/20 disabled:cursor-not-allowed disabled:opacity-70";
+
 export function TourTab() {
   const router = useRouter();
 
@@ -99,6 +102,12 @@ export function TourTab() {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (!regions.length) return;
+
+    setSelectedRegion((prev) => prev || regions[0]);
+  }, [regions]);
+
   const filteredCountries = React.useMemo(() => {
     if (!selectedRegion) return [];
 
@@ -119,6 +128,20 @@ export function TourTab() {
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [rows, selectedRegion]);
+
+  React.useEffect(() => {
+    if (!selectedRegion) {
+      setSelectedCountry("");
+      return;
+    }
+
+    setSelectedCountry((prev) => {
+      if (filteredCountries.some((country) => country.slug === prev)) {
+        return prev;
+      }
+      return "";
+    });
+  }, [selectedRegion, filteredCountries]);
 
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
@@ -142,18 +165,17 @@ export function TourTab() {
 
   return (
     <>
-      <div className="text-xs tracking-[0.2em] text-white/70">TOUR SEARCH</div>
+      <div className="text-[11px] font-medium tracking-[0.18em] text-[var(--evg-deep)]/55 uppercase">
+        Tour Search
+      </div>
 
-      <div className="mt-4 grid gap-3 md:grid-cols-3 items-end">
-        <div>
-          <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
-            SELECT REGION
-          </label>
+      <div className="mt-4 grid items-end gap-3 md:grid-cols-[1fr_1fr_auto]">
+        <Field label="SELECT REGION">
           <select
             value={selectedRegion}
             onChange={handleRegionChange}
             disabled={isLoading}
-            className="h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70"
+            className={inputClass}
           >
             <option value="" disabled>
               {isLoading ? "Loading regions..." : "Choose a region"}
@@ -165,17 +187,14 @@ export function TourTab() {
               </option>
             ))}
           </select>
-        </div>
+        </Field>
 
-        <div>
-          <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
-            SELECT COUNTRY
-          </label>
+        <Field label="SELECT COUNTRY">
           <select
             value={selectedCountry}
             onChange={(e) => setSelectedCountry(e.target.value)}
             disabled={isLoading || !selectedRegion}
-            className="h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70"
+            className={inputClass}
           >
             <option value="">
               {!selectedRegion
@@ -191,19 +210,33 @@ export function TourTab() {
               </option>
             ))}
           </select>
-        </div>
+        </Field>
 
-        <div>
-          <PrimaryButton
-            type="button"
-            onClick={handleSearch}
-            disabled={isLoading || !selectedRegion}
-            className="w-full"
-          >
-            SEARCH
-          </PrimaryButton>
-        </div>
+        <PrimaryButton
+          type="button"
+          onClick={handleSearch}
+          disabled={isLoading || !selectedRegion}
+        >
+          Search
+        </PrimaryButton>
       </div>
     </>
+  );
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-[11px] font-medium tracking-[0.16em] text-[var(--evg-deep)]/55">
+        {label}
+      </label>
+      {children}
+    </div>
   );
 }

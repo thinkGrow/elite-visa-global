@@ -1,214 +1,77 @@
 "use client";
 
-import Image from "next/image";
 import React from "react";
 import { BookingWidget } from "./booking-widget/BookingWidget";
-import { GlassHeadlineCard } from "../ui/GlassHeadlineCard";
-import styles from "@/components/ui/GlassHeadlineCard.module.css";
-
-type Slide = {
-  key: string;
-  imageSrc: string;
-  mobileFocus?: string;
-  desktopFocus?: string;
-};
-
-const slides: Slide[] = [
-  {
-    key: "student",
-    imageSrc: "/hero/student.webp",
-    mobileFocus: "object-[72%_center]",
-    desktopFocus: "object-center",
-  },
-  {
-    key: "visa",
-    imageSrc: "/hero/visa.webp",
-    mobileFocus: "object-[68%_center]",
-    desktopFocus: "object-center",
-  },
-  {
-    key: "hajj",
-    imageSrc: "/hero/hajj.webp",
-    mobileFocus: "object-center",
-    desktopFocus: "object-center",
-  },
-];
-
-const AUTO_MS = 5200;
-const ANIM_MS = 1600;
 
 export function Hero() {
-  const [i, setI] = React.useState(0);
-  const [prev, setPrev] = React.useState<number | null>(null);
-  const [dir, setDir] = React.useState<"next" | "prev">("next");
   const [contentIn, setContentIn] = React.useState(false);
-
-  const iRef = React.useRef(0);
 
   React.useEffect(() => {
     const t = window.setTimeout(() => setContentIn(true), 30);
     return () => window.clearTimeout(t);
   }, []);
 
-  const goTo = React.useCallback((next: number) => {
-    if (next === iRef.current) return;
-
-    const cur = iRef.current;
-    const last = slides.length - 1;
-
-    const isNext =
-      (cur === last && next === 0) ||
-      (next > cur && !(cur === 0 && next === last));
-
-    setDir(isNext ? "next" : "prev");
-    setPrev(cur);
-
-    iRef.current = next;
-    setI(next);
-
-    window.setTimeout(() => setPrev(null), ANIM_MS + 100);
-  }, []);
-
-  React.useEffect(() => {
-    const t = window.setInterval(() => {
-      goTo((iRef.current + 1) % slides.length);
-    }, AUTO_MS);
-
-    return () => window.clearInterval(t);
-  }, [goTo]);
-
-  const currentSlide = slides[i];
-  const prevSlide = prev !== null ? slides[prev] : null;
-
   return (
-    <section className="relative isolate overflow-hidden bg-black">
-      {/* Background */}
-      <div className="absolute inset-0">
-        {/* outgoing slide */}
-        {prevSlide && (
-          <div
-            className={[
-              "absolute inset-0 will-change-transform will-change-opacity",
-              dir === "next" ? "hero-out-left" : "hero-out-right",
-            ].join(" ")}
+    <section className="relative bg-[#f6f8fb]">
+      {/* Banner */}
+      <div className="relative isolate overflow-hidden bg-black">
+        <div className="relative h-[24rem] sm:h-[26rem] md:h-[28rem] lg:h-[30rem]">
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
           >
-            <Image
-              src={prevSlide.imageSrc}
-              alt="Elite Visa Global hero"
-              fill
-              priority={false}
-              sizes="100vw"
+            <source src="/hero/evg-hero-video.mp4" type="video/mp4" />
+          </video>
+
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,18,43,0.26)_0%,rgba(6,18,43,0.45)_38%,rgba(6,18,43,0.78)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(760px_circle_at_50%_18%,rgba(214,162,58,0.14),transparent_58%)]" />
+
+          <div className="relative z-10 mx-auto flex h-full max-w-8xl items-center justify-center px-6 pt-24 pb-24 text-center md:px-10 md:pt-28 md:pb-24">
+            <div
               className={[
-                "object-cover",
-                prevSlide.mobileFocus ?? "object-center",
-                `md:${(prevSlide.desktopFocus ?? "object-center").replace(
-                  "object-",
-                  "object-",
-                )}`,
-              ].join(" ")}
-            />
-          </div>
-        )}
-
-        {/* incoming/current slide */}
-        <div
-          key={currentSlide.key}
-          className={[
-            "absolute inset-0 will-change-transform will-change-opacity",
-            dir === "next" ? "hero-in-right" : "hero-in-left",
-          ].join(" ")}
-        >
-          <Image
-            src={currentSlide.imageSrc}
-            alt="Elite Visa Global hero"
-            fill
-            priority
-            sizes="100vw"
-            className={[
-              "object-cover",
-              currentSlide.mobileFocus ?? "object-center",
-              `md:${(currentSlide.desktopFocus ?? "object-center").replace(
-                "object-",
-                "object-",
-              )}`,
-            ].join(" ")}
-          />
-        </div>
-
-        {/* overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/72 via-black/42 to-black/12 md:from-black/70 md:via-black/35 md:to-black/10" />
-        <div className="absolute inset-0 bg-[radial-gradient(900px_circle_at_18%_22%,rgba(214,162,58,0.18),transparent_55%)]" />
-      </div>
-
-      {/* Content Layer */}
-      <div className="relative z-10">
-        <div className="mx-auto flex min-h-[100svh] max-w-8xl flex-col pt-24 pb-5 sm:px-6 sm:pt-28 md:px-10 md:min-h-screen md:pb-10">
-          {/* top content */}
-          <div className="max-w-3xl">
-            {/* HEADLINE - desktop glass card preserved */}
-            <GlassHeadlineCard textColor="white" size="lg">
-              <h1 className="text-balance">
-                Dreams beyond <span className="gold-motion">borders</span>
-                {/* without limits. */}
-              </h1>
-
-              <div className={`${styles.underlineMotion} mt-4`} />
-            </GlassHeadlineCard>
-            {/* SUBTEXT */}
-            <p
-              className={[
-                "mt-15 md:mt-6 max-w-xl text-white/75 text-base sm:text-lg leading-relaxed font-light",
-                contentIn ? "hero-sub-in" : "",
+                "max-w-3xl transition-all duration-700 ease-out",
+                contentIn
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-4 opacity-0",
               ].join(" ")}
             >
-              Whether it’s higher education abroad or the sacred pilgrimage of
-              Hajj and Umrah, we ensure every document, every requirement, and
-              every step is handled with care, compliance, and responsibility.
-            </p>
-          </div>
+ 
 
-          {/* Spacer so widget stays lower without absolute overlap on mobile */}
-          <div className="flex-1 min-h-6 md:min-h-10" />
+<h1 className="mt-5 text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
+  Visa, Travel & Pilgrimage
+  <span className="block text-[var(--evg-gold)]">
+    in One Place
+  </span>
+</h1>
 
-          {/* Bottom UI */}
-          <div>
-            <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
-              {/* dots */}
-              <div className="flex items-center gap-2">
-                {slides.map((x, idx) => {
-                  const active = idx === i;
-                  return (
-                    <button
-                      key={x.key}
-                      type="button"
-                      onClick={() => goTo(idx)}
-                      className={[
-                        "h-2 rounded-full transition-all duration-300",
-                        active
-                          ? "w-8 bg-[var(--evg-gold)]"
-                          : "w-2 bg-white/30 hover:bg-white/55",
-                      ].join(" ")}
-                      aria-label={`Hero slide ${idx + 1}`}
-                    />
-                  );
-                })}
-              </div>
-
-              {/* widget */}
-              <div className="w-full md:w-[56rem] max-w-full">
-                <div
-                  className={[
-                    "rounded-2xl border border-white/15 bg-white/10 p-2 md:p-3 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]",
-                    contentIn ? "hero-widget-in" : "",
-                  ].join(" ")}
-                >
-                  <BookingWidget />
-                </div>
-              </div>
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/80 sm:text-base md:text-lg">
+                Trusted support for visa processing, tour planning, hotel
+                booking, and flights with structured guidance every step of the
+                way.
+              </p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Widget */}
+      <div className="relative z-20 mx-auto -mt-14 max-w-7xl px-4 sm:px-6 md:-mt-20 md:px-10">
+        <div
+          className={[
+            "overflow-hidden rounded-[1.6rem] border border-black/6 bg-white shadow-[0_20px_60px_rgba(6,18,43,0.12)] ring-1 ring-black/4",
+            "transition-all duration-700 ease-out",
+            contentIn ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
+          ].join(" ")}
+        >
+          <BookingWidget />
+        </div>
+      </div>
+
+      <div className="h-10 sm:h-12 md:h-14" />
     </section>
   );
 }

@@ -36,7 +36,7 @@ const initialForm: FlightInquiryForm = {
 };
 
 const inputClass =
-  "h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70";
+  "h-12 w-full rounded-lg border border-black/12 bg-white px-4 text-sm text-[var(--evg-deep)] outline-none transition focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/20 disabled:cursor-not-allowed disabled:opacity-70";
 
 export function FlightTab() {
   const [form, setForm] = React.useState<FlightInquiryForm>(initialForm);
@@ -117,12 +117,12 @@ export function FlightTab() {
 
   return (
     <>
-      <div className="text-xs tracking-[0.2em] text-white/70">
-        FLIGHT SEARCH
+      <div className="text-[11px] font-medium tracking-[0.18em] text-[var(--evg-deep)]/55 uppercase">
+        Flight Search
       </div>
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-        <div className="flex flex-wrap gap-5 border-b border-white/10 pb-4 text-sm text-white/80">
+        <div className="flex flex-wrap gap-5 border-b border-black/8 pb-4 text-sm text-[var(--evg-deep)]/75">
           <TripTypeOption
             label="1 WAY"
             checked={form.tripType === "one-way"}
@@ -294,7 +294,7 @@ export function FlightTab() {
         </div>
 
         <div className="grid gap-3 md:grid-cols-[1fr_auto] items-end">
-          <div className="text-[11px] text-white/50">
+          <div className="text-[11px] text-[var(--evg-deep)]/50">
             Submit your route and travel preferences and the team will follow up
             with flight options.
           </div>
@@ -302,7 +302,7 @@ export function FlightTab() {
           <PrimaryButton
             type="submit"
             disabled={submitting}
-            className="w-full md:w-[180px]"
+            // className="h-12 w-full rounded-lg px-6 md:w-[190px] shadow-[0_10px_24px_rgba(214,162,58,0.28)]"
           >
             {submitting ? "SENDING..." : "SEARCH"}
           </PrimaryButton>
@@ -311,7 +311,7 @@ export function FlightTab() {
         {status.type !== "idle" ? (
           <div
             className={[
-              "rounded-xl border px-4 py-3 text-sm",
+              "rounded-lg border px-4 py-3 text-sm",
               status.type === "success"
                 ? "border-emerald-300/70 bg-emerald-50 text-emerald-700"
                 : "border-red-300/70 bg-red-50 text-red-700",
@@ -334,7 +334,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
+      <label className="mb-1.5 block text-[11px] font-medium tracking-[0.16em] text-[var(--evg-deep)]/55">
         {label}
       </label>
       {children}
@@ -355,21 +355,27 @@ function TripTypeOption({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-3"
+      className="inline-flex items-center gap-3 text-sm"
     >
       <span
         className={[
-          "relative h-5 w-5 rounded-full border transition",
+          "relative h-4.5 w-4.5 rounded-full border transition",
           checked
-            ? "border-[var(--evg-gold)]"
-            : "border-white/35 bg-white/10",
+            ? "border-[var(--evg-gold)] bg-[var(--evg-gold)]/10"
+            : "border-black/20 bg-white",
         ].join(" ")}
       >
         {checked ? (
-          <span className="absolute inset-1 rounded-full bg-[var(--evg-deep)]" />
+          <span className="absolute inset-1 rounded-full bg-[var(--evg-gold)]" />
         ) : null}
       </span>
-      <span>{label}</span>
+      <span
+        className={
+          checked ? "text-[var(--evg-deep)]" : "text-[var(--evg-deep)]/65"
+        }
+      >
+        {label}
+      </span>
     </button>
   );
 }

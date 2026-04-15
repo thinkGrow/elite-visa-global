@@ -31,7 +31,7 @@ const visaWidgetQuery = `
 `;
 
 const inputClass =
-  "h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70";
+  "h-12 w-full rounded-lg border border-black/12 bg-white px-4 text-sm text-[var(--evg-deep)] outline-none transition focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/20 disabled:cursor-not-allowed disabled:opacity-70";
 
 export function VisaTab() {
   const router = useRouter();
@@ -98,9 +98,11 @@ export function VisaTab() {
 
   return (
     <>
-      <div className="text-xs tracking-[0.2em] text-white/70">VISA SEARCH</div>
+      <div className="text-[11px] font-medium tracking-[0.18em] text-[var(--evg-deep)]/55 uppercase">
+        Visa Search
+      </div>
 
-      <div className="mt-4 grid gap-3 md:grid-cols-3 items-end">
+      <div className="mt-4 grid items-end gap-3 md:grid-cols-[1fr_1fr_auto]">
         <Field label="SELECT VISA TYPE">
           <select
             value={category}
@@ -137,21 +139,19 @@ export function VisaTab() {
           </select>
         </Field>
 
-        <div>
-          <PrimaryButton
-            type="button"
-            onClick={handleSearch}
-            disabled={isLoading || !selectedCountrySlug}
-            className="w-full"
-          >
-            SEARCH
-          </PrimaryButton>
-        </div>
+        <PrimaryButton
+          type="button"
+          onClick={handleSearch}
+          disabled={isLoading || !selectedCountrySlug}
+          // className="h-12 w-full rounded-lg px-6 md:w-[190px] shadow-[0_10px_24px_rgba(214,162,58,0.28)]"
+        >
+          Search 
+        </PrimaryButton>
       </div>
 
-      <div className="mt-3 text-[11px] text-white/50">
-        Choose a visa category first, then select a country to view the relevant
-        processing details.
+      <div className="mt-3 text-[11px] text-[var(--evg-deep)]/50">
+        Choose a visa category first, then select a country to view the
+        relevant processing details.
       </div>
     </>
   );
@@ -166,7 +166,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
+      <label className="mb-1.5 block text-[11px] font-medium tracking-[0.16em] text-[var(--evg-deep)]/55">
         {label}
       </label>
       {children}

@@ -32,7 +32,7 @@ const initialForm: HotelInquiryForm = {
 };
 
 const inputClass =
-  "h-11 w-full rounded-xl border border-white/15 bg-white/95 px-4 text-sm text-slate-900 outline-none focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/30 disabled:cursor-not-allowed disabled:opacity-70";
+  "h-12 w-full rounded-lg border border-black/12 bg-white px-4 text-sm text-[var(--evg-deep)] outline-none transition focus:border-[var(--evg-gold)] focus:ring-2 focus:ring-[color:var(--evg-gold)]/20 disabled:cursor-not-allowed disabled:opacity-70";
 
 export function HotelTab() {
   const [form, setForm] = React.useState<HotelInquiryForm>(initialForm);
@@ -88,7 +88,9 @@ export function HotelTab() {
 
   return (
     <>
-      <div className="text-xs tracking-[0.2em] text-white/70">HOTEL SEARCH</div>
+      <div className="text-[11px] font-medium tracking-[0.18em] text-[var(--evg-deep)]/55 uppercase">
+        Hotel Search
+      </div>
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div className="grid gap-3">
@@ -239,7 +241,7 @@ export function HotelTab() {
         </div>
 
         <div className="grid gap-3 md:grid-cols-[1fr_auto] items-end">
-          <div className="text-[11px] text-white/50">
+          <div className="text-[11px] text-[var(--evg-deep)]/50">
             Share your stay details and the team will follow up with available
             hotel options and pricing.
           </div>
@@ -247,7 +249,7 @@ export function HotelTab() {
           <PrimaryButton
             type="submit"
             disabled={submitting}
-            className="w-full md:w-[180px]"
+            // className="h-12 w-full rounded-lg px-6 md:w-[190px] shadow-[0_10px_24px_rgba(214,162,58,0.28)]"
           >
             {submitting ? "SENDING..." : "SEARCH"}
           </PrimaryButton>
@@ -256,7 +258,7 @@ export function HotelTab() {
         {status.type !== "idle" ? (
           <div
             className={[
-              "rounded-xl border px-4 py-3 text-sm",
+              "rounded-lg border px-4 py-3 text-sm",
               status.type === "success"
                 ? "border-emerald-300/70 bg-emerald-50 text-emerald-700"
                 : "border-red-300/70 bg-red-50 text-red-700",
@@ -279,7 +281,7 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-[11px] tracking-[0.2em] text-white/60">
+      <label className="mb-1.5 block text-[11px] font-medium tracking-[0.16em] text-[var(--evg-deep)]/55">
         {label}
       </label>
       {children}
