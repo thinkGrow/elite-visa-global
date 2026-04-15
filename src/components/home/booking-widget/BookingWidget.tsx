@@ -15,8 +15,8 @@ const tabs: Array<{
   label: string;
   icon: React.ComponentType<{ className?: string }>;
 }> = [
+   { key: "visa", label: "Visa", icon: FileText },
   { key: "tour", label: "Tour", icon: Map },
-  { key: "visa", label: "Visa", icon: FileText },
   { key: "hotel", label: "Hotel", icon: Hotel },
   { key: "flight", label: "Flight", icon: PlaneTakeoff },
 ];

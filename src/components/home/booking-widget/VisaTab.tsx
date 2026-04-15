@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { client } from "@/sanity/lib/client";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
-type VisaCategoryKey = "student" | "visit";
+type VisaCategoryKey = "student" | "visit" | "transit";
 
 type VisaWidgetCountry = {
   countrySlug: string;
@@ -112,6 +112,7 @@ export function VisaTab() {
           >
             <option value="student">Student Visa</option>
             <option value="visit">Visit / Family / Business</option>
+            <option value="transit">Transit Visa</option>
           </select>
         </Field>
 
@@ -143,9 +144,8 @@ export function VisaTab() {
           type="button"
           onClick={handleSearch}
           disabled={isLoading || !selectedCountrySlug}
-          // className="h-12 w-full rounded-lg px-6 md:w-[190px] shadow-[0_10px_24px_rgba(214,162,58,0.28)]"
         >
-          Search 
+          Search
         </PrimaryButton>
       </div>
 
