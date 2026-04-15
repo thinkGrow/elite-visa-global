@@ -30,7 +30,7 @@ export function Hero() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,18,43,0.26)_0%,rgba(6,18,43,0.45)_38%,rgba(6,18,43,0.78)_100%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(760px_circle_at_50%_18%,rgba(214,162,58,0.14),transparent_58%)]" />
 
-          <div className="relative z-10 mx-auto flex h-full max-w-8xl items-center justify-center px-6 pt-24 pb-24 text-center md:px-10 md:pt-28 md:pb-24">
+          <div className="relative z-10 mx-auto flex h-full max-w-8xl items-center justify-center px-6 pt-16 pb-24 text-center md:px-10 md:pt-20 md:pb-24">
             <div
               className={[
                 "max-w-3xl transition-all duration-700 ease-out",

@@ -94,7 +94,7 @@ function NavbarInner() {
     isAbout ||
     isContact;
 
-  const useLightNav = isLightPage && !scrolled;
+  const useLightNav = !scrolled;
 
   function navLinkClasses(isActive: boolean) {
     const base =
@@ -164,23 +164,21 @@ function NavbarInner() {
   }
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50" style={themeVars}>
-      <div className="mx-auto max-w-8xl px-4 sm:px-6 pt-4">
+    <header className="sticky top-0 z-50" style={themeVars}>
+      <div className="mx-auto max-w-8xl px-4 py-4 sm:px-6">
         <div
           className={[
             "relative flex h-[68px] items-center justify-between rounded-[22px] px-4 sm:px-5",
             "transition-all duration-300",
             scrolled
               ? "bg-[rgba(6,18,43,0.86)] backdrop-blur-xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.35)]"
-              : useLightNav
-                ? "bg-white/70 backdrop-blur-xl border border-slate-200 shadow-[0_18px_60px_rgba(2,6,23,0.08)]"
-                : "bg-transparent",
+              : "bg-white/90 backdrop-blur-xl border border-slate-200 shadow-[0_18px_60px_rgba(2,6,23,0.08)]",
           ].join(" ")}
         >
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 min-w-0">
             <div
               className={[
-                "relative h-12 w-12 xl:h-14 xl:w-14 rounded-full overflow-hidden",
+                "relative h-12 w-12 xl:h-14 xl:w-14 rounded-full overflow-hidden shrink-0",
                 useLightNav
                   ? "bg-white/70 border border-black/5 shadow-[0_10px_30px_rgba(2,6,23,0.08)]"
                   : "bg-white/10 border border-white/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)]",
@@ -195,11 +193,11 @@ function NavbarInner() {
               />
             </div>
 
-            <div className="leading-tight">
+            <div className="leading-tight min-w-0">
               <div
                 className={[
-                  "whitespace-nowrap font-[var(--font-playfair)] font-semibold tracking-[0.16em]",
-                  "text-[15px] xl:text-[17px]",
+                  "whitespace-nowrap font-[var(--font-playfair)] font-semibold tracking-[0.12em]",
+                  "text-[14px] xl:text-[16px]",
                   useLightNav ? "text-slate-900" : "text-white",
                 ].join(" ")}
               >
@@ -218,7 +216,7 @@ function NavbarInner() {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-7 xl:gap-8 text-balance text-center">
+          <nav className="hidden md:flex items-center gap-5 xl:gap-6 text-center">
             <Link href="/" className={navLinkClasses(isHome)}>
               Home
             </Link>
@@ -428,7 +426,14 @@ function NavbarInner() {
                 </button>
 
                 {mobileVisaOpen && (
-                  <div className="ml-2 mr-1 rounded-2xl border border-white/10 p-2">
+                  <div
+                    className={[
+                      "ml-2 mr-1 rounded-2xl p-2",
+                      useLightNav
+                        ? "border border-slate-200"
+                        : "border border-white/10",
+                    ].join(" ")}
+                  >
                     <Link
                       href="/visa-processing?type=visit"
                       className={[
@@ -474,7 +479,14 @@ function NavbarInner() {
                 </button>
 
                 {mobileToursOpen && (
-                  <div className="ml-2 mr-1 rounded-2xl border border-white/10 p-2">
+                  <div
+                    className={[
+                      "ml-2 mr-1 rounded-2xl p-2",
+                      useLightNav
+                        ? "border border-slate-200"
+                        : "border border-white/10",
+                    ].join(" ")}
+                  >
                     <Link
                       href="/tour-packages?type=international"
                       className={[
@@ -548,9 +560,9 @@ function NavbarInner() {
 
 function NavbarFallback() {
   return (
-    <header className="fixed left-0 right-0 top-0 z-50" style={themeVars}>
-      <div className="mx-auto max-w-8xl px-4 sm:px-6 pt-4">
-        <div className="relative flex h-[68px] items-center justify-between rounded-[22px] px-4 sm:px-5 bg-white/70 backdrop-blur-xl border border-slate-200 shadow-[0_18px_60px_rgba(2,6,23,0.08)]">
+    <header className="sticky top-0 z-50" style={themeVars}>
+      <div className="mx-auto max-w-8xl px-4 py-4 sm:px-6">
+        <div className="relative flex h-[68px] items-center justify-between rounded-[22px] px-4 sm:px-5 bg-white/90 backdrop-blur-xl border border-slate-200 shadow-[0_18px_60px_rgba(2,6,23,0.08)]">
           <Link href="/" className="flex items-center gap-3">
             <div className="relative h-12 w-12 xl:h-14 xl:w-14 rounded-full overflow-hidden bg-white/70 border border-black/5 shadow-[0_10px_30px_rgba(2,6,23,0.08)]">
               <Image
@@ -563,7 +575,7 @@ function NavbarFallback() {
             </div>
 
             <div className="leading-tight">
-              <div className="whitespace-nowrap font-[var(--font-playfair)] font-semibold tracking-[0.16em] text-[15px] xl:text-[17px] text-slate-900">
+              <div className="whitespace-nowrap font-[var(--font-playfair)] font-semibold tracking-[0.12em] text-[14px] xl:text-[16px] text-slate-900">
                 <span className="gold-motion relative">ELITE</span>{" "}
                 <span className="opacity-90">VISA GLOBAL</span>
               </div>
