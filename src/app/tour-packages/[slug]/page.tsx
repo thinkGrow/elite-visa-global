@@ -124,19 +124,22 @@ export default async function TourDetailPage({
     },
 
     types: {
-      image: ({ value }: any) => (
-        <div className="my-8">
-          <div className="relative h-[260px] w-full overflow-hidden rounded-2xl md:h-[360px]">
-            <Image
-              src={urlFor(value).width(1800).height(1000).url()}
-              alt=""
-              fill
-              className="object-cover"
-            />
-          </div>
-        </div>
-      ),
+image: ({ value }: any) => {
+  if (!value?.asset) return null;
 
+  return (
+    <div className="my-8">
+      <div className="relative h-[260px] w-full overflow-hidden rounded-2xl md:h-[360px]">
+        <Image
+          src={urlFor(value).width(1800).height(1000).url()}
+          alt={value.alt ?? ""}
+          fill
+          className="object-cover"
+        />
+      </div>
+    </div>
+  );
+},
       callout: ({ value }: any) => {
         const tone = value?.tone ?? "info";
         const toneCls =
