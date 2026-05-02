@@ -16,8 +16,8 @@ import {
 const allowedContinents = [
   "europe",
   "asia",
-  "na",
-  "sa",
+  "northamerica",
+  "southamerica",
   "africa",
   "oceania",
   "multi",

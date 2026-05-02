@@ -6,8 +6,8 @@ import type { ContinentKey } from "../types";
 const continents: Array<{ key: ContinentKey; label: string }> = [
   { key: "europe", label: "Europe" },
   { key: "asia", label: "Asia" },
-  { key: "na", label: "North America" },
-  { key: "sa", label: "South America" },
+  { key: "northamerica", label: "North America" },
+  { key: "southamerica", label: "South America" },
   { key: "africa", label: "Africa" },
   { key: "oceania", label: "Oceania" },
   { key: "multi", label: "Multi Countries" },

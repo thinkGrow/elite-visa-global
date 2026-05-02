@@ -3,8 +3,8 @@ export type TourCategoryKey = "international" | "local";
 export type ContinentKey =
   | "europe"
   | "asia"
-  | "na"
-  | "sa"
+  | "northamerica"
+  | "southamerica"
   | "africa"
   | "oceania"
   | "multi";

@@ -25,8 +25,8 @@ export default function TourPackagesClient({ tours }: { tours: CmsTour[] }) {
   const searchParams = useSearchParams();
 
   const typeParam = normalize(searchParams.get("type"));
-  const continentParam = normalize(searchParams.get("continent"));
-  const countryParam = normalize(searchParams.get("country"));
+  const continentParam = normalize(searchParams.get("continent")) || null;
+  const countryParam = normalize(searchParams.get("country")) || null;
 
   const urlType: TourCategoryKey =
     typeParam === "local" ? "local" : "international";
@@ -43,10 +43,9 @@ export default function TourPackagesClient({ tours }: { tours: CmsTour[] }) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("type", v);
 
-    if (v === "local") {
-      params.delete("continent");
-      params.delete("country");
-    }
+    // 🔥 always clear filters when switching
+    params.delete("continent");
+    params.delete("country");
 
     router.replace(`/tour-packages?${params.toString()}`, { scroll: false });
   };
@@ -58,13 +57,11 @@ export default function TourPackagesClient({ tours }: { tours: CmsTour[] }) {
 
       if (category === "local") return true;
 
-      const matchesContinent = continentParam
-        ? normalize(tour.continent) === continentParam
-        : true;
+      const matchesContinent =
+        !continentParam || normalize(tour.continent) === continentParam;
 
-      const matchesCountry = countryParam
-        ? normalize(tour.country) === countryParam
-        : true;
+      const matchesCountry =
+        !countryParam || normalize(tour.country) === countryParam;
 
       return matchesContinent && matchesCountry;
     });
@@ -106,7 +103,6 @@ export default function TourPackagesClient({ tours }: { tours: CmsTour[] }) {
       <Container>
         <Card hairline className="p-0">
           <div className="absolute inset-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={headerBg} alt="" className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/5 to-white/25" />
           </div>
