@@ -3,6 +3,10 @@ import HajjUmrahClient from "./HajjUmrahClient";
 import { pilgrimagePackagesQuery } from "@/lib/pilgrimage/queries";
 import { Suspense } from "react";
 
+export const revalidate = 0;
+// src/app/hajj-umrah/page.tsx
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const umrahPackages = await client.fetch(pilgrimagePackagesQuery, {
     category: "umrah",
